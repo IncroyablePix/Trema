@@ -8,8 +8,8 @@
 #include "IViewParser.h"
 #include "../Components/Docking/MainDockSpace.h"
 #include "../Components/Container/WindowContainer.h"
-#include "../Components/Widgets/Radio.h"
-#include "../Components/Widgets/Combo.h"
+#include "../Components/Widgets/Options/Radio.h"
+#include "../Components/Widgets/Options/Combo.h"
 #include "../Components/Widgets/Button.h"
 #include "../Components/Widgets/Text.h"
 #include "../Components/Widgets/Checkbox.h"
@@ -17,10 +17,11 @@
 #include "../Components/Widgets/Input/TextInput.h"
 #include "../Components/Widgets/Input/TextArea.h"
 #include "ParsingException.h"
+#include "../Components/Widgets/Options/SelectorOption.h"
 
 namespace Trema::View
 {
-    std::shared_ptr<IGuiElement> IViewParser::CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string &elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window)
+    std::shared_ptr<IGuiElement> IViewParser::CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string &elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window, std::string content)
     {
         auto name = attributes["name"];
         auto id = attributes.find("id") == attributes.end() ? "" : attributes["id"];
@@ -48,7 +49,26 @@ namespace Trema::View
 
         else if(elementName == "Radio")
         {
-            element = Radio::CreateRadio(std::move(parent), std::move(name));
+            const char separator = '\n';
+
+            std::vector<std::string> options;
+            {
+                std::istringstream iss(content);
+                std::string option;
+                while (std::getline(iss, option, separator))
+                {
+                    options.push_back(option);
+                }
+            }
+
+            auto radio = Radio::CreateRadio(std::move(parent), std::move(name));
+            for(const auto &option : options)
+            {
+                radio->AddOption(option);
+            }
+
+            element = std::move(radio);
+
         }
 
         else if(elementName == "Combo")
@@ -98,6 +118,16 @@ namespace Trema::View
         else if(elementName == "TextArea")
         {
             element = TextArea::CreateTextArea(std::move(parent), std::move(name));
+        }
+
+        else if(elementName == "Option")
+        {
+            element = SelectorOption::CreateSelectorOption(std::move(parent), std::move(name));
+        }
+
+        else if(elementName == "TableRow")
+        {
+            element = TableRow::CreateTableRow(std::move(parent), std::move(name));
         }
 
         //---
@@ -152,11 +182,6 @@ namespace Trema::View
             ss << "Tried to append to non container element: [" << elementName <<  "]";
             throw ParsingException(ss.str().c_str());
         }
-    }
-
-    bool IViewParser::IsLayout(const std::shared_ptr<IGuiElement> &element)
-    {
-        return dynamic_cast<ILayout*>(element.get()) != nullptr;
     }
 
     void IViewParser::TryAddToLayout(const std::shared_ptr<IGuiElement>& element,

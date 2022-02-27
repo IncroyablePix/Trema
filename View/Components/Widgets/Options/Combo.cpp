@@ -4,13 +4,13 @@
 
 #include <future>
 #include "Combo.h"
-#include "../../ImGUI/imgui.h"
+#include "../../../ImGUI/imgui.h"
 
 namespace Trema::View
 {
 
     Combo::Combo(std::shared_ptr<IGuiElement> parent, std::string name) :
-            IGuiElement(std::move(parent), std::move(name)),
+            IContainer(std::move(parent), std::move(name)),
             m_selected("")
     {
 
@@ -21,11 +21,14 @@ namespace Trema::View
 
     }
 
-    void Combo::AddOption(std::string name, std::function<void(Combo)> listener)
+    void Combo::AddChild(std::shared_ptr<IGuiElement> child)
     {
-        /*ComboOption option = {.Name = std::move(name), .Listener = std::move(listener) };
-        m_options.push_back(option);*/
-        m_options[std::move(name)] = std::move(listener);
+        AddOption(child->GetName());
+    }
+
+    void Combo::AddOption(std::string name)
+    {
+        m_options.push_back(std::move(name));
     }
 
     void Combo::Show()
@@ -44,7 +47,7 @@ namespace Trema::View
 
         if (ImGui::BeginCombo(NameId(), m_selected))
         {
-            for(const auto& [name, function] : m_options)
+            for(const auto& name : m_options)
             {
                 bool selected = m_selected == name;
 
@@ -54,7 +57,10 @@ namespace Trema::View
 
                     auto future = std::async(std::launch::async, [this]()
                     {
-                        m_options[m_selected](*this);
+                        for(const auto& [_, listener] : m_listeners)
+                        {
+                            listener(m_selected);
+                        }
                     });
                 }
 
@@ -70,5 +76,10 @@ namespace Trema::View
     std::shared_ptr<Combo> Combo::CreateCombo(std::shared_ptr<IGuiElement> parent, std::string name)
     {
         return std::make_shared<Combo>(std::move(parent), std::move(name));
+    }
+
+    void Combo::AddOnClickListener(std::string name, std::function<void(const std::string &)> listener)
+    {
+        m_listeners[std::move(name)] = std::move(listener);
     }
 }

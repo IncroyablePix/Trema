@@ -7,17 +7,25 @@
 
 #include <array>
 #include <vector>
+#include <sstream>
 #include "../IGuiElement.h"
 #include "../../ImGUI/imgui.h"
+#include "../Container/IContainer.h"
+#include "FamilyException.h"
 
 namespace Trema::View
 {
-    struct TableRow : public IGuiElement
+    struct TableRow : public IContainer
     {
-        explicit TableRow(std::vector<std::shared_ptr<IGuiElement>> elements) :
-                IGuiElement(nullptr, std::string("")),
+        explicit TableRow(std::shared_ptr<IGuiElement> parent, std::string name, std::vector<std::shared_ptr<IGuiElement>> elements) :
+                IContainer(std::move(parent), std::move(name)),
                 Elements(std::move(elements))
         {
+        }
+
+        void AddChild(std::shared_ptr<IGuiElement> child) override
+        {
+            Elements.push_back(child);
         }
 
         std::vector<std::shared_ptr<IGuiElement>> Elements;
@@ -31,36 +39,60 @@ namespace Trema::View
                 Elements[i]->Show();
             }
         }
+
+        static std::shared_ptr<TableRow> CreateTableRow(std::shared_ptr<IGuiElement> parent, std::string name)
+        {
+            return std::make_shared<TableRow>(std::move(parent), std::move(name), std::vector<std::shared_ptr<IGuiElement>>());
+        }
     };
 
 
-    class Table : public IGuiElement
+    class Table : public IContainer
     {
     public:
         Table(std::shared_ptr<IGuiElement> parent, std::string name, std::vector<std::string> titles) :
-            IGuiElement(std::move(parent), std::move(name)),
+            IContainer(std::move(parent), std::move(name)),
             m_tableColumns(titles.size()),
             m_titles(std::move(titles)),
             m_displayHeaders(true)
         {
 
         }
+
         ~Table() = default;
 
-        void AddValue(TableRow row)
+        void AddChild(std::shared_ptr<IGuiElement> child) override
         {
-            if(row.Elements.size() == m_tableColumns)
-                m_rows.push_back(std::move(row));
+            if(IsType<TableRow>(child))
+            {
+                AddValue(std::dynamic_pointer_cast<TableRow>(child));
+            }
+            else
+            {
+                throw FamilyException(R"(Invalid type appended to "Table", expected "TableRow".)");
+            }
         }
 
-        void AddValue(std::vector<std::shared_ptr<IGuiElement>> row)
+        void AddValue(std::shared_ptr<TableRow> row)
+        {
+            if(row->Elements.size() != m_tableColumns)
+            {
+                std::stringstream ss;
+                ss << "Invalid row size [" << row->Elements.size() << "] for table size [" << m_tableColumns << "]";
+                throw FamilyException(ss.str().c_str());
+            }
+
+            m_rows.push_back(std::move(row));
+        }
+
+        /*void AddValue(std::vector<std::shared_ptr<IGuiElement>> row)
         {
             if(row.size() == m_tableColumns)
             {
-                TableRow tr(std::move(row));
+                TableRow tr(std::shared_ptr<Table>(this), std::move(row));
                 m_rows.push_back(tr);
             }
-        }
+        }*/
 
         void Show() override
         {
@@ -70,9 +102,9 @@ namespace Trema::View
                     ImGui::TableSetupColumn(m_titles[i].c_str());
                 ImGui::TableHeadersRow();
 
-                for(auto tuple : m_rows)
+                for(auto &tuple : m_rows)
                 {
-                    tuple.Show();
+                    tuple->Show();
                 }
 
                 ImGui::EndTable();
@@ -93,7 +125,7 @@ namespace Trema::View
         size_t m_tableColumns;
         bool m_displayHeaders;
         std::vector<std::string> m_titles;
-        std::vector<TableRow> m_rows;
+        std::vector<std::shared_ptr<TableRow>> m_rows;
     };
 }
 

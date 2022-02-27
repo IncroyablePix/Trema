@@ -12,7 +12,7 @@ namespace Trema::View
     class ParsingException : public std::runtime_error
     {
     public:
-        explicit ParsingException(char const* const message) noexcept;
+        explicit ParsingException(char const* message) noexcept;
         //virtual char const* what() const noexcept;
     };
 }

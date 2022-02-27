@@ -16,7 +16,7 @@ namespace Trema::View
     {
     public:
         explicit IContainer(std::shared_ptr<IGuiElement> parent, std::string name);
-        void AddChild(std::shared_ptr<IGuiElement> child);
+        virtual void AddChild(std::shared_ptr<IGuiElement> child);
 
     protected:
         std::vector<std::shared_ptr<IGuiElement>> m_children;

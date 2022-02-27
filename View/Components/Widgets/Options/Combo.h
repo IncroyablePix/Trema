@@ -6,24 +6,28 @@
 #define TREMA_COMBO_H
 
 
-#include "../IGuiElement.h"
+#include "../../IGuiElement.h"
+#include "../../Container/IContainer.h"
 #include <functional>
 
 namespace Trema::View
 {
-    class Combo : public IGuiElement
+    class Combo : public IContainer
     {
     public:
         Combo(std::shared_ptr<IGuiElement> parent, std::string name);
         ~Combo();
-        void AddOption(std::string name, std::function<void(Combo)> listener);
+        void AddChild(std::shared_ptr<IGuiElement> child) override;
+        void AddOption(std::string name);
+        void AddOnClickListener(std::string name, std::function<void(const std::string&)> listener);
         void Show() override;
         static std::shared_ptr<Combo> CreateCombo(std::shared_ptr<IGuiElement> parent, std::string name);
 
     private:
         std::string m_name;
         const char* m_selected {};
-        std::unordered_map<std::string, std::function<void(Combo)>> m_options;
+        std::vector<std::string> m_options;
+        std::unordered_map<std::string, std::function<void(const std::string& option)>> m_listeners;
     };
 }
 

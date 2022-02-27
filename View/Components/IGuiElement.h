@@ -38,6 +38,9 @@ namespace Trema::View
         ElementStyle Style;
 
     protected:
+        template<class T>
+        inline static bool IsType(const std::shared_ptr<IGuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
+        
         std::shared_ptr<IGuiElement> m_parent;
         float m_dockSize { 0.2f };
         std::string m_name;

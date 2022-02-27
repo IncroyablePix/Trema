@@ -21,12 +21,14 @@ namespace Trema::View
         virtual void SetupWindowFromString(const std::string &code, std::shared_ptr<IWindow> window) = 0;
 
     protected:
-        std::shared_ptr<IGuiElement> CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string& elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window);
+        std::shared_ptr<IGuiElement> CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string& elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window, std::string content);
         static void TryAddLayout(const std::shared_ptr<IGuiElement>& layout, const std::shared_ptr<IWindow>& window);
         static void TryAddAsChild(const std::shared_ptr<IGuiElement>& container, const std::shared_ptr<IGuiElement>& element, const std::string &elementName);
-        static bool IsLayout(const std::shared_ptr<IGuiElement>& element);
         void TryAddToLayout(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<IGuiElement> &container,
                             std::unordered_map<std::string, std::string>& attributes);
+
+        template<class T>
+        inline static bool IsType(const std::shared_ptr<IGuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
 
     private:
         static int StrToInt(const std::string& str);

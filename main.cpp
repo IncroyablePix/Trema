@@ -3,8 +3,8 @@
 #include "View/Components/Docking/MainDockSpace.h"
 #include "View/Components/Container/WindowContainer.h"
 #include "View/Components/Widgets/Button.h"
-#include "View/Components/Widgets/Radio.h"
-#include "View/Components/Widgets/Combo.h"
+#include "View/Components/Widgets/Options/Radio.h"
+#include "View/Components/Widgets/Options/Combo.h"
 #include "View/Components/Widgets/Text.h"
 #include "View/Components/Widgets/Checkbox.h"
 #include "View/Components/Widgets/Table.h"
@@ -24,10 +24,19 @@ int main(int argc, char** argv)
 
     auto textInput = window->GetElementById<TextInput>("textInput");
     auto textOutput = window->GetElementById<Text>("textOutput");
+    auto combo = window->GetElementById<Combo>("my-combo");
 
     textInput->AddOnChangeListener("main", [&textOutput](const std::string &text)
     {
         textOutput->SetName(text);
+    });
+
+    combo->AddOnClickListener("RandomListener", [&textOutput](const std::string & option)
+    {
+        if(option == "Dark")
+            textOutput->SetName("Je suis un enculé");
+        else
+            textOutput->SetName("Oéééé");
     });
 
     window->Run();
