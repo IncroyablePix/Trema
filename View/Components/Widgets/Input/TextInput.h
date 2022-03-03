@@ -16,7 +16,8 @@ namespace Trema::View
     public:
         TextInput(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
         virtual ~TextInput();
-        const std::string & GetText();
+        std::string GetText();
+        void SetText(const std::string& text);
         void Show() override;
         void AddOnChangeListener(std::string name, std::function<void(std::string text)> listener);
 

@@ -8,7 +8,10 @@
 #include <string>
 #include "Components/ILayout.h"
 #include "Components/TopMenu/TopMenu.h"
+#include "Components/IPopupComponent.h"
+#include "ImGUI/imgui.h"
 #include <unordered_map>
+#include <vector>
 
 namespace Trema::View
 {
@@ -30,6 +33,8 @@ namespace Trema::View
         virtual void Update() = 0;
         virtual void Render() = 0;
         virtual int Run() = 0;
+        void SetDefaultFont(const std::string& m_path, float size = 12.0f);
+        void Build();
 
         void SetLayout(std::shared_ptr<ILayout> layout);
         void SetTopMenu(std::shared_ptr<TopMenu> topMenu);
@@ -39,8 +44,7 @@ namespace Trema::View
             m_elementsById[id] = std::move(element);
         }
 
-        template<class T>
-        std::shared_ptr<T> GetElementById(const std::string& id)
+        template<class T> std::shared_ptr<T> GetElementById(const std::string& id)
         {
             if(m_elementsById.find(id) == m_elementsById.end())
                 return nullptr;
@@ -53,14 +57,37 @@ namespace Trema::View
             return std::dynamic_pointer_cast<T>(element);
         }
 
+        template<class T> void AddPopupComponent(std::shared_ptr<T> component)
+        {
+            m_popupComponents[typeid(T).name()] = std::move(component);
+        }
+
+        template<class T> std::shared_ptr<T> GetComponent()
+        {
+            auto typeName = typeid(T).name();
+            if(m_popupComponents.find(typeName) == m_popupComponents.end())
+                return nullptr;
+
+            auto element = m_popupComponents[typeName];
+
+            if(!dynamic_cast<T*>(element.get()))
+                return nullptr;
+
+            return std::dynamic_pointer_cast<T>(element);
+        }
+
     protected:
         std::unordered_map<std::string, std::shared_ptr<IGuiElement>> m_elementsById;
         std::shared_ptr<ILayout> m_layout;
         std::shared_ptr<TopMenu> m_menu;
         std::string m_title;
+        ImFont* m_standardFont;
         double m_secondsPerUpdate {};
         int m_width;
         int m_height;
+
+
+        std::unordered_map<std::string, std::shared_ptr<IPopupComponent>> m_popupComponents;
     };
 }
 

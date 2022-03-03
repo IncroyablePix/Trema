@@ -3,6 +3,7 @@
 //
 
 #include <future>
+#include <sstream>
 #include "TextInput.h"
 #include "../../../ImGUI/imgui.h"
 
@@ -66,8 +67,13 @@ namespace Trema::View
         m_listeners[std::move(name)] = std::move(listener);
     }
 
-    const std::string &TextInput::GetText()
+    std::string TextInput::GetText()
     {
-        return std::move(std::string(m_text));
+        return { m_text };
+    }
+
+    void TextInput::SetText(const std::string &text)
+    {
+        strcpy(m_text, text.c_str());
     }
 }

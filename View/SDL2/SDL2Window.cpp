@@ -18,12 +18,13 @@ namespace Trema::View
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void) io;
+        io.Fonts->AddFontDefault();
 
         io.DisplaySize.x = static_cast<float>(m_width);
         io.DisplaySize.y = static_cast<float>(m_height);
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         ImGui::StyleColorsLight();
         //ImGui::StyleColorsDark();
@@ -105,15 +106,30 @@ namespace Trema::View
         ImGui_ImplSDL2_NewFrame(m_window);
         ImGui::NewFrame();
 
+        if(m_standardFont)
+            ImGui::PushFont(m_standardFont);
+
         //--- ImGui code
         if(m_menu)
             m_menu->Show();
         if(m_layout)
             m_layout->Show();
+        for(const auto& [name, popup] : m_popupComponents)
+            popup->Show();
         //---
+
+        if(m_standardFont)
+            ImGui::PopFont();
 
         ImGui::Render();
         ImDrawData* drawData = ImGui::GetDrawData();
+
+        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+        }
+
         const bool isMinimized = (drawData->DisplaySize.x <= 0.0f || drawData->DisplaySize.y <= 0.0f);
         if(!isMinimized)
         {
@@ -132,6 +148,7 @@ namespace Trema::View
     int SDL2Window::Run()
     {
         m_opened = true;
+        Build();
         while(IsOpened())
         {
             Update();

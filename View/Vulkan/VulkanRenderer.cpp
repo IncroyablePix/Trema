@@ -7,6 +7,7 @@
 #include "../WindowInitializationException.h"
 #include "../ImGUI/imgui_impl_sdl.h"
 
+#undef IMGUI_VULKAN_DEBUG_REPORT
 
 namespace Trema::View
 {
@@ -176,12 +177,12 @@ namespace Trema::View
         create_info.ppEnabledExtensionNames = extensions_ext;
 
         // Create Vulkan Instance
-        err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
+        err = vkCreateInstance(&create_info, m_allocator, &m_instance);
         CheckVkResult(err);
         free(extensions_ext);
 
         // Get the function pointer (required for any extensions)
-        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkCreateDebugReportCallbackEXT");
+        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkCreateDebugReportCallbackEXT");
         IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
 
         // Setup the debug report callback
@@ -190,7 +191,7 @@ namespace Trema::View
         debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
         debug_report_ci.pfnCallback = debug_report;
         debug_report_ci.pUserData = NULL;
-        err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
+        err = vkCreateDebugReportCallbackEXT(m_instance, &debug_report_ci, g_Allocator, &g_DebugReport);
         CheckVkResult(err);
 #else
             // Create Vulkan Instance without any debug feature
@@ -302,8 +303,8 @@ namespace Trema::View
 
 #ifdef IMGUI_VULKAN_DEBUG_REPORT
         // Remove the debug report callback
-    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkDestroyDebugReportCallbackEXT");
-    vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
+    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkDestroyDebugReportCallbackEXT");
+    vkDestroyDebugReportCallbackEXT(m_instance, m_debugReport, m_allocator);
 #endif // IMGUI_VULKAN_DEBUG_REPORT
 
         vkDestroyDevice(m_device, m_allocator);
