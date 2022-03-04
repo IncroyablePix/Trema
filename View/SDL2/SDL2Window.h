@@ -23,6 +23,7 @@ namespace Trema::View
         bool IsOpened() override;
         void Update() override;
         void Render() override;
+        void UploadFonts();
 
         static std::shared_ptr<SDL2Window> CreateSDL2Window(const WindowInfo &info);
 

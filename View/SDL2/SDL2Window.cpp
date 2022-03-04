@@ -149,6 +149,7 @@ namespace Trema::View
     {
         m_opened = true;
         Build();
+        UploadFonts();
         while(IsOpened())
         {
             Update();
@@ -160,5 +161,10 @@ namespace Trema::View
     std::shared_ptr<SDL2Window> SDL2Window::CreateSDL2Window(const WindowInfo &info)
     {
         return std::make_shared<SDL2Window>(info);
+    }
+
+    void SDL2Window::UploadFonts()
+    {
+        m_renderer.UploadFonts();
     }
 }

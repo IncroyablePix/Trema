@@ -33,7 +33,8 @@ int main(int argc, char** argv)
     auto window = SDL2Window::CreateSDL2Window(info);
     //parser.SetupWindowFromFile("./csv_table.txml", window);
     //window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("File dialog"));
-    //window->SetDefaultFont("./BAUHS93.TTF", 14.0f);
+    window->AddFont("./JetBrainsMono-Regular.TTF", 28.0f, "JetbrainsMono");
+    window->SetDefaultFont("JetbrainsMono");
 
     //---
 

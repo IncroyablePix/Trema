@@ -41,6 +41,8 @@ namespace Trema::View
 
         static void CheckVkResult(VkResult error);
 
+        void UploadFonts();
+
     private:
         VkAllocationCallbacks* m_allocator = nullptr;
         VkInstance m_instance = VK_NULL_HANDLE;

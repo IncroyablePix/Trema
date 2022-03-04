@@ -33,7 +33,8 @@ namespace Trema::View
         virtual void Update() = 0;
         virtual void Render() = 0;
         virtual int Run() = 0;
-        void SetDefaultFont(const std::string& m_path, float size = 12.0f);
+        void SetDefaultFont(const std::string &name);
+        void AddFont(const std::string& path, float size = 12.0f, const std::string& name = "");
         void Build();
 
         void SetLayout(std::shared_ptr<ILayout> layout);
@@ -81,11 +82,11 @@ namespace Trema::View
         std::shared_ptr<ILayout> m_layout;
         std::shared_ptr<TopMenu> m_menu;
         std::string m_title;
+        std::unordered_map<std::string, ImFont*> m_fonts;
         ImFont* m_standardFont;
-        double m_secondsPerUpdate {};
+        double m_secondsPerUpdate { };
         int m_width;
         int m_height;
-
 
         std::unordered_map<std::string, std::shared_ptr<IPopupComponent>> m_popupComponents;
     };

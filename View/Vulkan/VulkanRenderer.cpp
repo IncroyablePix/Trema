@@ -437,4 +437,39 @@ namespace Trema::View
         wd->ClearValue.color.float32[2] = m_clearColor.z * m_clearColor.w;
         wd->ClearValue.color.float32[3] = m_clearColor.w;
     }
+
+    void VulkanRenderer::UploadFonts()
+    {
+        VkResult err;
+        auto* wd = GetWindowData();
+        auto commandPool = wd->Frames[wd->FrameIndex].CommandPool;
+        auto commandBuffer = wd->Frames[wd->FrameIndex].CommandBuffer;
+
+        err = vkResetCommandPool(m_device, commandPool, 0);
+        CheckVkResult(err);
+
+        VkCommandBufferBeginInfo beginInfo = { };
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(commandBuffer, &beginInfo);
+        CheckVkResult(err);
+
+        ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
+
+        VkSubmitInfo endInfo =
+        {
+            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+            .commandBufferCount = 1,
+            .pCommandBuffers = &commandBuffer
+        };
+
+        err = vkEndCommandBuffer(commandBuffer);
+        CheckVkResult(err);
+        err = vkQueueSubmit(m_queue, 1, &endInfo, VK_NULL_HANDLE);
+        CheckVkResult(err);
+
+        err = vkDeviceWaitIdle(m_device);
+        CheckVkResult(err);
+        ImGui_ImplVulkan_DestroyFontUploadObjects();
+    }
 }
