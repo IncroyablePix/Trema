@@ -44,7 +44,38 @@ namespace Trema::View
         //---
 
         pElement = document.RootElement();
-        ParseElement(pElement, nullptr, window);
+
+        if(pElement->Value() != std::string("App"))
+        {
+            std::stringstream ss;
+            ss << "Root element should be of type \"App\". Found: [" << pElement->Value() <<  "]";
+            throw ParsingException(ss.str().c_str());
+        }
+
+        ParseRoots(pElement, window);
+    }
+
+    void TinyXMLViewParser::ParseRoots(TiXmlElement *element, const std::shared_ptr<IWindow> &window)
+    {
+        for (TiXmlElement *child = element->FirstChildElement();
+             child != nullptr; child = child->NextSiblingElement())
+        {
+            auto val = child->Value();
+            if(val == std::string("Head"))
+            {
+
+            }
+            else if(val == std::string("Body"))
+            {
+                ParseBody(child, window);
+            }
+        }
+    }
+
+    void TinyXMLViewParser::ParseBody(TiXmlElement *element, const std::shared_ptr<IWindow> &window)
+    {
+        auto* child = element->FirstChildElement();
+        ParseElement(child, nullptr, window);
     }
 
     void TinyXMLViewParser::ParseElement(TiXmlElement *element, const std::shared_ptr<IGuiElement>& container, const std::shared_ptr<IWindow>& window)

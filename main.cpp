@@ -32,8 +32,10 @@ int main(int argc, char** argv)
     auto parser = TinyXMLViewParser();
     auto window = SDL2Window::CreateSDL2Window(info);
     //parser.SetupWindowFromFile("./csv_table.txml", window);
-    //window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("File dialog"));
-    window->AddFont("./JetBrainsMono-Regular.TTF", 28.0f, "JetbrainsMono");
+    window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("File dialog"));
+    window->AddFont("./JetBrainsMono-Regular.ttf", 28.0f, "JetbrainsMono");
+    window->AddFont("./BasicSharpie.ttf", 28.0f, "BasicSharpie");
+    window->AddFont("./ITCEDSCR.TTF", 28.0f, "Edward");
     window->SetDefaultFont("JetbrainsMono");
 
     //---
@@ -177,29 +179,16 @@ int main(int argc, char** argv)
     {
         textOutput->SetName(text);
     });*/
-
-    window->Run();
-
-    /*auto dockSpaceLayout = MainDockSpace::CreateMainDockSpace("Dockspace", 1);
-    auto topMenu = TopMenu::CreateTopMenu("Top Menu");
-    auto container = WindowContainer::CreateWindowContainer(dockSpaceLayout, "Test");
-
-    auto radio = Radio::CreateRadio(container, "My radio");
-    radio->AddOption("Fuck", [](const Radio& r) { });
-    radio->AddOption("Me", [](const Radio& r) { });
-    radio->AddOption("Jesus", [](const Radio& r) { });
-
-    auto combo = Combo::CreateCombo(container, "Orientation");
-    combo->AddOption("Column", [&radio](const Combo& combo)
+    auto filesButton = window->GetElementById<Button>("files");
+    filesButton->AddOnClickListener("listener2", [&window](const Trema::View::Button &)
     {
-        radio->Style.Orientation = Column;
-    });
-    combo->AddOption("Row", [&radio](const Combo& combo)
-    {
-        radio->Style.Orientation = Row;
+        window->GetComponent<FileDialog>()->ShowFileDialog("C:\\", "*.*",  [](const std::string &path)
+        {
+            std::cout << path <<  std::endl;
+        });
     });
 
-    auto button = Button::CreateButton(container, "My test button");
+    auto button = window->GetElementById<Button>("change-theme");
     button->AddOnClickListener("listener 1", [](const Button& button)
     {
         ImGuiStyle * style = &ImGui::GetStyle();
@@ -259,10 +248,32 @@ int main(int argc, char** argv)
         style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
         style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
         style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
+        style->Colors[ImGuiCol_TableHeaderBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
         //style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
     });
 
-    auto buttonBob = Button::CreateButton(container, "c quoi");
+    window->Run();
+
+    /*auto dockSpaceLayout = MainDockSpace::CreateMainDockSpace("Dockspace", 1);
+    auto topMenu = TopMenu::CreateTopMenu("Top Menu");
+    auto container = WindowContainer::CreateWindowContainer(dockSpaceLayout, "Test");
+
+    auto radio = Radio::CreateRadio(container, "My radio");
+    radio->AddOption("Fuck", [](const Radio& r) { });
+    radio->AddOption("Me", [](const Radio& r) { });
+    radio->AddOption("Jesus", [](const Radio& r) { });
+
+    auto combo = Combo::CreateCombo(container, "Orientation");
+    combo->AddOption("Column", [&radio](const Combo& combo)
+    {
+        radio->Style.Orientation = Column;
+    });
+    combo->AddOption("Row", [&radio](const Combo& combo)
+    {
+        radio->Style.Orientation = Row;
+    });*/
+
+    /*auto buttonBob = Button::CreateButton(container, "c quoi");
     auto text = Text::CreateText(container, "La vérité c'est que");
     buttonBob->AddOnClickListener("listener 1", [&text](const Button& button)
     {

@@ -19,6 +19,8 @@ namespace Trema::View
 
     private:
         void ParseDocument(TiXmlDocument& document, std::shared_ptr<IWindow> window);
+        void ParseRoots(TiXmlElement* element, const std::shared_ptr<IWindow>& window);
+        void ParseBody(TiXmlElement* element, const std::shared_ptr<IWindow>& window);
         void ParseElement(TiXmlElement* element, const std::shared_ptr<IGuiElement>& container, const std::shared_ptr<IWindow>& window);
         void ParseChildren(TiXmlElement *element, const std::shared_ptr<IGuiElement>& container, const std::shared_ptr<IWindow>& window);
     };

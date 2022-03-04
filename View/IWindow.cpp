@@ -41,21 +41,24 @@ namespace Trema::View
         ImGuiIO& io = ImGui::GetIO();
 
         static const ImWchar ranges[] =
-                {
-                        0x0020, 0x00FF, // Basic Latin + Latin Supplement
-                        0x20AC, 0x20AC, // €
-                        0x2122, 0x2122, // ™
-                        0x2196, 0x2196, // ↖
-                        0x21D6, 0x21D6, // ⇖
-                        0x2B01, 0x2B01, // ⬁
-                        0x2B09, 0x2B09, // ⬉
-                        0x2921, 0x2922, // ⤡ ⤢
-                        0x263A, 0x263A, // ☺
-                        0x266A, 0x266A, // ♪
-                        0,
-                };
+        {
+                0x0020, 0x00FF, // Basic Latin + Latin Supplement
+                0x0400, 0x052F, // Cyrillic + Cyrillic Supplement
+                0x20AC, 0x20AC, // €
+                0x2122, 0x2122, // ™
+                0x2196, 0x2196, // ↖
+                0x21D6, 0x21D6, // ⇖
+                0x2B01, 0x2B01, // ⬁
+                0x2B09, 0x2B09, // ⬉
+                0x2921, 0x2922, // ⤡ ⤢
+                0x263A, 0x263A, // ☺
+                0x266A, 0x266A, // ♪
+                0x2DE0, 0x2DFF, // Cyrillic Extended-A
+                0xA640, 0xA69F, // Cyrillic Extended-B
+                0,
+        };
 
-        auto font = io.Fonts->AddFontFromFileTTF(path.c_str(), size, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+        auto font = io.Fonts->AddFontFromFileTTF(path.c_str(), size, nullptr, ranges);
         if(name.empty())
         {
             m_fonts[FileSplit(path).FileWithoutExtension] = font;
