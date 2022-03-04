@@ -33,9 +33,7 @@ int main(int argc, char** argv)
     auto window = SDL2Window::CreateSDL2Window(info);
     //parser.SetupWindowFromFile("./csv_table.txml", window);
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("File dialog"));
-    window->AddFont("./JetBrainsMono-Regular.ttf", 28.0f, "JetbrainsMono");
-    window->AddFont("./BasicSharpie.ttf", 28.0f, "BasicSharpie");
-    window->AddFont("./ITCEDSCR.TTF", 28.0f, "Edward");
+    parser.SetupWindowFromFile("./sample_1.txml", window);
     window->SetDefaultFont("JetbrainsMono");
 
     //---
@@ -145,8 +143,6 @@ int main(int argc, char** argv)
     }*/
 
     //--- Table
-
-    parser.SetupWindowFromFile("./sample_1.txml", window);
 
     auto counter = 1;
     auto scoresBoard = window->GetElementById<Table>("scoresBoard");

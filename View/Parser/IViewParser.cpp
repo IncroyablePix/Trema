@@ -18,9 +18,36 @@
 #include "../Components/Widgets/Input/TextArea.h"
 #include "ParsingException.h"
 #include "../Components/Widgets/Options/SelectorOption.h"
+#include "../Utils/StringExtensions.h"
 
 namespace Trema::View
 {
+    void IViewParser::HeadElementFromName(const std::string& elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window)
+    {
+        auto name = attributes["name"];
+
+        if(elementName == "Font")
+        {
+            std::string src;
+            float size = 12.0f;
+
+            if(attributes.find("src") != attributes.end())
+            {
+                src = attributes["src"];
+                if(attributes.find("size") != attributes.end() &&
+                    IsFloat(attributes["size"]))
+                    size = std::stof(attributes["size"]);
+
+                window->AddFont(src, size, name);
+            }
+            else
+            {
+                throw ParsingException(R"(Missing "src" attribute from element "Font")");
+            }
+
+        }
+    }
+
     std::shared_ptr<IGuiElement> IViewParser::CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string &elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window, std::string content)
     {
         auto name = attributes["name"];
