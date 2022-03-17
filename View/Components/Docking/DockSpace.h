@@ -31,7 +31,7 @@ namespace Trema::View
     class DockSpace : public ILayout
     {
     public:
-        explicit DockSpace(std::string title, ImGuiID dockspaceId);
+        explicit DockSpace(std::string title, ImGuiID dockspaceId, bool allowSave = true);
         ~DockSpace();
 
         virtual void Begin();
@@ -43,10 +43,12 @@ namespace Trema::View
 
     protected:
         bool m_firstTime { true };
+        bool m_allowSave { true };
         ImGuiID m_dockspaceId;
         std::unordered_map<DockSlot, std::shared_ptr<IContainer>> m_elements;
 
         void ShowElements(ImGuiID dockspaceId);
+        bool IsSavedDock() const;
     };
 }
 

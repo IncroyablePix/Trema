@@ -44,7 +44,6 @@ namespace Trema::View
             {
                 throw ParsingException(R"(Missing "src" attribute from element "Font")");
             }
-
         }
     }
 
@@ -57,11 +56,15 @@ namespace Trema::View
         if(elementName == "MainDockSpace")
         {
             auto dockspaceId = 1;
+            auto saveLayout = true;
 
             if(attributes.find("dockspaceId") != attributes.end())
                 dockspaceId = StrToInt(attributes["dockspaceId"]);
 
-            element = MainDockSpace::CreateMainDockSpace(std::move(name), dockspaceId);
+            if(attributes.find("saveLayout") != attributes.end())
+                saveLayout = StrToBool(attributes["saveLayout"]);
+
+            element = MainDockSpace::CreateMainDockSpace(std::move(name), dockspaceId, saveLayout);
         }
 
         else if(elementName == "TopMenu")
@@ -182,6 +185,11 @@ namespace Trema::View
         ss >> integer;
 
         return integer;
+    }
+
+    bool IViewParser::StrToBool(const std::string &str)
+    {
+        return str == "true";
     }
 
     void IViewParser::TryAddLayout(const std::shared_ptr<IGuiElement>& layout, const std::shared_ptr<IWindow>& window)

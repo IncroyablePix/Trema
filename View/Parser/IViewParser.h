@@ -33,6 +33,8 @@ namespace Trema::View
 
     private:
         static int StrToInt(const std::string& str);
+
+        bool StrToBool(const std::string &str);
     };
 }
 

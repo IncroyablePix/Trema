@@ -15,6 +15,7 @@
 #include "View/Components/Widgets/Input/TextArea.h"
 #include "View/Parser/TinyXML/TinyXMLViewParser.h"
 #include "View/Components/Windows/FileDialog.h"
+#include "View/Style/Tokenizer.h"
 
 using namespace Trema::View;
 
@@ -27,14 +28,24 @@ std::vector<std::string> split(const std::string& input, const std::string& rege
 
 int main(int argc, char** argv)
 {
-    WindowInfo info { .Title = "Trema", .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
+    std::string test = "@coucou { nique: 0.3; }";
+    Tokenizer tokenizer(test);
+
+    while(!tokenizer.Empty())
+    {
+        auto t = tokenizer.GetNextToken();
+        std::cout << "<" << t->GetTokenType() << ":" << t->GetPosition() << ">\n";
+    }
+
+    std::cout << std::flush;
+    /*WindowInfo info { .Title = "Trema", .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
 
     auto parser = TinyXMLViewParser();
     auto window = SDL2Window::CreateSDL2Window(info);
     //parser.SetupWindowFromFile("./csv_table.txml", window);
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("File dialog"));
     parser.SetupWindowFromFile("./sample_1.txml", window);
-    window->SetDefaultFont("JetbrainsMono");
+    window->SetDefaultFont("JetbrainsMono");*/
 
     //---
 
@@ -144,7 +155,7 @@ int main(int argc, char** argv)
 
     //--- Table
 
-    auto counter = 1;
+    /*auto counter = 1;
     auto scoresBoard = window->GetElementById<Table>("scoresBoard");
     auto nameInput = window->GetElementById<TextInput>("nameInput");
     auto scoreInput = window->GetElementById<TextInput>("scoreInput");
@@ -171,10 +182,7 @@ int main(int argc, char** argv)
 
         counter ++;
     });
-    /*textInput->AddOnChangeListener("main", [&textOutput](const std::string &text)
-    {
-        textOutput->SetName(text);
-    });*/
+
     auto filesButton = window->GetElementById<Button>("files");
     filesButton->AddOnClickListener("listener2", [&window](const Trema::View::Button &)
     {
@@ -185,6 +193,8 @@ int main(int argc, char** argv)
     });
 
     auto button = window->GetElementById<Button>("change-theme");
+    // button->Style.SetAlpha(0.3f);
+    button->Style.SetTextColor(0xCC0000FF);
     button->AddOnClickListener("listener 1", [](const Button& button)
     {
         ImGuiStyle * style = &ImGui::GetStyle();
@@ -248,7 +258,7 @@ int main(int argc, char** argv)
         //style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
     });
 
-    window->Run();
+    window->Run();*/
 
     /*auto dockSpaceLayout = MainDockSpace::CreateMainDockSpace("Dockspace", 1);
     auto topMenu = TopMenu::CreateTopMenu("Top Menu");
@@ -259,14 +269,14 @@ int main(int argc, char** argv)
     radio->AddOption("Me", [](const Radio& r) { });
     radio->AddOption("Jesus", [](const Radio& r) { });
 
-    auto combo = Combo::CreateCombo(container, "Orientation");
+    auto combo = Combo::CreateCombo(container, "m_orientation");
     combo->AddOption("Column", [&radio](const Combo& combo)
     {
-        radio->Style.Orientation = Column;
+        radio->Style.m_orientation = Column;
     });
     combo->AddOption("Row", [&radio](const Combo& combo)
     {
-        radio->Style.Orientation = Row;
+        radio->Style.m_orientation = Row;
     });*/
 
     /*auto buttonBob = Button::CreateButton(container, "c quoi");

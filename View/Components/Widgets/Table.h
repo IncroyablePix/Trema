@@ -32,12 +32,14 @@ namespace Trema::View
 
         void Show() override
         {
+            BeginStyle();
             ImGui::TableNextRow();
             for(int i = 0; i < Elements.size(); i ++)
             {
                 ImGui::TableSetColumnIndex(i);
                 Elements[i]->Show();
             }
+            EndStyle();
         }
 
         static std::shared_ptr<TableRow> CreateTableRow(std::shared_ptr<IGuiElement> parent, std::string name)
@@ -85,17 +87,9 @@ namespace Trema::View
             m_rows.push_back(std::move(row));
         }
 
-        /*void AddValue(std::vector<std::shared_ptr<IGuiElement>> row)
-        {
-            if(row.size() == m_tableColumns)
-            {
-                TableRow tr(std::shared_ptr<Table>(this), std::move(row));
-                m_rows.push_back(tr);
-            }
-        }*/
-
         void Show() override
         {
+            BeginStyle();
             if(ImGui::BeginTable(NameId(), (int) m_tableColumns))
             {
                 for (int i = 0; i < m_tableColumns; i++)
@@ -109,6 +103,7 @@ namespace Trema::View
 
                 ImGui::EndTable();
             }
+            EndStyle();
         }
 
         void ToggleDisplayHeaders(bool toggle)

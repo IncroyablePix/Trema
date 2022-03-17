@@ -33,11 +33,12 @@ namespace Trema::View
 
     void Radio::Show()
     {
+        BeginStyle();
         int count = 0;
         bool changed = false;
         for(const auto& option : m_options)
         {
-            if(count != 0 && Style.Orientation == Row)
+            if(count != 0 && Style.GetOrientation() == Row)
                 ImGui::SameLine();
 
             if(ImGui::RadioButton(option.c_str(), &m_option, count ++))
@@ -56,6 +57,7 @@ namespace Trema::View
                 }
             });
         }
+        EndStyle();
     }
 
     std::shared_ptr<Radio> Radio::CreateRadio(std::shared_ptr<IGuiElement> parent, std::string name)

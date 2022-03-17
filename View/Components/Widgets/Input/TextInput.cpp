@@ -37,10 +37,12 @@ namespace Trema::View
 
     void TextInput::Show()
     {
+        BeginStyle();
         if(ImGui::InputText(NameId(), m_text, m_bufferSize))
         {
             Notify();
         }
+        EndStyle();
     }
 
     std::shared_ptr<TextInput>

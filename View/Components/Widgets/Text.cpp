@@ -24,10 +24,14 @@ namespace Trema::View
 
     void Text::Show()
     {
+        BeginStyle();
+
         if(m_wrapped)
             ImGui::TextWrapped("%s", NameId());
         else
             ImGui::Text("%s", NameId());
+
+        EndStyle();
     }
 
     const std::string &Text::GetName()

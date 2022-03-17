@@ -27,6 +27,7 @@ namespace Trema::View
 
     void Button::Show()
     {
+        BeginStyle();
         if(ImGui::Button(NameId()))
         {
             auto future = std::async(std::launch::async, [this]()
@@ -37,6 +38,7 @@ namespace Trema::View
                 }
             });
         }
+        EndStyle();
     }
 
     std::shared_ptr<Button> Button::CreateButton(std::shared_ptr<IGuiElement> parent, std::string name)

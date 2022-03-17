@@ -4,13 +4,15 @@
 
 #include <iostream>
 #include <utility>
+#include <fstream>
 #include "DockSpace.h"
 #include "../../ImGUI/imgui_internal.h"
 
 namespace Trema::View
 {
-    DockSpace::DockSpace(std::string title, ImGuiID dockspaceId) :
+    DockSpace::DockSpace(std::string title, ImGuiID dockspaceId, bool allowSave) :
         ILayout(std::move(title)),
+        m_allowSave(allowSave),
         m_dockspaceId(dockspaceId)
     {
 
@@ -39,7 +41,7 @@ namespace Trema::View
             ImGuiID dockspaceId = ImGui::GetID(NameId());
             ImGui::DockSpace(dockspaceId, ImVec2(), dockspaceFlags);
 
-            if (m_firstTime)
+            if (m_firstTime && !IsSavedDock())
             {
                 m_firstTime = false;
 
@@ -70,6 +72,11 @@ namespace Trema::View
             if(slot != DOCK_CENTER)
             {
                 auto dock = ImGui::DockBuilderSplitNode(dockspaceId, slot, element->GetDockSize(), nullptr, &dockspaceId);
+                ImGui::DockBuilderDockWindow(element->NameId(), dock);
+            }
+            else
+            {
+                auto dock = ImGui::DockBuilderSplitNode(dockspaceId, ImGuiDir_Left | ImGuiDir_Right | ImGuiDir_Up | ImGuiDir_Down, element->GetDockSize(), nullptr, &dockspaceId);
                 ImGui::DockBuilderDockWindow(element->NameId(), dock);
             }
         }
@@ -104,6 +111,14 @@ namespace Trema::View
     std::shared_ptr<DockSpace> DockSpace::CreateDockSpace(std::string title, ImGuiID dockspaceId)
     {
         return std::make_shared<DockSpace>(std::move(title), dockspaceId);
+    }
+
+    bool DockSpace::IsSavedDock() const
+    {
+        auto io = ImGui::GetIO();
+        std::ifstream file(io.IniFilename);
+
+        return file.is_open() && m_allowSave;
     }
 
     //---

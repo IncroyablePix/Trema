@@ -26,6 +26,7 @@ namespace Trema::View
 
     void Checkbox::Show()
     {
+        BeginStyle();
         if(ImGui::Checkbox(m_name.c_str(), &m_checked))
         {
             auto future = std::async(std::launch::async, [this]()
@@ -36,6 +37,7 @@ namespace Trema::View
                 }
             });
         }
+        EndStyle();
     }
 
     std::shared_ptr<Checkbox> Checkbox::CreateCheckbox(std::shared_ptr<IGuiElement> parent, std::string name)

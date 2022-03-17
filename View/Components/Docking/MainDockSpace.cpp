@@ -10,8 +10,8 @@
 
 namespace Trema::View
 {
-    MainDockSpace::MainDockSpace(std::string title, ImGuiID dockspaceId) :
-    DockSpace(std::move(title), dockspaceId)
+    MainDockSpace::MainDockSpace(std::string title, ImGuiID dockspaceId, bool allowSave) :
+    DockSpace(std::move(title), dockspaceId, allowSave)
     {
 
     }
@@ -27,10 +27,10 @@ namespace Trema::View
 
         if(io.ConfigFlags & ImGuiConfigFlags_DockingEnable) // If docking enabled
         {
-            ImGuiID dockspaceId = ImGui::GetID(m_name.c_str());
+            ImGuiID dockspaceId = ImGui::GetID(NameId());
             ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 
-            if (m_firstTime)
+            if (m_firstTime && !IsSavedDock())
             {
                 m_firstTime = false;
 
@@ -43,14 +43,6 @@ namespace Trema::View
                 ImGui::DockBuilderFinish(dockspaceId);
             }
 
-
-            if(m_elements.find(DOCK_CENTER) != m_elements.end())
-            {
-                auto element = m_elements[DOCK_CENTER];
-                element->Show();
-                //ImGui::DockBuilderDockWindow(element->GetName().c_str(), dock);
-                //ImGui::DockBuilderAddNode(dock, ImGuiDockNodeFlags_PassthruCentralNode);
-            }
         }
 
         End();
@@ -58,6 +50,7 @@ namespace Trema::View
 
     void MainDockSpace::Begin()
     {
+        BeginStyle();
         ImGuiViewport* viewport = ImGui::GetMainViewport();
         // Central dockspace should take up all space
         ImGui::SetNextWindowPos(viewport->Pos);
@@ -81,16 +74,29 @@ namespace Trema::View
 
         for(const auto& [slot, element] : m_elements)
         {
-            if(slot != DOCK_CENTER)
+            if(slot == DOCK_CENTER)
+            {
+
+            }
+            //if(slot != DOCK_CENTER)
             {
                 element->Show();
             }
         }
+
+        /*if(m_elements.find(DOCK_CENTER) != m_elements.end())
+        {
+            auto element = m_elements[DOCK_CENTER];
+            element->Show();
+            //ImGui::DockBuilderDockWindow(element->GetName().c_str(), dock);
+            //ImGui::DockBuilderAddNode(dock, ImGuiDockNodeFlags_PassthruCentralNode);
+        }*/
+        EndStyle();
     }
 
-    std::shared_ptr<MainDockSpace> MainDockSpace::CreateMainDockSpace(std::string title, ImGuiID dockspaceId)
+    std::shared_ptr<MainDockSpace> MainDockSpace::CreateMainDockSpace(std::string title, ImGuiID dockspaceId, bool saveLayout)
     {
-        return std::make_shared<MainDockSpace>(std::move(title), 1);
+        return std::make_shared<MainDockSpace>(std::move(title), dockspaceId, saveLayout);
     }
 
     MainDockSpace::~MainDockSpace()

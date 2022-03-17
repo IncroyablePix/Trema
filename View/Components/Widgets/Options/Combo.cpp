@@ -45,6 +45,7 @@ namespace Trema::View
             flags &= ~ImGuiComboFlags_NoArrowButton; // Clear the other flag, as we cannot combine both
         }*/
 
+        BeginStyle();
         if (ImGui::BeginCombo(NameId(), m_selected))
         {
             for(const auto& name : m_options)
@@ -71,6 +72,7 @@ namespace Trema::View
             }
             ImGui::EndCombo();
         }
+        EndStyle();
     }
 
     std::shared_ptr<Combo> Combo::CreateCombo(std::shared_ptr<IGuiElement> parent, std::string name)

@@ -6,20 +6,10 @@
 #define MATH4BG_IGUIELEMENT_H
 
 #include <memory>
+#include "ElementStyle.h"
 
 namespace Trema::View
 {
-    enum Orientation
-    {
-        Column,
-        Row
-    };
-
-    struct ElementStyle
-    {
-        Orientation Orientation = Row;
-    };
-
     class IGuiElement : public std::enable_shared_from_this<IGuiElement>
     {
     public:
@@ -31,6 +21,8 @@ namespace Trema::View
         inline void SetId(std::string id) { m_id = std::move(id); }
         virtual const char* NameId();
         virtual void SetName(std::string name);
+        virtual void BeginStyle();
+        virtual void EndStyle();
 
         inline void SetDockSize(float dockSize) { m_dockSize = dockSize; }
         inline float GetDockSize() const { return m_dockSize; }
@@ -45,6 +37,8 @@ namespace Trema::View
         float m_dockSize { 0.2f };
         std::string m_name;
         std::string m_id;
+        unsigned int m_styles;
+        unsigned int m_colors;
     };
 }
 

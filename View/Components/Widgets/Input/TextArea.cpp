@@ -23,7 +23,9 @@ namespace Trema::View
 
     void TextArea::Show()
     {
+        BeginStyle();
         ImGui::InputTextMultiline(NameId(), m_text, m_bufferSize);
+        EndStyle();
     }
 
     std::shared_ptr<TextArea> TextArea::CreateTextArea(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText,
