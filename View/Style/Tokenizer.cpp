@@ -3,6 +3,7 @@
 //
 
 #include <cstring>
+#include <sstream>
 #include "Tokenizer.h"
 
 namespace Trema::View
@@ -32,6 +33,9 @@ namespace Trema::View
             string[0] == '-' &&
             string[1] == '.' &&
             std::isdigit(string[2]))
+            return true;
+
+        if(string[0] == '#' || (string[0] && (string[1] == 'x' || string[1] =='X')))
             return true;
 
         return false;
@@ -124,9 +128,22 @@ namespace Trema::View
 
             else if(c == '@')
             {
-                m_lastType = T_VARASSIGN;
+                m_lastType = T_IDENTITY;
                 m_cursor = pos + 1;
                 auto t = std::move(std::make_unique<Token>(T_IDENTITY, m_cursor, nullptr));
+                return t;
+            }
+
+            // *
+            else if (c == '*')
+            {
+                m_lastType = T_IDENTIFIER;
+                m_cursor = pos + 1;
+
+                symbolPtr = new char[2];
+                strcpy(symbolPtr, "*");
+
+                auto t = std::move(std::make_unique<Token>(T_IDENTIFIER, m_cursor, symbolPtr));
                 return t;
             }
 
@@ -146,7 +163,7 @@ namespace Trema::View
             {
                 l = pos + 1;
 
-                while(m_code[l] != '\0' && (std::isalpha(m_code[l]) || std::isdigit(m_code[l])))
+                while(m_code[l] != '\0' && (std::isalpha(m_code[l]) || std::isdigit(m_code[l]) || m_code[l] == '_'))
                 {
                     l ++;
                 }
@@ -156,7 +173,7 @@ namespace Trema::View
                 strncpy(symbolPtr, m_code + pos, l);
                 symbolPtr[l] = '\0';
 
-                auto t = std::move(std::make_unique<Token>(T_IDENTIFIER, m_cursor, valuePtr));
+                auto t = std::move(std::make_unique<Token>(T_IDENTIFIER, m_cursor, symbolPtr));
                 m_cursor = pos + l;
                 m_lastType = T_IDENTIFIER;
 
@@ -184,5 +201,51 @@ namespace Trema::View
         m_value(value)
     {
 
+    }
+
+    std::string Token::GetIdentity() const
+    {
+        std::stringstream ss;
+        ss << "<";
+        switch(m_tokenType)
+        {
+            case T_LNUMBER:
+                ss << "NUMBER ('" << *((double*) m_value) << "'):";
+                break;
+            case T_IDENTIFIER:
+                ss << "IDENTIFIER ('" << (std::string((char*)m_value)) << "'):";
+                break;
+            case T_IDENTITY:
+                ss << "IDENTITY ('@'):";
+                break;
+            case T_ENDINS:
+                ss << "ENDINS (';'):";
+                break;
+            case T_LPAR:
+                ss << "LPAR ('('):";
+                break;
+            case T_RPAR:
+                ss << "RPAR (')'):";
+                break;
+            case T_LCURLY:
+                ss << "LCURLY ('{'):";
+                break;
+            case T_RCURLY:
+                ss << "RCURLY ('}'):";
+                break;
+            case T_PROPASSIGN:
+                ss << "PROPASSIGN (':'):";
+                break;
+            case T_VARASSIGN:
+                ss << "VARASSIGN ('='):";
+                break;
+            case T_STOP:
+                ss << "STOP:";
+                break;
+        }
+        ss << GetPosition() << ">\n";
+        auto str = ss.str();
+
+        return str;
     }
 }

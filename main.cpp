@@ -28,13 +28,14 @@ std::vector<std::string> split(const std::string& input, const std::string& rege
 
 int main(int argc, char** argv)
 {
-    std::string test = "@coucou { nique: 0.3; }";
+    // std::string test = "@obj { prop: 0.3; }";
+    std::string test = "obj { prop: 0.3; }";
     Tokenizer tokenizer(test);
 
     while(!tokenizer.Empty())
     {
         auto t = tokenizer.GetNextToken();
-        std::cout << "<" << t->GetTokenType() << ":" << t->GetPosition() << ">\n";
+        std::cout << t->GetIdentity();
     }
 
     std::cout << std::flush;
