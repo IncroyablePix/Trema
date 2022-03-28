@@ -84,7 +84,7 @@ namespace Trema::View
 
     void DockSpace::Begin()
     {
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar |
+        ImGuiWindowFlags windowFlags = (m_hasMenuBar ? ImGuiWindowFlags_MenuBar : 0) |
                                        ImGuiWindowFlags_NoTitleBar |
                                        ImGuiWindowFlags_NoCollapse |
                                        ImGuiWindowFlags_NoResize |

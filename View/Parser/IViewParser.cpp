@@ -16,9 +16,12 @@
 #include "../Components/Widgets/Table.h"
 #include "../Components/Widgets/Input/TextInput.h"
 #include "../Components/Widgets/Input/TextArea.h"
-#include "ParsingException.h"
+#include "../Exceptions/ParsingException.h"
 #include "../Components/Widgets/Options/SelectorOption.h"
 #include "../Utils/StringExtensions.h"
+#include "../Components/TopMenu/SubMenu.h"
+#include "../Components/TopMenu/MenuOption.h"
+#include "../Components/Widgets/Separator.h"
 
 namespace Trema::View
 {
@@ -160,6 +163,31 @@ namespace Trema::View
             element = TableRow::CreateTableRow(std::move(parent), std::move(name));
         }
 
+        else if(elementName == "TopMenu")
+        {
+            element = TopMenu::CreateTopMenu(std::move(name));
+        }
+
+        else if(elementName == "SubMenu")
+        {
+            element = SubMenu::CreateSubMenu(std::move(parent), std::move(name));
+        }
+
+        else if(elementName == "MenuOption")
+        {
+            std::string shortcut;
+
+            if(attributes.find("shortcut") != attributes.end())
+                shortcut = attributes["shortcut"];
+
+            element = MenuOption::CreateMenuOption(std::move(parent), std::move(name), shortcut);
+        }
+
+        else if(elementName == "Separator")
+        {
+            element = Separator::CreateSeparator(std::move(parent), std::move(name));
+        }
+
         //---
 
         if(element)
@@ -192,16 +220,16 @@ namespace Trema::View
         return str == "true";
     }
 
-    void IViewParser::TryAddLayout(const std::shared_ptr<IGuiElement>& layout, const std::shared_ptr<IWindow>& window)
+    void IViewParser::TryAddLayout(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<IWindow>& window)
     {
-        if(dynamic_cast<ILayout*>(layout.get()))
+        if(IsType<ILayout>(element))
         {
-            std::shared_ptr<ILayout> newLayout = std::dynamic_pointer_cast<ILayout>(layout);
+            std::shared_ptr<ILayout> newLayout = std::dynamic_pointer_cast<ILayout>(element);
             window->SetLayout(newLayout);
         }
         else
         {
-            throw ParsingException("Root element should be layout type");
+            throw ParsingException("Root element should be layout");
         }
     }
 
@@ -221,7 +249,8 @@ namespace Trema::View
 
     void IViewParser::TryAddToLayout(const std::shared_ptr<IGuiElement>& element,
                                            const std::shared_ptr<IGuiElement> &container,
-                                           std::unordered_map<std::string, std::string>& attributes)
+                                           std::unordered_map<std::string, std::string>& attributes,
+                                           const std::shared_ptr<IWindow>& window)
     {
         if (auto* layout = dynamic_cast<DockSpace*>(container.get()))
         {
@@ -239,6 +268,11 @@ namespace Trema::View
 
                 layout->AddElement(std::move(newContainer), dockSlot);
             }
+            else if(IsType<TopMenu>(element))
+            {
+                auto menu = std::dynamic_pointer_cast<TopMenu>(element);
+                window->SetTopMenu(menu);
+            }
             else
             {
                 throw ParsingException("Missing attribute \"dockSlot\" for DockSpace child");
@@ -247,6 +281,19 @@ namespace Trema::View
         else
         {
             throw ParsingException("Unsupported layout type");
+        }
+    }
+
+    void IViewParser::TryAddTopMenu(const std::shared_ptr<IGuiElement> &element, const std::shared_ptr<IWindow> &window)
+    {
+        if(IsType<TopMenu>(element))
+        {
+            std::shared_ptr<TopMenu> newMenu = std::dynamic_pointer_cast<TopMenu>(element);
+            window->SetTopMenu(newMenu);
+        }
+        else
+        {
+            throw ParsingException("Type mismatch to top menu item!");
         }
     }
 }

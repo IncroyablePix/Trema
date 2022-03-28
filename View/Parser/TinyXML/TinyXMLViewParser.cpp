@@ -9,7 +9,7 @@
 #include "TinyXMLViewParser.h"
 #include "tinyxml.h"
 #include "../../Components/Container/IContainer.h"
-#include "../ParsingException.h"
+#include "../../Exceptions/ParsingException.h"
 #include "../../Components/Widgets/Options/Radio.h"
 
 namespace Trema::View
@@ -107,11 +107,12 @@ namespace Trema::View
         //---
 
         ParseChildren(element, newElement, window);
-
         if(container == nullptr)
             TryAddLayout(newElement, window); // Try add as layout
         else if(IsType<ILayout>(container))
-            TryAddToLayout(newElement, container, attributes); // Add container to layout
+            TryAddToLayout(newElement, container, attributes, window); // Add container to layout
+        else if(IsType<TopMenu>(newElement))
+            TryAddTopMenu(newElement, window);
         else
             TryAddAsChild(container, newElement, elementName); // Add to container
     }

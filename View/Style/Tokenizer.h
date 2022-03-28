@@ -24,6 +24,8 @@ namespace Trema::View
         T_RCURLY = 8, // }
         T_PROPASSIGN = 9, // :
         T_VARASSIGN = 10, // =
+        T_LSTRING = 11, // " " || ' '
+        T_LBOOL = 12,
         T_STOP = -1 // End of expression
     } TokenType;
 
@@ -33,6 +35,7 @@ namespace Trema::View
         Token(TokenType tokenType, unsigned int position, void* value);
         inline unsigned int GetPosition() const { return m_position; }
         inline TokenType GetTokenType() const { return m_tokenType; }
+        inline void* GetValue() const { return m_value; }
         std::string GetIdentity() const;
 
     protected:
@@ -53,6 +56,9 @@ namespace Trema::View
         std::deque<std::unique_ptr<Token>> m_tokens;
         const char* m_code;
         unsigned int m_cursor;
+
+        unsigned int m_line;
+        unsigned int m_linePos;
 
         std::unique_ptr<Token> ParseToken();
     };

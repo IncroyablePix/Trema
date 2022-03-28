@@ -16,6 +16,7 @@
 #include "View/Parser/TinyXML/TinyXMLViewParser.h"
 #include "View/Components/Windows/FileDialog.h"
 #include "View/Style/Tokenizer.h"
+#include "View/Components/TopMenu/MenuOption.h"
 
 using namespace Trema::View;
 
@@ -29,7 +30,7 @@ std::vector<std::string> split(const std::string& input, const std::string& rege
 int main(int argc, char** argv)
 {
     // std::string test = "@obj { prop: 0.3; }";
-    std::string test = "obj { prop: 0.3; }";
+    std::string test = "@obj { prop: 'coucou' les benz; }";
     Tokenizer tokenizer(test);
 
     while(!tokenizer.Empty())
@@ -39,14 +40,14 @@ int main(int argc, char** argv)
     }
 
     std::cout << std::flush;
-    /*WindowInfo info { .Title = "Trema", .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
+    WindowInfo info { .Title = "Trema", .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
 
     auto parser = TinyXMLViewParser();
     auto window = SDL2Window::CreateSDL2Window(info);
     //parser.SetupWindowFromFile("./csv_table.txml", window);
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("File dialog"));
     parser.SetupWindowFromFile("./sample_1.txml", window);
-    window->SetDefaultFont("JetbrainsMono");*/
+    window->SetDefaultFont("JetbrainsMono");
 
     //---
 
@@ -156,7 +157,7 @@ int main(int argc, char** argv)
 
     //--- Table
 
-    /*auto counter = 1;
+    auto counter = 1;
     auto scoresBoard = window->GetElementById<Table>("scoresBoard");
     auto nameInput = window->GetElementById<TextInput>("nameInput");
     auto scoreInput = window->GetElementById<TextInput>("scoreInput");
@@ -164,6 +165,16 @@ int main(int argc, char** argv)
 
     auto textOutput = window->GetElementById<Text>("textOutput");
     auto combo = window->GetElementById<Combo>("my-combo");
+
+    auto newFile = window->GetElementById<MenuOption>("newFile");
+
+    newFile->AddOnClickListener("listener", [&window](const Trema::View::MenuOption &)
+    {
+        window->GetComponent<FileDialog>()->ShowFileDialog("C:/", "*.*",  [](const std::string &path)
+        {
+            std::cout << path <<  std::endl;
+        });
+    });
 
     addButton->AddOnClickListener("addButtonListener", [&counter, &scoresBoard, nameInput, scoreInput](const Trema::View::Button &button)
     {
@@ -187,7 +198,7 @@ int main(int argc, char** argv)
     auto filesButton = window->GetElementById<Button>("files");
     filesButton->AddOnClickListener("listener2", [&window](const Trema::View::Button &)
     {
-        window->GetComponent<FileDialog>()->ShowFileDialog("C:\\", "*.*",  [](const std::string &path)
+        window->GetComponent<FileDialog>()->ShowFileDialog("C:/", "*.*",  [](const std::string &path)
         {
             std::cout << path <<  std::endl;
         });
@@ -259,7 +270,7 @@ int main(int argc, char** argv)
         //style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
     });
 
-    window->Run();*/
+    window->Run();
 
     /*auto dockSpaceLayout = MainDockSpace::CreateMainDockSpace("Dockspace", 1);
     auto topMenu = TopMenu::CreateTopMenu("Top Menu");

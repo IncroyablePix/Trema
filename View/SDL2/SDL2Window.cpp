@@ -99,7 +99,6 @@ namespace Trema::View
 
     void SDL2Window::Render()
     {
-        bool show_demo_window;
         auto* wd = m_renderer.GetWindowData();
 
         ImGui_ImplVulkan_NewFrame();
@@ -111,9 +110,16 @@ namespace Trema::View
 
         //--- ImGui code
         if(m_menu)
+        {
             m_menu->Show();
+        }
+
         if(m_layout)
+        {
+            m_layout->SetActiveMenuBar(m_menu != nullptr);
             m_layout->Show();
+        }
+
         for(const auto& [name, popup] : m_popupComponents)
             popup->Show();
         //---

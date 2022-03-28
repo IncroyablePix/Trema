@@ -13,6 +13,10 @@ namespace Trema::View
     {
     public:
         ILayout(std::string name);
+        inline void SetActiveMenuBar(bool toggle) { m_hasMenuBar = toggle; }
+
+    protected:
+        bool m_hasMenuBar;
     };
 }
 

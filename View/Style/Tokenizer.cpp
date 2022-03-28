@@ -5,6 +5,7 @@
 #include <cstring>
 #include <sstream>
 #include "Tokenizer.h"
+#include "../Exceptions/ParsingException.h"
 
 namespace Trema::View
 {
@@ -35,7 +36,7 @@ namespace Trema::View
             std::isdigit(string[2]))
             return true;
 
-        if(string[0] == '#' || (string[0] && (string[1] == 'x' || string[1] =='X')))
+        if((string[0] && (string[1] == 'x' || string[1] =='X')))
             return true;
 
         return false;
@@ -44,6 +45,8 @@ namespace Trema::View
     Tokenizer::Tokenizer(const std::string& code) :
         m_code(code.c_str()),
         m_cursor(0),
+        m_line(1),
+        m_linePos(1),
         m_lastType(T_LPAR)
     {
         while(m_lastType != T_STOP)
@@ -59,6 +62,13 @@ namespace Trema::View
         // ignoring white spaces
         while(std::isspace(m_code[pos]))
         {
+            if(m_code[pos] == '\n')
+            {
+                m_line ++;
+                m_linePos = 0;
+            }
+
+            m_linePos ++;
             pos ++;
         }
 
@@ -74,6 +84,7 @@ namespace Trema::View
             {
                 m_lastType = T_ENDINS;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_ENDINS, m_cursor, nullptr));
                 return t;
             }
@@ -82,6 +93,7 @@ namespace Trema::View
             {
                 m_lastType = T_LPAR;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_LPAR, m_cursor, nullptr));
                 return t;
             }
@@ -90,6 +102,7 @@ namespace Trema::View
             {
                 m_lastType = T_RPAR;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_RPAR, m_cursor, nullptr));
                 return t;
             }
@@ -98,6 +111,7 @@ namespace Trema::View
             {
                 m_lastType = T_LCURLY;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_LCURLY, m_cursor, nullptr));
                 return t;
             }
@@ -106,6 +120,7 @@ namespace Trema::View
             {
                 m_lastType = T_RCURLY;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_RCURLY, m_cursor, nullptr));
                 return t;
             }
@@ -114,6 +129,7 @@ namespace Trema::View
             {
                 m_lastType = T_PROPASSIGN;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_PROPASSIGN, m_cursor, nullptr));
                 return t;
             }
@@ -122,6 +138,7 @@ namespace Trema::View
             {
                 m_lastType = T_VARASSIGN;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_VARASSIGN, m_cursor, nullptr));
                 return t;
             }
@@ -130,6 +147,7 @@ namespace Trema::View
             {
                 m_lastType = T_IDENTITY;
                 m_cursor = pos + 1;
+                m_linePos ++;
                 auto t = std::move(std::make_unique<Token>(T_IDENTITY, m_cursor, nullptr));
                 return t;
             }
@@ -139,6 +157,7 @@ namespace Trema::View
             {
                 m_lastType = T_IDENTIFIER;
                 m_cursor = pos + 1;
+                m_linePos ++;
 
                 symbolPtr = new char[2];
                 strcpy(symbolPtr, "*");
@@ -147,11 +166,42 @@ namespace Trema::View
                 return t;
             }
 
+            else if (c == '\'' || c == '"')
+            {
+                l = pos + 1;
+
+                while(m_code[l] != '\0' && m_code[l] != c && m_code[l] != '\n')
+                {
+                    l ++;
+
+                    if(m_code[l] == '\0' || m_code[l] == '\n')
+                    {
+                        std::stringstream ss;
+                        ss << "Unfinished string on line " << m_line;
+                        throw ParsingException(ss.str().c_str());
+                    }
+                }
+                l -= pos;
+                symbolPtr = new char[l - 1];
+                strncpy(symbolPtr, m_code + pos + 1, l - 1);
+                symbolPtr[l] = '\0';
+
+                auto t = std::move(std::make_unique<Token>(T_LSTRING, m_cursor, symbolPtr));
+                m_cursor = pos + l + 1;
+                m_linePos += l + 1;
+                m_lastType = T_LSTRING;
+
+                return t;
+            }
+
             else if(IsNumber(m_code + pos, m_lastType))
             {
                 valuePtr = new double;
                 *valuePtr = strtod(m_code + pos, &symbolPtr);
-                pos += (unsigned int) (symbolPtr - (m_code + pos));
+
+                auto size = (unsigned int) (symbolPtr - (m_code + pos));
+                pos += size;
+                m_linePos += size;
 
                 auto t = std::move(std::make_unique<Token>(T_LNUMBER, m_cursor, valuePtr));
                 m_cursor = pos;
@@ -175,9 +225,17 @@ namespace Trema::View
 
                 auto t = std::move(std::make_unique<Token>(T_IDENTIFIER, m_cursor, symbolPtr));
                 m_cursor = pos + l;
+                m_linePos += l;
                 m_lastType = T_IDENTIFIER;
 
                 return t;
+            }
+
+            else
+            {
+                std::stringstream ss;
+                ss << "Unknown token '" << c << "' on " << m_line << ":" << m_linePos;
+                throw ParsingException(ss.str().c_str());
             }
         }
 
@@ -238,6 +296,9 @@ namespace Trema::View
                 break;
             case T_VARASSIGN:
                 ss << "VARASSIGN ('='):";
+                break;
+            case T_LSTRING:
+                ss << "LSTRING ('" << (std::string((char*)m_value)) << "'):";
                 break;
             case T_STOP:
                 ss << "STOP:";

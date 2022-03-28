@@ -7,6 +7,7 @@
 
 
 #include "IStyleParser.h"
+#include "SymbolTable.h"
 
 namespace Trema::View
 {
@@ -19,6 +20,7 @@ namespace Trema::View
         void ParseFromFile(const std::string &path) override;
 
     private:
+        SymbolTable m_symbolTable;
         std::vector<std::string> m_tokens;
         unsigned int m_pos;
     };
