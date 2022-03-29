@@ -9,11 +9,11 @@
 #include <array>
 #include <memory>
 #include <unordered_map>
-#include "../IGuiElement.h"
-#include "../../ImGUI/imgui.h"
-#include "../../ImGUI/imgui_internal.h"
+#include "../../IGuiElement.h"
+#include "../../../ImGUI/imgui.h"
+#include "../../../ImGUI/imgui_internal.h"
 #include "../ILayout.h"
-#include "../Container/IContainer.h"
+#include "../../Container/IContainer.h"
 
 namespace Trema::View
 {
@@ -36,6 +36,7 @@ namespace Trema::View
 
         virtual void Begin();
         virtual void End();
+        void AddContainer(std::shared_ptr<IContainer> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<IWindow> &window) override;
 
         void Show() override;
         void AddElement(std::shared_ptr<IContainer> element, DockSlot slot);
@@ -52,4 +53,4 @@ namespace Trema::View
     };
 }
 
-#endif //MATH4BG_DOCKSPACE_H
+#endif

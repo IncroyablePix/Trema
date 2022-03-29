@@ -6,7 +6,6 @@
 #include <iterator>
 #include <vector>
 #include "IViewParser.h"
-#include "../Components/Docking/MainDockSpace.h"
 #include "../Components/Container/WindowContainer.h"
 #include "../Components/Widgets/Options/Radio.h"
 #include "../Components/Widgets/Options/Combo.h"
@@ -22,6 +21,10 @@
 #include "../Components/TopMenu/SubMenu.h"
 #include "../Components/TopMenu/MenuOption.h"
 #include "../Components/Widgets/Separator.h"
+#include "../Components/Layout/Docking/DockSpace.h"
+#include "../Components/Layout/Docking/MainDockSpace.h"
+#include "../Components/Layout/StackSpace/StackSpace.h"
+#include "../Components/Layout/LayoutException.h"
 
 namespace Trema::View
 {
@@ -70,9 +73,9 @@ namespace Trema::View
             element = MainDockSpace::CreateMainDockSpace(std::move(name), dockspaceId, saveLayout);
         }
 
-        else if(elementName == "TopMenu")
+        else if(elementName == "StackSpace")
         {
-            element = TopMenu::CreateTopMenu(std::move(name));
+            element = StackSpace::CreateStackSpace(std::move(name));
         }
 
         else if(elementName == "WindowContainer")
@@ -252,35 +255,32 @@ namespace Trema::View
                                            std::unordered_map<std::string, std::string>& attributes,
                                            const std::shared_ptr<IWindow>& window)
     {
-        if (auto* layout = dynamic_cast<DockSpace*>(container.get()))
+        if(dynamic_cast<IContainer*>(element.get()) == nullptr)
+            throw ParsingException("Only IContainer can fit into layout");
+
+        std::shared_ptr<IContainer> newContainer = std::dynamic_pointer_cast<IContainer>(element);
+
+        if(auto* layout = dynamic_cast<ILayout*>(container.get()))
         {
-            if(dynamic_cast<IContainer*>(element.get()) == nullptr)
+            if(IsType<TopMenu>(element))
             {
-                throw ParsingException("Only IContainer can fit into layout");
-            }
-
-            std::shared_ptr<IContainer> newContainer = std::dynamic_pointer_cast<IContainer>(element);
-
-            if(attributes.find("dockSlot") != attributes.end())
-            {
-                auto dockSlotName = attributes["dockSlot"];
-                auto dockSlot = DockSlotFromString(dockSlotName);
-
-                layout->AddElement(std::move(newContainer), dockSlot);
-            }
-            else if(IsType<TopMenu>(element))
-            {
-                auto menu = std::dynamic_pointer_cast<TopMenu>(element);
+                auto menu = std::dynamic_pointer_cast<TopMenu>(container);
                 window->SetTopMenu(menu);
+                return;
             }
-            else
+
+            try
             {
-                throw ParsingException("Missing attribute \"dockSlot\" for DockSpace child");
+                layout->AddContainer(newContainer, attributes, window);
+            }
+            catch(const LayoutException& e)
+            {
+                throw ParsingException(e.what());
             }
         }
         else
         {
-            throw ParsingException("Unsupported layout type");
+            throw ParsingException("Tried to append container to non-layout element");
         }
     }
 

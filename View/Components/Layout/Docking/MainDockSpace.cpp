@@ -5,8 +5,8 @@
 #include "MainDockSpace.h"
 
 #include <utility>
-#include "../../ImGUI/imgui.h"
-#include "../../ImGUI/imgui_internal.h"
+#include "../../../ImGUI/imgui.h"
+#include "../../../ImGUI/imgui_internal.h"
 
 namespace Trema::View
 {
@@ -42,7 +42,6 @@ namespace Trema::View
 
                 ImGui::DockBuilderFinish(dockspaceId);
             }
-
         }
 
         End();
@@ -65,6 +64,7 @@ namespace Trema::View
                                        ImGuiWindowFlags_NoMove |
                                        ImGuiWindowFlags_NoBringToFrontOnFocus |
                                        ImGuiWindowFlags_NoNavFocus;
+
         ImGui::Begin(NameId(), nullptr, windowFlags);
     }
 

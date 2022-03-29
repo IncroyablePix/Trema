@@ -6,7 +6,7 @@
 #define TREMA_IWINDOW_H
 
 #include <string>
-#include "Components/ILayout.h"
+#include "Components/Layout/ILayout.h"
 #include "Components/TopMenu/TopMenu.h"
 #include "Components/IPopupComponent.h"
 #include "ImGUI/imgui.h"

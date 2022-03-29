@@ -10,6 +10,7 @@
 #include <vector>
 #include <unordered_map>
 #include "../IWindow.h"
+#include "../Components/Layout/Docking/DockSpace.h"
 
 namespace Trema::View
 {
@@ -36,6 +37,10 @@ namespace Trema::View
         static int StrToInt(const std::string& str);
 
         bool StrToBool(const std::string &str);
+
+        void TryAddToDockSpace(const std::shared_ptr<IGuiElement> &element, Trema::View::DockSpace *layout,
+                               std::unordered_map<std::string, std::string> &attributes,
+                               const std::shared_ptr<IWindow> &window);
     };
 }
 

@@ -6,7 +6,11 @@
 #include <utility>
 #include <fstream>
 #include "DockSpace.h"
-#include "../../ImGUI/imgui_internal.h"
+#include "../../../ImGUI/imgui_internal.h"
+#include "../../../Exceptions/ParsingException.h"
+#include "../LayoutException.h"
+#include "../../TopMenu/TopMenu.h"
+#include "../../../IWindow.h"
 
 namespace Trema::View
 {
@@ -119,6 +123,19 @@ namespace Trema::View
         std::ifstream file(io.IniFilename);
 
         return file.is_open() && m_allowSave;
+    }
+
+    void DockSpace::AddContainer(std::shared_ptr<IContainer> container,
+                                 std::unordered_map<std::string, std::string> &attributes,
+                                 const std::shared_ptr<IWindow> &window)
+    {
+        if(attributes.find("dockSlot") == attributes.end())
+            throw LayoutException("Missing attribute \"dockSlot\" for DockSpace child");
+
+        auto dockSlotName = attributes["dockSlot"];
+        auto dockSlot = DockSlotFromString(dockSlotName);
+
+        AddElement(std::move(container), dockSlot);
     }
 
     //---
