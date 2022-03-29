@@ -264,7 +264,7 @@ namespace Trema::View
         {
             if(IsType<TopMenu>(element))
             {
-                auto menu = std::dynamic_pointer_cast<TopMenu>(container);
+                auto menu = std::dynamic_pointer_cast<TopMenu>(newContainer);
                 window->SetTopMenu(menu);
                 return;
             }

@@ -56,4 +56,9 @@ namespace Trema::View
         ImGui::PopStyleColor((int) m_colors);
         m_colors = 0;
     }
+
+    ImVec2 IGuiElement::GetItemSize() const
+    {
+        return Style.GetSize();
+    }
 }

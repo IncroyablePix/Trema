@@ -22,8 +22,14 @@ namespace Trema::View
         float m_alpha = -1.f;            // Transparency
         Orientation m_orientation = Row; // Orientation (radio buttons, ...)
 
+        std::string m_width = "auto";
+        std::string m_height = "auto";
+
         ImVec4 m_textColor = {1.0f, 1.0f, 1.0f, 1.0f };
         bool m_hasTextColor { false };
+
+        static bool GetFromPercents(const std::string& value, float& floatValue);
+        static bool GetFromWord(const std::string& value, float& floatValue);
 
     public:
         void SetOrientation(enum Orientation orientation);
@@ -33,6 +39,11 @@ namespace Trema::View
         void SetAlpha(float alpha);
         void SetAlpha(const std::string &alpha);
         float GetAlpha() const;
+
+        void SetWidth(std::string width);
+        void SetHeight(std::string height);
+
+        ImVec2 GetSize() const;
 
         void SetTextColor(int color);
         void SetTextColor(unsigned int color);

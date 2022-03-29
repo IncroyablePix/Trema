@@ -24,6 +24,8 @@ namespace Trema::View
         virtual void BeginStyle();
         virtual void EndStyle();
 
+        virtual ImVec2 GetItemSize() const;
+
         inline void SetDockSize(float dockSize) { m_dockSize = dockSize; }
         inline float GetDockSize() const { return m_dockSize; }
 

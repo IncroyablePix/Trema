@@ -27,7 +27,8 @@ namespace Trema::View
     void Button::Show()
     {
         BeginStyle();
-        if(ImGui::Button(NameId()))
+
+        if(ImGui::Button(NameId(), GetItemSize()))
         {
             auto future = std::async(std::launch::async, [this]()
             {

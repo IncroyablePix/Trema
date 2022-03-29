@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <regex>
 #include "ElementStyle.h"
 #include "../Utils/StringExtensions.h"
 
@@ -92,6 +93,54 @@ namespace Trema::View
     bool ElementStyle::HasTextColor() const
     {
         return m_hasTextColor;
+    }
+
+    void ElementStyle::SetWidth(std::string width)
+    {
+        m_width = std::move(width);
+    }
+
+    void ElementStyle::SetHeight(std::string height)
+    {
+        m_height = std::move(height);
+    }
+
+    ImVec2 ElementStyle::GetSize() const
+    {
+        float w = 0.0f, h = 0.0f;
+        auto available = ImGui::GetContentRegionAvail();
+
+        if(GetFromWord(m_width, w)) { }
+        else if(GetFromPercents(m_width, w)) { }
+
+        if(GetFromWord(m_height, h)) { }
+        if(GetFromPercents(m_height, h))
+        { }
+
+
+        return { available.x * w, available.y * h };
+    }
+
+    bool ElementStyle::GetFromPercents(const std::string& value, float& floatValue)
+    {
+        if(std::regex_match(value, std::regex(R"(^-?\d*(\.\d+)?%$)")))
+        {
+            floatValue = strtof(value.c_str(), nullptr) / 100.0f;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool ElementStyle::GetFromWord(const std::string &value, float &floatValue)
+    {
+        if(value == "auto")
+        {
+            floatValue = 0.0f;
+            return true;
+        }
+
+        return false;
     }
 
 

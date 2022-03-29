@@ -65,12 +65,14 @@ namespace Trema::View
                                        ImGuiWindowFlags_NoBringToFrontOnFocus |
                                        ImGuiWindowFlags_NoNavFocus;
 
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { .0f, .0f });
         ImGui::Begin(NameId(), nullptr, windowFlags);
     }
 
     void MainDockSpace::End()
     {
         ImGui::End();
+        ImGui::PopStyleVar(1);
 
         for(const auto& [slot, element] : m_elements)
         {

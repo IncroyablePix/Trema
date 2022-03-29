@@ -112,6 +112,9 @@ int main(int argc, char** argv)
     parser.SetupWindowFromFile("./sample_2.txml", window);
     window->SetDefaultFont("JetbrainsMono");
 
+    window->GetElementById<Button>("change-theme")->Style.SetWidth("30%");
+    window->GetElementById<Button>("change-theme")->Style.SetHeight("30%");
+
     window->Run();
 
     return EXIT_SUCCESS;
