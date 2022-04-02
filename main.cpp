@@ -16,6 +16,7 @@
 #include "View/Components/Windows/FileDialog.h"
 #include "View/Style/Tokenizer.h"
 #include "View/Components/TopMenu/MenuOption.h"
+#include "View/Style/StackedStyleParser.h"
 
 using namespace Trema::View;
 
@@ -92,17 +93,20 @@ std::vector<std::string> split(const std::string& input, const std::string& rege
 int main(int argc, char** argv)
 {
     // std::string test = "@obj { prop: 0.3; }";
-    std::string test = "@obj { prop: 'coucou' les benz; }";
-    Tokenizer tokenizer(test);
+    std::string test = "salut: 'meriana'; #obj { prop: fdp; } mama { name: 'suzanne anne'; }";
+    //Tokenizer tokenizer(test);
 
-    while(!tokenizer.Empty())
+    /*while(!tokenizer.Empty())
     {
         auto t = tokenizer.GetNextToken();
         std::cout << t->GetIdentity();
     }
 
-    std::cout << std::flush;
-    WindowInfo info { .Title = "Trema", .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
+    std::cout << std::flush;*/
+
+    StackedStyleParser parser;
+    parser.ParseFromCode(test);
+    /*WindowInfo info { .Title = "Trema", .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
 
     auto parser = TinyXMLViewParser();
     auto window = SDL2Window::CreateSDL2Window(info);
@@ -115,7 +119,7 @@ int main(int argc, char** argv)
     window->GetElementById<Button>("change-theme")->Style.SetWidth("30%");
     window->GetElementById<Button>("change-theme")->Style.SetHeight("30%");
 
-    window->Run();
+    window->Run();*/
 
     return EXIT_SUCCESS;
 }

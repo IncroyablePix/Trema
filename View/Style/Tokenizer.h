@@ -16,7 +16,7 @@ namespace Trema::View
     {
         T_LNUMBER = 1, // number
         T_IDENTIFIER = 2, // property name, applier, variable
-        T_IDENTITY = 3, // @
+        T_IDENTITY = 3, // #
         T_ENDINS = 4, // ;
         T_LPAR = 5, // (
         T_RPAR = 6, // )

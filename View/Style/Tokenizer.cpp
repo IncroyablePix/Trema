@@ -143,7 +143,7 @@ namespace Trema::View
                 return t;
             }
 
-            else if(c == '@')
+            else if(c == '#')
             {
                 m_lastType = T_IDENTITY;
                 m_cursor = pos + 1;
@@ -274,7 +274,7 @@ namespace Trema::View
                 ss << "IDENTIFIER ('" << (std::string((char*)m_value)) << "'):";
                 break;
             case T_IDENTITY:
-                ss << "IDENTITY ('@'):";
+                ss << "IDENTITY ('#'):";
                 break;
             case T_ENDINS:
                 ss << "ENDINS (';'):";
@@ -298,6 +298,9 @@ namespace Trema::View
                 ss << "VARASSIGN ('='):";
                 break;
             case T_LSTRING:
+                ss << "LSTRING ('" << (std::string((char*)m_value)) << "'):";
+                break;
+            case T_LBOOL:
                 ss << "LSTRING ('" << (std::string((char*)m_value)) << "'):";
                 break;
             case T_STOP:

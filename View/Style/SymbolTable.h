@@ -8,48 +8,17 @@
 
 #include <unordered_map>
 #include <memory>
+#include <sstream>
+#include "Variable.h"
 
 namespace Trema::View
 {
-    enum VariableType
-    {
-        TYPE_STR,
-        TYPE_NUM,
-        TYPE_BOOL
-    };
-
-    class Variable : public std::enable_shared_from_this<Variable>
-    {
-    public:
-        Variable(void* value, VariableType type) : m_value(value), m_type(type) { }
-        ~Variable()
-        {
-            switch(GetType())
-            {
-                case TYPE_STR:
-                    delete static_cast<char*>(m_value);
-                    break;
-                case TYPE_NUM:
-                    delete static_cast<double*>(m_value);
-                    break;
-                case TYPE_BOOL:
-                    delete static_cast<bool*>(m_value);
-                    break;
-            }
-        }
-
-        inline void* GetValue() const { return m_value; }
-        inline VariableType GetType() const { return m_type; }
-
-    private:
-        void* m_value;
-        VariableType m_type;
-    };
-
-    class SymbolTable
+    class SymbolTable : public std::enable_shared_from_this<SymbolTable>
     {
     public:
         SymbolTable();
+        SymbolTable(const SymbolTable& st);
+
         template<typename T> void SetVariable(const std::string &name, T* value)
         {
             if(std::is_same<T, double>::value)
@@ -72,6 +41,8 @@ namespace Trema::View
 
         bool HasVariable(const std::string &name) { return m_variables.find(name) != m_variables.end(); }
         std::shared_ptr<Variable> GetVariable(const std::string& name) { return m_variables[name]; }
+
+        friend std::ostream& operator<<(std::ostream& os, const SymbolTable& st);
 
     private:
         std::unordered_map<std::string, std::shared_ptr<Variable>> m_variables;

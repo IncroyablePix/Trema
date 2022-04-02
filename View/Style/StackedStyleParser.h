@@ -20,9 +20,14 @@ namespace Trema::View
         void ParseFromFile(const std::string &path) override;
 
     private:
-        SymbolTable m_symbolTable;
+        /*SymbolTable m_symbolTable;*/
+        std::deque<std::shared_ptr<SymbolTable>> m_symbolTables;
+        std::unordered_map<std::string, std::shared_ptr<SymbolTable>> m_variables;
         std::vector<std::string> m_tokens;
+
         unsigned int m_pos;
+
+        void SetFromSymbolTables(const std::shared_ptr<SymbolTable>& st, const char *propName, char* varName);
     };
 }
 
