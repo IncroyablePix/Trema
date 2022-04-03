@@ -8,6 +8,7 @@
 
 #include "IStyleParser.h"
 #include "SymbolTable.h"
+#include "Tokenizer.h"
 
 namespace Trema::View
 {
@@ -15,19 +16,18 @@ namespace Trema::View
     {
     public:
         StackedStyleParser();
-        void Apply(std::shared_ptr<IWindow> window) override;
         void ParseFromCode(const std::string &code) override;
         void ParseFromFile(const std::string &path) override;
 
     private:
-        /*SymbolTable m_symbolTable;*/
         std::deque<std::shared_ptr<SymbolTable>> m_symbolTables;
-        std::unordered_map<std::string, std::shared_ptr<SymbolTable>> m_variables;
-        std::vector<std::string> m_tokens;
 
         unsigned int m_pos;
 
         void SetFromSymbolTables(const std::shared_ptr<SymbolTable>& st, const char *propName, char* varName);
+        void AssignVar(std::stack<std::unique_ptr<Token>>& tokens, const std::shared_ptr<SymbolTable>& currentSt);
+        void AssignProps(std::stack<std::unique_ptr<Token>>& tokens, std::shared_ptr<SymbolTable>& currentSt);
+        void SaveTopSymbolTable(std::string name);
     };
 }
 

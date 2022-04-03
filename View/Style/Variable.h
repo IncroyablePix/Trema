@@ -7,6 +7,7 @@
 
 #include <string>
 #include <memory>
+#include <cstring>
 
 namespace Trema::View
 {
@@ -14,6 +15,7 @@ namespace Trema::View
     {
         TYPE_STR,
         TYPE_NUM,
+        TYPE_FLOAT,
         TYPE_BOOL
     };
 
@@ -26,9 +28,12 @@ namespace Trema::View
             switch(GetType())
             {
                 case TYPE_STR:
-                    delete static_cast<char*>(m_value);
+                    delete[] static_cast<char*>(m_value);
                     break;
                 case TYPE_NUM:
+                    delete static_cast<int64_t*>(m_value);
+                    break;
+                case TYPE_FLOAT:
                     delete static_cast<double*>(m_value);
                     break;
                 case TYPE_BOOL:
@@ -37,10 +42,42 @@ namespace Trema::View
             }
         }
 
+        inline void* CopyValue() const
+        {
+            void* v;
+            switch(GetType())
+            {
+                case TYPE_STR:
+                    v = new char[strlen((char*)m_value)];
+                    strcpy((char*)v, (char*)m_value);
+                    break;
+                case TYPE_NUM:
+                    v = new int64_t;
+                    *((int64_t*)v) = *((int64_t*)m_value);
+                    break;
+                case TYPE_FLOAT:
+                    v = new double;
+                    *((double*)v) = *((double*)m_value);
+                    break;
+                case TYPE_BOOL:
+                    v = new bool;
+                    *((bool*)v) = *((bool*)m_value);
+                    break;
+            }
+
+            return v;
+        }
+
+        template<typename T>
+        inline T GetValue() const { return (T) m_value; }
+        template<typename T>
+        inline T GetPtrValue() const { return *(reinterpret_cast<T*>(m_value)); }
+
         inline void* GetValue() const { return m_value; }
         inline VariableType GetType() const { return m_type; }
         std::string GetIdentity() const;
 
+        friend std::ostream& operator<<(std::ostream& os, const Variable& st);
 
     private:
         void* m_value;

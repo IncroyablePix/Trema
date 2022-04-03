@@ -7,12 +7,14 @@
 
 #include "../IViewParser.h"
 #include "tinyxml.h"
+#include "../../Style/IStyleParser.h"
 
 namespace Trema::View
 {
     class TinyXMLViewParser : public IViewParser
     {
     public:
+        explicit TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser);
         void SetupWindowFromFile(const std::string &path, std::shared_ptr<IWindow> window) override;
         void SetupWindowFromFile(const std::wstring &path, std::shared_ptr<IWindow> window) override;
         void SetupWindowFromString(const std::string &code, std::shared_ptr<IWindow> window) override;

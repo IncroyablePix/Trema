@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <memory>
 #include "../IWindow.h"
+#include "SymbolTable.h"
 
 
 namespace Trema::View
@@ -19,21 +20,15 @@ namespace Trema::View
         IdStyle
     };
 
-    struct AbstractStyle
-    {
-        ObjectType Type;
-        std::string Identifier;
-    };
-
     class IStyleParser
     {
     public:
-        virtual void Apply(std::shared_ptr<IWindow> window) = 0;
         virtual void ParseFromFile(const std::string& path) = 0;
         virtual void ParseFromCode(const std::string& code) = 0;
+        inline const std::unordered_map<std::string, std::shared_ptr<SymbolTable>>& GetVariables() { return m_variables; };
 
     protected:
-        std::unordered_map<std::string, std::unordered_map<std::string, std::string>> m_styles;
+        std::unordered_map<std::string, std::shared_ptr<SymbolTable>> m_variables;
     };
 }
 

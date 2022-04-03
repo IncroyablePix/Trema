@@ -2,6 +2,7 @@
 // Created by JajaFil on 3/19/2022.
 //
 
+#include <algorithm>
 #include "SymbolTable.h"
 
 namespace Trema::View
@@ -15,7 +16,7 @@ namespace Trema::View
     {
         for(const auto& [key, val] : st.m_variables)
         {
-            os << "[" << key << ":" << val->GetIdentity() << "]\n";
+            os << "\t[" << key << ":" << val->GetIdentity() << "]\n";
         }
 
         os << std::endl;
@@ -25,5 +26,11 @@ namespace Trema::View
     SymbolTable::SymbolTable(const SymbolTable& st) : m_variables(st.m_variables)
     {
 
+    }
+
+    void SymbolTable::Append(const SymbolTable &st)
+    {
+        for(const auto& [name, val] : st.m_variables)
+            m_variables[name] = val;
     }
 }

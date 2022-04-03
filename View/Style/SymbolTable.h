@@ -23,6 +23,10 @@ namespace Trema::View
         {
             if(std::is_same<T, double>::value)
             {
+                m_variables[name] = std::make_shared<Variable>(value, TYPE_FLOAT);
+            }
+            else if(std::is_same<T, int64_t>::value)
+            {
                 m_variables[name] = std::make_shared<Variable>(value, TYPE_NUM);
             }
             else if(std::is_same<T, char>::value)
@@ -41,8 +45,12 @@ namespace Trema::View
 
         bool HasVariable(const std::string &name) { return m_variables.find(name) != m_variables.end(); }
         std::shared_ptr<Variable> GetVariable(const std::string& name) { return m_variables[name]; }
+        void Append(const SymbolTable &st);
 
         friend std::ostream& operator<<(std::ostream& os, const SymbolTable& st);
+
+        auto begin() { return m_variables.begin(); }
+        auto end() { return m_variables.end(); }
 
     private:
         std::unordered_map<std::string, std::shared_ptr<Variable>> m_variables;

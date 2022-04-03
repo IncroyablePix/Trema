@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <iterator>
+#include <utility>
 #include <vector>
 #include "IViewParser.h"
 #include "../Components/Container/WindowContainer.h"
@@ -25,10 +26,25 @@
 #include "../Components/Layout/Docking/MainDockSpace.h"
 #include "../Components/Layout/StackSpace/StackSpace.h"
 #include "../Components/Layout/LayoutException.h"
+#include "../Style/StyleApplier.h"
 
 namespace Trema::View
 {
-    void IViewParser::HeadElementFromName(const std::string& elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window)
+    IViewParser::IViewParser(std::unique_ptr<IStyleParser> stylesParser) :
+        m_stylesParser(std::move(stylesParser))
+    {
+
+    }
+
+    void IViewParser::ApplyStyles(const std::shared_ptr<IWindow>& window)
+    {
+        auto vals = m_stylesParser->GetVariables();
+        StyleApplier applier;
+        applier.ApplyStylesToWindow(vals, window);
+
+    }
+
+    void IViewParser::HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window)
     {
         auto name = attributes["name"];
 
@@ -49,6 +65,18 @@ namespace Trema::View
             else
             {
                 throw ParsingException(R"(Missing "src" attribute from element "Font")");
+            }
+        }
+
+        else if(elementName == "Style")
+        {
+            if(attributes.find("src") != attributes.end())
+            {
+                m_stylesParser->ParseFromFile(attributes["src"]);
+            }
+            else if(!content.empty())
+            {
+                m_stylesParser->ParseFromCode(content);
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Trema::View
 {
     typedef enum
     {
-        T_LNUMBER = 1, // number
+        T_LFNUMBER = 1, // number
         T_IDENTIFIER = 2, // property name, applier, variable
         T_IDENTITY = 3, // #
         T_ENDINS = 4, // ;
@@ -25,7 +25,8 @@ namespace Trema::View
         T_PROPASSIGN = 9, // :
         T_VARASSIGN = 10, // =
         T_LSTRING = 11, // " " || ' '
-        T_LBOOL = 12,
+        T_LNUMBER = 12, // number
+        T_LBOOL = 13,
         T_STOP = -1 // End of expression
     } TokenType;
 

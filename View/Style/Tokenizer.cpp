@@ -4,12 +4,14 @@
 
 #include <cstring>
 #include <sstream>
+#include <cmath>
 #include "Tokenizer.h"
 #include "../Exceptions/ParsingException.h"
+#include "../Utils/StringExtensions.h"
 
 namespace Trema::View
 {
-    bool IsNumber(const char* string, TokenType lastType)
+    bool IsFloatNumber(const char* string, TokenType lastType)
     {
         if(string[0] == '\0')
             return false;
@@ -24,22 +26,39 @@ namespace Trema::View
             return true;
 
         if((lastType == T_LPAR || lastType == T_VARASSIGN || lastType == T_PROPASSIGN ) &&
-            string[0] == '-' && std::isdigit(string[1]))
+           string[0] == '-' && std::isdigit(string[1]))
             return true;
 
         if(string[2] == '\0')
             return false;
 
         if((lastType == T_LPAR || lastType == T_PROPASSIGN || lastType == T_VARASSIGN) &&
-            string[0] == '-' &&
-            string[1] == '.' &&
-            std::isdigit(string[2]))
+           string[0] == '-' &&
+           string[1] == '.' &&
+           std::isdigit(string[2]))
             return true;
 
         if((string[0] && (string[1] == 'x' || string[1] =='X')))
             return true;
 
         return false;
+    }
+
+    bool IsHexNumber(const char* string, size_t size)
+    {
+        std::string s(string, size);
+
+        return (s[0] == '0' && (s[1] == 'x' || s[1] == 'X')) &&
+            s.size() > 2 &&
+            s.find_first_not_of("0123456789abcdefABCDEF", 2) == std::string::npos;
+    }
+
+    long long IntFromHex(const char* string, size_t size)
+    {
+        auto hexString = std::string(string + 2, size - 2);
+        auto val = std::stoll(hexString, nullptr, 16);
+
+        return val;
     }
 
     Tokenizer::Tokenizer(const std::string& code) :
@@ -76,7 +95,8 @@ namespace Trema::View
 
         char c, *symbolPtr;
         unsigned int l;
-        double *valuePtr;
+        double *fValuePtr;
+        int64_t *valuePtr;
 
         while((c = m_code[pos]) != '\0')
         {
@@ -194,26 +214,46 @@ namespace Trema::View
                 return t;
             }
 
-            else if(IsNumber(m_code + pos, m_lastType))
+            else if(IsFloatNumber(m_code + pos, m_lastType))
             {
-                valuePtr = new double;
-                *valuePtr = strtod(m_code + pos, &symbolPtr);
+                const char* offset = m_code + pos;
+                double intPart, fractPart;
+                fValuePtr = new double;
+                *fValuePtr = strtod(offset, &symbolPtr);
 
                 auto size = (unsigned int) (symbolPtr - (m_code + pos));
                 pos += size;
                 m_linePos += size;
 
-                auto t = std::move(std::make_unique<Token>(T_LNUMBER, m_cursor, valuePtr));
-                m_cursor = pos;
-                m_lastType = T_LNUMBER;
-                return t;
+                fractPart = modf(*fValuePtr, &intPart);
+                if (fractPart == 0 || IsHexNumber(offset, size))
+                {
+                    valuePtr = new int64_t;
+
+                    if(IsHexNumber(offset, size))
+                        *valuePtr = IntFromHex(offset, size);
+                    else
+                        *valuePtr = (int)*fValuePtr;
+
+                    auto t = std::move(std::make_unique<Token>(T_LNUMBER, m_cursor, valuePtr));
+                    m_cursor = pos;
+                    m_lastType = T_LNUMBER;
+                    return t;
+                }
+                else
+                {
+                    auto t = std::move(std::make_unique<Token>(T_LFNUMBER, m_cursor, fValuePtr));
+                    m_cursor = pos;
+                    m_lastType = T_LFNUMBER;
+                    return t;
+                }
             }
 
             else if(std::isalpha(c))
             {
                 l = pos + 1;
 
-                while(m_code[l] != '\0' && (std::isalpha(m_code[l]) || std::isdigit(m_code[l]) || m_code[l] == '_'))
+                while(m_code[l] != '\0' && (std::isalpha(m_code[l]) || std::isdigit(m_code[l]) || m_code[l] == '_' || m_code[l] == '-'))
                 {
                     l ++;
                 }
@@ -268,7 +308,10 @@ namespace Trema::View
         switch(m_tokenType)
         {
             case T_LNUMBER:
-                ss << "NUMBER ('" << *((double*) m_value) << "'):";
+                ss << "NUMBER ('" << *((int64_t*) m_value) << " - " << ToHex(*((int64_t*) m_value)) << "'):";
+                break;
+            case T_LFNUMBER:
+                ss << "FLOAT_NUMBER ('" << *((double*) m_value) << "'):";
                 break;
             case T_IDENTIFIER:
                 ss << "IDENTIFIER ('" << (std::string((char*)m_value)) << "'):";
@@ -301,7 +344,7 @@ namespace Trema::View
                 ss << "LSTRING ('" << (std::string((char*)m_value)) << "'):";
                 break;
             case T_LBOOL:
-                ss << "LSTRING ('" << (std::string((char*)m_value)) << "'):";
+                ss << "LSTRING ('" << (*((bool*)m_value)) << "'):";
                 break;
             case T_STOP:
                 ss << "STOP:";

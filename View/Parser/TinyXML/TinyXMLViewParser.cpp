@@ -14,6 +14,12 @@
 
 namespace Trema::View
 {
+    TinyXMLViewParser::TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser) :
+            IViewParser(std::move(styleParser))
+    {
+
+    }
+
     void TinyXMLViewParser::SetupWindowFromFile(const std::string &path, std::shared_ptr<IWindow> window)
     {
         TiXmlDocument doc(path.c_str());
@@ -23,6 +29,7 @@ namespace Trema::View
             // TODO : Throw exception
         }
         ParseDocument(doc, window);
+        ApplyStyles(window);
     }
 
     void TinyXMLViewParser::SetupWindowFromFile(const std::wstring &path, std::shared_ptr<IWindow> window)
@@ -82,7 +89,9 @@ namespace Trema::View
             for(TiXmlAttribute* attribute = child->FirstAttribute(); attribute != nullptr; attribute = attribute->Next())
                 attributes[attribute->Name()] = attribute->Value();
 
-            HeadElementFromName(child->Value(), attributes, window);
+            auto elementName = child->Value();
+            auto innerText = child->GetText();
+            HeadElementFromName(elementName, std::string(innerText ? innerText : ""), attributes, window);
         }
     }
 
