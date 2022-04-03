@@ -36,6 +36,7 @@ namespace Trema::View
         void SetDefaultFont(const std::string &name);
         void AddFont(const std::string& path, float size = 12.0f, const std::string& name = "");
         void Build();
+        void ApplyStyle();
 
         void SetLayout(std::shared_ptr<ILayout> layout);
         void SetTopMenu(std::shared_ptr<TopMenu> topMenu);
@@ -76,6 +77,8 @@ namespace Trema::View
 
             return std::dynamic_pointer_cast<T>(element);
         }
+
+        ElementStyle Style;
 
     protected:
         std::unordered_map<std::string, std::shared_ptr<IGuiElement>> m_elementsById;

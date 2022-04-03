@@ -143,5 +143,41 @@ namespace Trema::View
         return false;
     }
 
+    void ElementStyle::SetPaddingX(float x)
+    {
+        m_padding.x = x;
+    }
+
+    void ElementStyle::SetPaddingY(float y)
+    {
+        m_padding.y = y;
+    }
+
+    void ElementStyle::SetPadding(float x, float y)
+    {
+        m_padding.x = x;
+        m_padding.y = y;
+    }
+
+    void ElementStyle::SetPadding(ImVec2 padding)
+    {
+        m_padding = padding;
+    }
+
+    ImVec2 ElementStyle::GetPadding() const
+    {
+        return m_padding;
+    }
+
+    void ElementStyle::SetRounding(float rounding)
+    {
+        m_rounding = rounding;
+    }
+
+    float ElementStyle::GetRounding() const
+    {
+        return m_rounding;
+    }
+
 
 }

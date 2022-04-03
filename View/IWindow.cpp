@@ -76,4 +76,11 @@ namespace Trema::View
         io.Fonts->Build();
         // io.Fonts->GetTexDataAsRGBA32();
     }
+
+    void IWindow::ApplyStyle()
+    {
+        ImGuiStyle * style = &ImGui::GetStyle();
+
+        style->WindowPadding = Style.GetPadding();
+    }
 }

@@ -28,10 +28,23 @@ namespace Trema::View
         ImVec4 m_textColor = {1.0f, 1.0f, 1.0f, 1.0f };
         bool m_hasTextColor { false };
 
+        ImVec2 m_padding = { 0.0f, 0.0f };
+
+        float m_rounding = 0.0f;
+
         static bool GetFromPercents(const std::string& value, float& floatValue);
         static bool GetFromWord(const std::string& value, float& floatValue);
 
     public:
+        void SetPaddingX(float x);
+        void SetPaddingY(float y);
+        void SetPadding(float x, float y);
+        void SetPadding(ImVec2 padding);
+        ImVec2 GetPadding() const;
+
+        void SetRounding(float rounding);
+        float GetRounding() const;
+
         void SetOrientation(enum Orientation orientation);
         void SetOrientation(const std::string &orientation);
         enum Orientation GetOrientation() const;

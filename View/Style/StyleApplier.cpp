@@ -17,7 +17,7 @@ namespace Trema::View
         {
             if(elementName == "*") // Global
             {
-                SetGlobalStyles(symbolTable);
+                SetGlobalStyles(symbolTable, window);
             }
             else if(elementName[0] == '#') // Id
             {
@@ -26,22 +26,30 @@ namespace Trema::View
                 SetStyleForElement(element, symbolTable);
             }
         }
+
+        if(window)
+            window->ApplyStyle();
     }
 
-    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable)
+    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, const std::shared_ptr<IWindow> &window)
     {
-        /*for(const auto& [propName, value] : *symbolTable)
-        {
-            std::cout << "\t[" << propName << ":" << *value << "]\n";
-        }
-        std::cout << std::endl;*/
-    }
-
-    void StyleApplier::SetStyleForElement(const std::shared_ptr<IGuiElement>& element, std::shared_ptr<SymbolTable> symbolTable)
-    {
-        if(!element)
+        if(!window)
             return;
 
+        SetStyle(window->Style, symbolTable);
+        window->ApplyStyle();
+    }
+
+    void StyleApplier::SetStyleForElement(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable)
+    {
+        if(!element) // TODO: Throw exception ?
+            return;
+
+        SetStyle(element->Style, symbolTable);
+    }
+
+    void StyleApplier::SetStyle(ElementStyle& style, const std::shared_ptr<SymbolTable>& symbolTable)
+    {
         for(const auto& [propName, value] : *symbolTable)
         {
             auto type = value->GetType();
@@ -49,16 +57,42 @@ namespace Trema::View
             if(propName == "text-color")
             {
                 if(type == TYPE_NUM)
-                    element->Style.SetTextColor((int)(value->GetPtrValue<int64_t>()));
+                    style.SetTextColor((int)(value->GetPtrValue<int64_t>()));
                 else if(type == TYPE_STR)
-                    element->Style.SetTextColor(value->GetValue<char*>());
+                    style.SetTextColor(value->GetValue<char*>());
             }
             else if(propName == "opacity")
             {
                 if(type == TYPE_FLOAT)
-                    element->Style.SetAlpha((float)std::clamp<double>((value->GetPtrValue<double>()), 0, 1));
+                    style.SetAlpha((float)std::clamp<double>((value->GetPtrValue<double>()), 0, 1));
                 else if(type == TYPE_STR)
-                    element->Style.SetAlpha(value->GetValue<char*>());
+                    style.SetAlpha(value->GetValue<char*>());
+            }
+            else if(propName == "orientation")
+            {
+                if(type == TYPE_STR)
+                    style.SetOrientation(value->GetValue<char*>());
+            }
+            else if(propName == "padding-x")
+            {
+                if(type == TYPE_FLOAT)
+                    style.SetPaddingX((float)value->GetPtrValue<double>());
+                else if(type == TYPE_NUM)
+                    style.SetPaddingX((int)value->GetPtrValue<int64_t>());
+            }
+            else if(propName == "padding-y")
+            {
+                if(type == TYPE_FLOAT)
+                    style.SetPaddingY((float)value->GetPtrValue<double>());
+                else if(type == TYPE_NUM)
+                    style.SetPaddingY((float)value->GetPtrValue<int64_t>());
+            }
+            else if(propName == "window-rounding")
+            {
+                if(type == TYPE_FLOAT)
+                    style.SetRounding((float)value->GetPtrValue<double>());
+                else if(type == TYPE_NUM)
+                    style.SetRounding((float)value->GetPtrValue<int64_t>());
             }
 
             /*std::cout << "\t[" << propName << ":" << *value;
