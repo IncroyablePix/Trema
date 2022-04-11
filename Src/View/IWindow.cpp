@@ -98,6 +98,9 @@ namespace Trema::View
         if(Style.HasBackgroundColor())
             style->Colors[ImGuiCol_WindowBg] = Style.GetBackgroundColor();
 
+        if(Style.HasHeaderColor())
+            style->Colors[ImGuiCol_TitleBg] = Style.GetHeaderColor();
+
         if(!Style.GetFont().empty())
             SetDefaultFont(Style.GetFont());
     }

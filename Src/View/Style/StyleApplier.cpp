@@ -64,6 +64,11 @@ namespace Trema::View
                 if(type == TYPE_NUM)
                     style.SetBackgroundColor((int)(value->GetPtrValue<int64_t>()));
             }
+            else if(propName == "header-color")
+            {
+                if(type == TYPE_NUM)
+                    style.SetHeaderColor((int)(value->GetPtrValue<int64_t>()));
+            }
             else if(propName == "opacity")
             {
                 if(type == TYPE_FLOAT)

@@ -183,7 +183,7 @@ namespace Trema::View
     {
         m_hasBackgroundColor = true;
 
-        m_textColor =
+        m_backgroundColor =
                 {
                         (float) ((color >> 24) & 0xFF) / 255.0f,
                         (float) ((color >> 16) & 0xFF) / 255.0f,
@@ -214,6 +214,40 @@ namespace Trema::View
     bool ElementStyle::HasBackgroundColor() const
     {
         return m_hasBackgroundColor;
+    }
+
+    void ElementStyle::SetHeaderColor(int color)
+    {
+        SetHeaderColor(*((unsigned int*)&color));
+    }
+
+    void ElementStyle::SetHeaderColor(unsigned int color)
+    {
+        m_hasHeaderColor = true;
+
+        m_headerColor =
+                {
+                        (float) ((color >> 24) & 0xFF) / 255.0f,
+                        (float) ((color >> 16) & 0xFF) / 255.0f,
+                        (float) ((color >> 8) & 0xFF) / 255.0f,
+                        (float) ((color) & 0xFF) / 255.0f
+                };
+    }
+
+    void ElementStyle::SetHeaderColor(const ImVec4 &color)
+    {
+        m_hasHeaderColor = true;
+        m_headerColor = color;
+    }
+
+    ImVec4 ElementStyle::GetHeaderColor() const
+    {
+        return m_headerColor;
+    }
+
+    bool ElementStyle::HasHeaderColor() const
+    {
+        return m_hasHeaderColor;
     }
 
 

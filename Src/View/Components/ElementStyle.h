@@ -31,6 +31,9 @@ namespace Trema::View
         ImVec4 m_backgroundColor = {1.0f, 1.0f, 1.0f, 1.0f };
         bool m_hasBackgroundColor { false };
 
+        ImVec4 m_headerColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+        bool m_hasHeaderColor { false };
+
         ImVec2 m_padding = { 0.0f, 0.0f };
 
         float m_rounding { 0.0f };
@@ -77,6 +80,12 @@ namespace Trema::View
         void SetBackgroundColor(const ImVec4 &color);
         ImVec4 GetBackgroundColor() const;
         [[nodiscard]] bool HasBackgroundColor() const;
+
+        void SetHeaderColor(int color);
+        void SetHeaderColor(unsigned int color);
+        void SetHeaderColor(const ImVec4 &color);
+        ImVec4 GetHeaderColor() const;
+        [[nodiscard]] bool HasHeaderColor() const;
     };
 }
 

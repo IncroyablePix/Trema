@@ -203,9 +203,9 @@ namespace Trema::View
                     }
                 }
                 l -= pos;
-                symbolPtr = new char[l - 1];
+                symbolPtr = new char[l];
                 strncpy(symbolPtr, m_code + pos + 1, l - 1);
-                symbolPtr[l] = '\0';
+                symbolPtr[l - 1] = '\0';
 
                 auto t = std::move(std::make_unique<Token>(T_LSTRING, m_linePos, m_line, symbolPtr));
                 m_cursor = pos + l + 1;
