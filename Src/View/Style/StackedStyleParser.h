@@ -28,6 +28,7 @@ namespace Trema::View
         bool AssignVar(std::stack<std::unique_ptr<Token>>& tokens, const std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes);
         void AssignProps(std::stack<std::unique_ptr<Token>>& tokens, std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes);
         void SaveTopSymbolTable(std::string name);
+        static char* CopyStr(const char* str);
     };
 }
 

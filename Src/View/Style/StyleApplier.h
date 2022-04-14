@@ -23,6 +23,7 @@ namespace Trema::View
         void SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, const std::shared_ptr<IWindow> &window);
         void SetStyleForElement(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable);
         void SetStyle(ElementStyle &style, const std::shared_ptr<SymbolTable>& symbolTable);
+        static char* CopyStr(const char* str);
     };
 }
 

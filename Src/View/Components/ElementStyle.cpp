@@ -33,7 +33,7 @@ namespace Trema::View
     {
         if(IsFloat(alpha))
         {
-            m_alpha = std::stof(alpha);
+            SetAlpha(std::stof(alpha));
         }
     }
 
@@ -52,15 +52,12 @@ namespace Trema::View
     /// \param color ARGB Color
     void ElementStyle::SetTextColor(unsigned int color)
     {
-        m_hasTextColor = true;
-
-        m_textColor =
-        {
+        SetTextColor({
             (float) ((color >> 24) & 0xFF) / 255.0f,
             (float) ((color >> 16) & 0xFF) / 255.0f,
             (float) ((color >> 8) & 0xFF) / 255.0f,
             (float) ((color) & 0xFF) / 255.0f
-        };
+        });
     }
 
     /// Sets the color for text
@@ -101,9 +98,7 @@ namespace Trema::View
         else if(GetFromPercents(m_width, w)) { }
 
         if(GetFromWord(m_height, h)) { }
-        if(GetFromPercents(m_height, h))
-        { }
-
+        else if(GetFromPercents(m_height, h)) { }
 
         return { available.x * w, available.y * h };
     }
@@ -181,15 +176,12 @@ namespace Trema::View
     /// \param color ARGB Color
     void ElementStyle::SetBackgroundColor(unsigned int color)
     {
-        m_hasBackgroundColor = true;
-
-        m_backgroundColor =
-                {
-                        (float) ((color >> 24) & 0xFF) / 255.0f,
-                        (float) ((color >> 16) & 0xFF) / 255.0f,
-                        (float) ((color >> 8) & 0xFF) / 255.0f,
-                        (float) ((color) & 0xFF) / 255.0f
-                };
+        SetBackgroundColor({
+                (float) ((color >> 24) & 0xFF) / 255.0f,
+                (float) ((color >> 16) & 0xFF) / 255.0f,
+                (float) ((color >> 8) & 0xFF) / 255.0f,
+                (float) ((color) & 0xFF) / 255.0f
+        });
     }
 
     void ElementStyle::SetBackgroundColor(int color)
@@ -223,15 +215,12 @@ namespace Trema::View
 
     void ElementStyle::SetHeaderColor(unsigned int color)
     {
-        m_hasHeaderColor = true;
-
-        m_headerColor =
-                {
-                        (float) ((color >> 24) & 0xFF) / 255.0f,
-                        (float) ((color >> 16) & 0xFF) / 255.0f,
-                        (float) ((color >> 8) & 0xFF) / 255.0f,
-                        (float) ((color) & 0xFF) / 255.0f
-                };
+        SetHeaderColor({
+       (float) ((color >> 24) & 0xFF) / 255.0f,
+       (float) ((color >> 16) & 0xFF) / 255.0f,
+       (float) ((color >> 8) & 0xFF) / 255.0f,
+       (float) ((color) & 0xFF) / 255.0f
+       });
     }
 
     void ElementStyle::SetHeaderColor(const ImVec4 &color)
@@ -249,6 +238,4 @@ namespace Trema::View
     {
         return m_hasHeaderColor;
     }
-
-
 }

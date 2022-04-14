@@ -86,7 +86,7 @@ namespace Trema::View
 
     void IWindow::ApplyStyle()
     {
-        ImGuiStyle * style = &ImGui::GetStyle();
+        ImGuiStyle *style = &ImGui::GetStyle();
 
         style->WindowPadding = Style.GetPadding();
         style->WindowRounding = Style.GetRounding();

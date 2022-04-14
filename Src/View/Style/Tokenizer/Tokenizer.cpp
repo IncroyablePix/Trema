@@ -197,7 +197,7 @@ namespace Trema::View
 
                     if(m_code[l] == '\0' || m_code[l] == '\n')
                     {
-                        mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnfinishedString, .Extra = "" });
+                        // mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnfinishedString, .Extra = "" });
                         l --;
                         break;
                     }
@@ -260,7 +260,7 @@ namespace Trema::View
                 }
 
                 l -= pos;
-                symbolPtr = new char[l];
+                symbolPtr = new char[l + 1];
                 strncpy(symbolPtr, m_code + pos, l);
                 symbolPtr[l] = '\0';
 
@@ -274,7 +274,7 @@ namespace Trema::View
 
             else
             {
-                mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnknownToken, .Extra = &""[c] });
+                // mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnknownToken, .Extra = &""[c] });
                 pos ++;
                 m_cursor++;
                 m_linePos ++;

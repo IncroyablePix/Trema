@@ -109,6 +109,19 @@ int main(int argc, char** argv)
 
     std::cout << std::endl;
 
+    auto newFile = window->GetElementById<MenuOption>("newFile");
+
+    if(newFile)
+    {
+        newFile->AddOnClickListener("pute", [&window](const Trema::View::MenuOption &)
+        {
+             window->GetComponent<FileDialog>()->ShowFileDialog("./", ".pdf", [](const std::string &path)
+                {
+                    std::cout << path << std::endl;
+                }, Trema::View::Files);
+        });
+    }
+
     window->Run();
 
     return EXIT_SUCCESS;

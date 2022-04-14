@@ -18,12 +18,33 @@ namespace Trema::Test::View
         int count = 0;
 
         // When
-        while(t.GetNextToken())
+        while(!t.Empty())
         {
+            auto token = t.GetNextToken();
+            token->DeleteValue();
             count ++;
         }
 
         // Then
         REQUIRE(count == 9);
+    }
+
+    TEST_CASE("Last token is T_STOP")
+    {
+        // Given
+        std::string code = "#element { prop: variable; }";
+        std::vector<CompilationMistake> mistakes;
+        Tokenizer t(code, mistakes);
+        std::unique_ptr<Token> token;
+
+        // When
+        while(!t.Empty())
+        {
+            token = t.GetNextToken();
+            token->DeleteValue();
+        }
+
+        // Then
+        REQUIRE(token->GetTokenType() == T_STOP);
     }
 }

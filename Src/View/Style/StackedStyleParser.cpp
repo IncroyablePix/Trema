@@ -19,18 +19,17 @@ namespace Trema::View
     void StackedStyleParser::ParseFromCode(const std::string &code, std::vector<CompilationMistake>& mistakes)
     {
         Tokenizer tokenizer(code, mistakes);
-
+        //Tokenizer tokenizer("", mistakes);
         if(tokenizer.Empty())
             return;
 
         std::stack<std::unique_ptr<Token>> tokens;
 
-        auto currentToken = tokenizer.GetNextToken();
-
         auto currentSt = std::make_shared<SymbolTable>();
         m_symbolTables.push_back(currentSt);
 
-        while(currentToken->GetTokenType() != T_STOP)
+        auto currentToken = tokenizer.GetNextToken();
+        while(!tokenizer.Empty() && currentToken->GetTokenType() != T_STOP)
         {
             std::cout << currentToken->GetIdentity();
             switch(currentToken->GetTokenType())
@@ -171,7 +170,7 @@ namespace Trema::View
                 currentSt->SetVariable<char>((char *) propName->GetValue(),
                                              (char*) val->GetValue());
             else if(val->GetTokenType() == T_IDENTIFIER)
-                SetFromSymbolTables(currentSt, (char *) propName->GetValue(), (char *) val->GetValue(), mistakes);
+                SetFromSymbolTables(currentSt, CopyStr((char *) propName->GetValue()), (char *) val->GetValue(), mistakes);
 
             return true;
         }
@@ -219,5 +218,16 @@ namespace Trema::View
             m_variables[std::move(name)] = topSymbolTable;
         }
         m_symbolTables.pop_back();
+    }
+
+    char *StackedStyleParser::CopyStr(const char* str)
+    {
+        if(!str)
+            return nullptr;
+
+        auto copied = new char[strlen(str)];
+        strcpy(copied, str);
+
+        return copied;
     }
 }

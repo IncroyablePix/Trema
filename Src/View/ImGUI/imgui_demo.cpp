@@ -3534,20 +3534,20 @@ static void ShowDemoWindowPopups()
     {
         ImGui::TextWrapped("Modal windows are like popups but the user cannot close them by clicking outside.");
 
-        if (ImGui::Button("Delete.."))
-            ImGui::OpenPopup("Delete?");
+        if (ImGui::Button("DeleteValue.."))
+            ImGui::OpenPopup("DeleteValue?");
 
         // Always center this window when appearing
         ImVec2 center = ImGui::GetMainViewport()->GetCenter();
         ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-        if (ImGui::BeginPopupModal("Delete?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        if (ImGui::BeginPopupModal("DeleteValue?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
         {
             ImGui::Text("All those beautiful files will be deleted.\nThis operation cannot be undone!\n\n");
             ImGui::Separator();
 
             //static int unused_i = 0;
-            //ImGui::Combo("Combo", &unused_i, "Delete\0Delete harder\0");
+            //ImGui::Combo("Combo", &unused_i, "Delete\0DeleteValue harder\0");
 
             static bool dont_ask_me_next_time = false;
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
@@ -6783,7 +6783,7 @@ struct ExampleAppConsole
                 }
                 else if (candidates.Size == 1)
                 {
-                    // Single match. Delete the beginning of the word and replace it entirely so we've got nice casing.
+                    // Single match. DeleteValue the beginning of the word and replace it entirely so we've got nice casing.
                     data->DeleteChars((int)(word_start - data->Buf), (int)(word_end - word_start));
                     data->InsertChars(data->CursorPos, candidates[0]);
                     data->InsertChars(data->CursorPos, " ");

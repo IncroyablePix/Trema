@@ -21,6 +21,7 @@ namespace Trema::View
 
     protected:
         std::vector<std::shared_ptr<IGuiElement>> m_children;
+        static bool SubContainer;
     };
 }
 

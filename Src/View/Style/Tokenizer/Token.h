@@ -30,11 +30,13 @@ namespace Trema::View
     {
     public:
         Token(TokenType tokenType, unsigned int position, unsigned int line, void* value);
+        ~Token();
         inline unsigned int GetPosition() const { return m_position; }
         inline unsigned int GetLine() const { return m_line; }
         inline TokenType GetTokenType() const { return m_tokenType; }
         inline void* GetValue() const { return m_value; }
         std::string GetIdentity() const;
+        void DeleteValue();
 
     protected:
         TokenType m_tokenType;

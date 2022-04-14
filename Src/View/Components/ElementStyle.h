@@ -7,6 +7,7 @@
 
 #include <string>
 #include "../ImGUI/imgui.h"
+#include <functional>
 
 namespace Trema::View
 {
@@ -20,7 +21,7 @@ namespace Trema::View
     {
     private:
         float m_alpha = -1.f;            // Transparency
-        Orientation m_orientation = Row; // Orientation (radio buttons, ...)
+        Orientation m_orientation = Column; // Orientation (radio buttons, ...)
 
         std::string m_width { "auto" };
         std::string m_height { "auto" };

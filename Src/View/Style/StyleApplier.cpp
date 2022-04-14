@@ -86,7 +86,7 @@ namespace Trema::View
                 if(type == TYPE_FLOAT)
                     style.SetPaddingX((float)value->GetPtrValue<double>());
                 else if(type == TYPE_NUM)
-                    style.SetPaddingX((int)value->GetPtrValue<int64_t>());
+                    style.SetPaddingX((float)value->GetPtrValue<int64_t>());
             }
             else if(propName == "padding-y")
             {
@@ -105,7 +105,7 @@ namespace Trema::View
             else if(propName == "font")
             {
                 if(type == TYPE_STR)
-                    style.SetFont(value->GetValue<char*>());
+                    style.SetFont(CopyStr(value->GetValue<char*>()));
             }
 
             /*std::cout << "\t[" << propName << ":" << *value;
@@ -115,5 +115,16 @@ namespace Trema::View
             std::cout << "]\n";*/
         }
         //std::cout << std::endl;
+    }
+
+    char *StyleApplier::CopyStr(const char* str)
+    {
+        if(!str)
+            return nullptr;
+
+        auto copied = new char[strlen(str)];
+        strcpy(copied, str);
+
+        return copied;
     }
 }

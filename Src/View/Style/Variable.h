@@ -22,25 +22,8 @@ namespace Trema::View
     class Variable : public std::enable_shared_from_this<Variable>
     {
     public:
-        Variable(void* value, VariableType type) : m_value(value), m_type(type) { }
-        ~Variable()
-        {
-            switch(GetType())
-            {
-                case TYPE_STR:
-                    delete[] static_cast<char*>(m_value);
-                    break;
-                case TYPE_NUM:
-                    delete static_cast<int64_t*>(m_value);
-                    break;
-                case TYPE_FLOAT:
-                    delete static_cast<double*>(m_value);
-                    break;
-                case TYPE_BOOL:
-                    delete static_cast<bool*>(m_value);
-                    break;
-            }
-        }
+        Variable(void* value, VariableType type);
+        ~Variable();
 
         inline void* CopyValue() const
         {
@@ -76,6 +59,8 @@ namespace Trema::View
         inline void* GetValue() const { return m_value; }
         inline VariableType GetType() const { return m_type; }
         std::string GetIdentity() const;
+
+        void DeleteValue();
 
         friend std::ostream& operator<<(std::ostream& os, const Variable& st);
 

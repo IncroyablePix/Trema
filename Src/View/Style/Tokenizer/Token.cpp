@@ -71,4 +71,31 @@ namespace Trema::View
 
         return str;
     }
+
+    void Token::DeleteValue()
+    {
+        switch(m_tokenType)
+        {
+            case T_IDENTIFIER:
+            case T_LSTRING:
+                delete[] static_cast<char*>(m_value);
+                break;
+            case T_LNUMBER:
+                delete static_cast<int64_t*>(m_value);
+                break;
+            case T_LFNUMBER:
+                delete static_cast<double*>(m_value);
+                break;
+            case T_LBOOL:
+                delete static_cast<bool*>(m_value);
+                break;
+            default:
+                break;
+        }
+    }
+
+    Token::~Token()
+    {
+        DeleteValue();
+    }
 }

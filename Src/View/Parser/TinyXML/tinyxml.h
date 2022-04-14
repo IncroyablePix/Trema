@@ -512,7 +512,7 @@ public:
 	void SetValue( const std::string& _value )	{ value = _value; }
 	#endif
 
-	/// Delete all the children of this node. Does not affect 'this'.
+	/// DeleteValue all the children of this node. Does not affect 'this'.
 	void Clear();
 
 	/// One step up the DOM.
@@ -607,7 +607,7 @@ public:
 	*/
 	TiXmlNode* ReplaceChild( TiXmlNode* replaceThis, const TiXmlNode& withThis );
 
-	/// Delete a child of this node.
+	/// DeleteValue a child of this node.
 	bool RemoveChild( TiXmlNode* removeThis );
 
 	/// Navigate to a sibling node.

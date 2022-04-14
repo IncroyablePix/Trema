@@ -8,6 +8,8 @@
 
 namespace Trema::View
 {
+    bool IContainer::SubContainer = false;
+
     IContainer::IContainer(std::shared_ptr<IGuiElement> parent, std::string name) :
             IGuiElement(std::move(parent), std::move(name))
     {

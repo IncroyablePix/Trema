@@ -34,6 +34,8 @@ namespace Trema::View
     protected:
         template<class T>
         inline static bool IsType(const std::shared_ptr<IGuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
+        template<class T>
+        inline static std::shared_ptr<T> CastTo(const std::shared_ptr<IGuiElement> &element) { return std::dynamic_pointer_cast<T>(element); }
         
         std::shared_ptr<IGuiElement> m_parent;
         float m_dockSize { 0.2f };

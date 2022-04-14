@@ -7993,7 +7993,7 @@ int ImGui::GetKeyIndex(ImGuiKey key)
 static const char* const GKeyNames[] =
 {
     "Tab", "LeftArrow", "RightArrow", "UpArrow", "DownArrow", "PageUp", "PageDown",
-    "Home", "End", "Insert", "Delete", "Backspace", "Space", "Enter", "Escape",
+    "Home", "End", "Insert", "DeleteValue", "Backspace", "Space", "Enter", "Escape",
     "Apostrophe", "Comma", "Minus", "Period", "Slash", "Semicolon", "Equal", "LeftBracket",
     "Backslash", "RightBracket", "GraveAccent", "CapsLock", "ScrollLock", "NumLock", "PrintScreen",
     "Pause", "Keypad0", "Keypad1", "Keypad2", "Keypad3", "Keypad4", "Keypad5", "Keypad6",
@@ -12653,7 +12653,7 @@ static void ImGui::DestroyViewport(ImGuiViewportP* viewport)
         g.MouseLastHoveredViewport = NULL;
 
     // Destroy
-    IMGUI_DEBUG_LOG_VIEWPORT("Delete Viewport %08X (%s)\n", viewport->ID, viewport->Window ? viewport->Window->Name : "n/a");
+    IMGUI_DEBUG_LOG_VIEWPORT("DeleteValue Viewport %08X (%s)\n", viewport->ID, viewport->Window ? viewport->Window->Name : "n/a");
     DestroyPlatformWindow(viewport); // In most circumstances the platform window will already be destroyed here.
     IM_ASSERT(g.PlatformIO.Viewports.contains(viewport) == false);
     IM_ASSERT(g.Viewports[viewport->Idx] == viewport);
