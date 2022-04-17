@@ -61,7 +61,7 @@ namespace Trema::View
                 ss << "LSTRING ('" << ((char*)m_value) << "'):";
                 break;
             case T_LBOOL:
-                ss << "LSTRING ('" << (*((bool*)m_value)) << "'):";
+                ss << "LBOOL ('" << (*((bool*)m_value) ? "true" : "false") << "'):";
                 break;
             case T_STOP:
                 ss << "STOP:";

@@ -34,6 +34,7 @@ namespace Trema::View
         StyleColor m_menuBackgroundColor;
         StyleColor m_headerColor;
         StyleColor m_headerColorActive;
+        StyleColor m_tableHeaderActive;
 
         ImVec2 m_windowPadding = {0.0f, 0.0f };
         ImVec2 m_framePadding = { 0.0f, 0.0f };
@@ -88,6 +89,7 @@ namespace Trema::View
         inline StyleColor& MenuBackgroundColor() { return m_menuBackgroundColor; }
         inline StyleColor& HeaderColor() { return m_headerColor; }
         inline StyleColor& HeaderActiveColor() { return m_headerColorActive; }
+        inline StyleColor& TableHeaderColor() { return m_tableHeaderActive; }
     };
 }
 

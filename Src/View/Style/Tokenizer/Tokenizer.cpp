@@ -9,6 +9,16 @@
 #include "../../Exceptions/ParsingException.h"
 #include "../../Utils/StringExtensions.h"
 
+#define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a > _b ? _a : _b; })
+
+#define min(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a < _b ? _a : _b; })
+
 namespace Trema::View
 {
     bool IsFloatNumber(const char* string, TokenType lastType)
@@ -51,6 +61,17 @@ namespace Trema::View
         return (s[0] == '0' && (s[1] == 'x' || s[1] == 'X')) &&
             s.size() > 2 &&
             s.find_first_not_of("0123456789abcdefABCDEF", 2) == std::string::npos;
+    }
+
+    bool IsBoolValue(const char* string)
+    {
+        auto len = strlen(string);
+        if(len < 4)
+            return false;
+
+        std::string s(string, min(len, 5));
+
+        return (s == "true" || s == "false");
     }
 
     long long IntFromHex(const char* string, size_t size)
@@ -263,6 +284,18 @@ namespace Trema::View
                 symbolPtr = new char[l + 1];
                 strncpy(symbolPtr, m_code + pos, l);
                 symbolPtr[l] = '\0';
+
+                if(IsBoolValue(symbolPtr))
+                {
+                    auto* val = new bool(std::string(symbolPtr) == "true");
+                    auto t = std::move(std::make_unique<Token>(T_LBOOL, m_linePos, m_line, val));
+                    delete[] symbolPtr;
+                    m_cursor = pos + l;
+                    m_linePos += l;
+                    m_lastType = T_LBOOL;
+
+                    return t;
+                }
 
                 auto t = std::move(std::make_unique<Token>(T_IDENTIFIER, m_linePos, m_line, symbolPtr));
                 m_cursor = pos + l;

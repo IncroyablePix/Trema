@@ -115,6 +115,9 @@ namespace Trema::View
         if(Style.HeaderActiveColor().HasColor())
             style->Colors[ImGuiCol_TitleBgActive] = Style.HeaderActiveColor().GetColor();
 
+        if(Style.TableHeaderColor().HasColor())
+            style->Colors[ImGuiCol_TableHeaderBg] = Style.TableHeaderColor().GetColor();
+
         if(!Style.GetFont().empty())
             SetDefaultFont(Style.GetFont());
     }
