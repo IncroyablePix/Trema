@@ -57,17 +57,37 @@ namespace Trema::View
             if(propName == "text-color")
             {
                 if(type == TYPE_NUM)
-                    style.SetTextColor((int)(value->GetPtrValue<int64_t>()));
+                    style.TextColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+            }
+            else if(propName == "text-color-disabled")
+            {
+                if(type == TYPE_NUM)
+                    style.TextDisabledColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+            }
+            else if(propName == "widget-background-color")
+            {
+                if(type == TYPE_NUM)
+                    style.WidgetBackgroundColor().SetColor((int) (value->GetPtrValue<int64_t>()));
+            }
+            else if(propName == "menu-background-color")
+            {
+                if(type == TYPE_NUM)
+                    style.MenuBackgroundColor().SetColor((int)(value->GetPtrValue<int64_t>()));
             }
             else if(propName == "background-color")
             {
                 if(type == TYPE_NUM)
-                    style.SetBackgroundColor((int)(value->GetPtrValue<int64_t>()));
+                    style.WindowColor().SetColor((int)(value->GetPtrValue<int64_t>()));
             }
             else if(propName == "header-color")
             {
                 if(type == TYPE_NUM)
-                    style.SetHeaderColor((int)(value->GetPtrValue<int64_t>()));
+                    style.HeaderColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+            }
+            else if(propName == "header-color-active")
+            {
+                if(type == TYPE_NUM)
+                    style.HeaderActiveColor().SetColor((int)(value->GetPtrValue<int64_t>()));
             }
             else if(propName == "opacity")
             {
@@ -81,31 +101,52 @@ namespace Trema::View
                 if(type == TYPE_STR)
                     style.SetOrientation(value->GetValue<char*>());
             }
-            else if(propName == "padding-x")
+            else if(propName == "window-padding-x")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetPaddingX((float)value->GetPtrValue<double>());
+                    style.SetWindowPaddingX((float) value->GetPtrValue<double>());
                 else if(type == TYPE_NUM)
-                    style.SetPaddingX((float)value->GetPtrValue<int64_t>());
+                    style.SetWindowPaddingX((float) value->GetPtrValue<int64_t>());
             }
-            else if(propName == "padding-y")
+            else if(propName == "window-padding-y")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetPaddingY((float)value->GetPtrValue<double>());
+                    style.SetWindowPaddingY((float)value->GetPtrValue<double>());
                 else if(type == TYPE_NUM)
-                    style.SetPaddingY((float)value->GetPtrValue<int64_t>());
+                    style.SetWindowPaddingY((float)value->GetPtrValue<int64_t>());
             }
-            else if(propName == "rounding")
+            else if(propName == "window-rounding")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetRounding((float)value->GetPtrValue<double>());
+                    style.SetWindowRounding((float)value->GetPtrValue<double>());
                 else if(type == TYPE_NUM)
-                    style.SetRounding((float)value->GetPtrValue<int64_t>());
+                    style.SetWindowRounding((float)value->GetPtrValue<int64_t>());
+            }
+            else if(propName == "frame-padding-x")
+            {
+                if(type == TYPE_FLOAT)
+                    style.SetFramePaddingX((float) value->GetPtrValue<double>());
+                else if(type == TYPE_NUM)
+                    style.SetFramePaddingX((float) value->GetPtrValue<int64_t>());
+            }
+            else if(propName == "frame-padding-y")
+            {
+                if(type == TYPE_FLOAT)
+                    style.SetFramePaddingY((float)value->GetPtrValue<double>());
+                else if(type == TYPE_NUM)
+                    style.SetFramePaddingY((float)value->GetPtrValue<int64_t>());
+            }
+            else if(propName == "frame-rounding")
+            {
+                if(type == TYPE_FLOAT)
+                    style.SetFrameRounding((float)value->GetPtrValue<double>());
+                else if(type == TYPE_NUM)
+                    style.SetFrameRounding((float)value->GetPtrValue<int64_t>());
             }
             else if(propName == "font")
             {
                 if(type == TYPE_STR)
-                    style.SetFont(CopyStr(value->GetValue<char*>()));
+                    style.SetFont(value->GetValue<char*>());
             }
 
             /*std::cout << "\t[" << propName << ":" << *value;

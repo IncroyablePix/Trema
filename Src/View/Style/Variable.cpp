@@ -6,6 +6,7 @@
 #include "Variable.h"
 #include "../Utils/StringExtensions.h"
 #include <iomanip>
+#include <iostream>
 
 namespace Trema::View
 {

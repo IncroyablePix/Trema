@@ -6,7 +6,7 @@
 #define MATH4BG_IGUIELEMENT_H
 
 #include <memory>
-#include "ElementStyle.h"
+#include "Style/ElementStyle.h"
 
 namespace Trema::View
 {

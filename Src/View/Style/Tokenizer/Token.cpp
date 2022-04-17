@@ -3,6 +3,7 @@
 //
 
 #include <sstream>
+#include <iostream>
 #include "Token.h"
 #include "../../Utils/StringExtensions.h"
 
@@ -30,7 +31,7 @@ namespace Trema::View
                 ss << "FLOAT_NUMBER ('" << *((double*) m_value) << "'):";
                 break;
             case T_IDENTIFIER:
-                ss << "IDENTIFIER ('" << (std::string((char*)m_value)) << "'):";
+                ss << "IDENTIFIER ('" << ((char*)m_value) << "'):";
                 break;
             case T_IDENTITY:
                 ss << "IDENTITY ('#'):";
@@ -57,7 +58,7 @@ namespace Trema::View
                 ss << "VARASSIGN ('='):";
                 break;
             case T_LSTRING:
-                ss << "LSTRING ('" << (std::string((char*)m_value)) << "'):";
+                ss << "LSTRING ('" << ((char*)m_value) << "'):";
                 break;
             case T_LBOOL:
                 ss << "LSTRING ('" << (*((bool*)m_value)) << "'):";

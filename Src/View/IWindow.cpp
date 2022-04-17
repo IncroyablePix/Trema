@@ -88,18 +88,32 @@ namespace Trema::View
     {
         ImGuiStyle *style = &ImGui::GetStyle();
 
-        style->WindowPadding = Style.GetPadding();
-        style->WindowRounding = Style.GetRounding();
+        style->WindowPadding = Style.GetWindowPadding();
+        style->FramePadding = Style.GetFramePadding();
+        style->WindowRounding = Style.GetWindowRounding();
+        style->FrameRounding = Style.GetFrameRounding();
 
         //--- Colors
-        if(Style.HasTextColor())
-            style->Colors[ImGuiCol_Text] = Style.GetTextColor();
+        if(Style.TextColor().HasColor())
+            style->Colors[ImGuiCol_Text] = Style.TextColor().GetColor();
 
-        if(Style.HasBackgroundColor())
-            style->Colors[ImGuiCol_WindowBg] = Style.GetBackgroundColor();
+        if(Style.TextDisabledColor().HasColor())
+            style->Colors[ImGuiCol_TextDisabled] = Style.TextDisabledColor().GetColor();
 
-        if(Style.HasHeaderColor())
-            style->Colors[ImGuiCol_TitleBg] = Style.GetHeaderColor();
+        if(Style.WindowColor().HasColor())
+            style->Colors[ImGuiCol_WindowBg] = Style.WindowColor().GetColor();
+
+        if(Style.WidgetBackgroundColor().HasColor())
+            style->Colors[ImGuiCol_FrameBg] = Style.WidgetBackgroundColor().GetColor();
+
+        if(Style.MenuBackgroundColor().HasColor())
+            style->Colors[ImGuiCol_MenuBarBg] = Style.MenuBackgroundColor().GetColor();
+
+        if(Style.HeaderColor().HasColor())
+            style->Colors[ImGuiCol_TitleBg] = Style.HeaderColor().GetColor();
+
+        if(Style.HeaderActiveColor().HasColor())
+            style->Colors[ImGuiCol_TitleBgActive] = Style.HeaderActiveColor().GetColor();
 
         if(!Style.GetFont().empty())
             SetDefaultFont(Style.GetFont());

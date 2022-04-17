@@ -41,9 +41,9 @@ namespace Trema::View
             m_styles++;
         }
 
-        if(Style.HasTextColor())
+        if(Style.TextColor().HasColor())
         {
-            ImGui::PushStyleColor(ImGuiCol_Text, Style.GetTextColor());
+            ImGui::PushStyleColor(ImGuiCol_Text, Style.TextColor().GetColor());
             m_colors++;
         }
     }
