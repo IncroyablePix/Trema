@@ -47,8 +47,7 @@ namespace Trema::View
 
     void WindowContainer::ShowPureWindow()
     {
-
-        ImGui::Begin(NameId(), &m_isOpened, GetWindowFlags());
+        ImGui::Begin(NameId(), m_closable ? &m_isOpened : nullptr, GetWindowFlags());
 
         bool horizontal = (Style.GetOrientation() == Row);
         bool notFirst = false;

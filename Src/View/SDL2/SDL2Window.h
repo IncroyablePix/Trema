@@ -38,7 +38,6 @@ namespace Trema::View
 
         static SDL_Window* CreateWindow(const WindowInfo &info);
     };
-
     static SDL_WindowFlags WindowFlags = (SDL_WindowFlags) (SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
     static bool Sdl2Initialized { false };
 }

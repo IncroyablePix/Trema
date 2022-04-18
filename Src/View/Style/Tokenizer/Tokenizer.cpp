@@ -218,7 +218,7 @@ namespace Trema::View
 
                     if(m_code[l] == '\0' || m_code[l] == '\n')
                     {
-                        // mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnfinishedString, .Extra = "" });
+                        mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnfinishedString });
                         l --;
                         break;
                     }

@@ -24,6 +24,7 @@ namespace Trema::View
         void ShowPureWindow();
         void ShowSubContainer();
         bool m_isOpened { true };
+        bool m_closable { false };
     };
 }
 
