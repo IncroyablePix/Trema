@@ -35,12 +35,15 @@ namespace Trema::View
         StyleColor m_headerColor;
         StyleColor m_headerColorActive;
         StyleColor m_tableHeaderActive;
+        StyleColor m_popupBackgroundColor;
 
         ImVec2 m_windowPadding = {0.0f, 0.0f };
         ImVec2 m_framePadding = { 0.0f, 0.0f };
 
-        float m_frameRounding {0.0f };
-        float m_windowRounding {0.0f };
+        float m_frameRounding { 0.0f };
+        float m_windowRounding { 0.0f };
+
+        bool m_windowHeader { true };
 
         std::string m_font;
 
@@ -66,6 +69,9 @@ namespace Trema::View
         void SetFrameRounding(float rounding);
         float GetFrameRounding() const;
 
+        void SetWindowHeaderVisibility(bool toggle);
+        bool GetWindowHeaderVisibility() const;
+
         void SetOrientation(enum Orientation orientation);
         void SetOrientation(const std::string &orientation);
         enum Orientation GetOrientation() const;
@@ -90,6 +96,7 @@ namespace Trema::View
         inline StyleColor& HeaderColor() { return m_headerColor; }
         inline StyleColor& HeaderActiveColor() { return m_headerColorActive; }
         inline StyleColor& TableHeaderColor() { return m_tableHeaderActive; }
+        inline StyleColor& PopupBackgroundColor() { return m_popupBackgroundColor; }
     };
 }
 

@@ -20,8 +20,10 @@ namespace Trema::View
         static std::shared_ptr<WindowContainer> CreateWindowContainer(std::shared_ptr<IGuiElement> parent, std::string name);
 
     private:
+        int GetWindowFlags();
         void ShowPureWindow();
         void ShowSubContainer();
+        bool m_isOpened { true };
     };
 }
 

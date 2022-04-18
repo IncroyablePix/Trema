@@ -118,6 +118,9 @@ namespace Trema::View
         if(Style.TableHeaderColor().HasColor())
             style->Colors[ImGuiCol_TableHeaderBg] = Style.TableHeaderColor().GetColor();
 
+        if(Style.PopupBackgroundColor().HasColor())
+            style->Colors[ImGuiCol_PopupBg] = Style.PopupBackgroundColor().GetColor();
+
         if(!Style.GetFont().empty())
             SetDefaultFont(Style.GetFont());
     }

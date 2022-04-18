@@ -169,4 +169,14 @@ namespace Trema::View
     {
         return m_font;
     }
+
+    void ElementStyle::SetWindowHeaderVisibility(bool toggle)
+    {
+        m_windowHeader = toggle;
+    }
+
+    bool ElementStyle::GetWindowHeaderVisibility() const
+    {
+        return m_windowHeader;
+    }
 }

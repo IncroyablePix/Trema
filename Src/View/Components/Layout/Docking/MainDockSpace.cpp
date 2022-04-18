@@ -76,14 +76,7 @@ namespace Trema::View
 
         for(const auto& [slot, element] : m_elements)
         {
-            if(slot == DOCK_CENTER)
-            {
-
-            }
-            //if(slot != DOCK_CENTER)
-            {
-                element->Show();
-            }
+            element->Show();
         }
 
         /*if(m_elements.find(DOCK_CENTER) != m_elements.end())

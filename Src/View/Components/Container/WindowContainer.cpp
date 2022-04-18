@@ -47,7 +47,8 @@ namespace Trema::View
 
     void WindowContainer::ShowPureWindow()
     {
-        ImGui::Begin(NameId());
+
+        ImGui::Begin(NameId(), &m_isOpened, GetWindowFlags());
 
         bool horizontal = (Style.GetOrientation() == Row);
         bool notFirst = false;
@@ -79,5 +80,15 @@ namespace Trema::View
 
             element->Show();
         }
+    }
+
+    int WindowContainer::GetWindowFlags()
+    {
+        int flags = ImGuiWindowFlags_None;
+
+        if(!Style.GetWindowHeaderVisibility())
+            flags |= ImGuiWindowFlags_NoTitleBar;
+
+        return flags;
     }
 }

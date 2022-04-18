@@ -94,6 +94,11 @@ namespace Trema::View
                 if(type == TYPE_NUM)
                     style.TableHeaderColor().SetColor((int)(value->GetPtrValue<int64_t>()));
             }
+            else if(propName == "popup-background-color")
+            {
+                if(type == TYPE_NUM)
+                    style.PopupBackgroundColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+            }
             else if(propName == "opacity")
             {
                 if(type == TYPE_FLOAT)
@@ -152,6 +157,11 @@ namespace Trema::View
             {
                 if(type == TYPE_STR)
                     style.SetFont(value->GetValue<char*>());
+            }
+            else if(propName == "header")
+            {
+                if(type == TYPE_BOOL)
+                    style.SetWindowHeaderVisibility(value->GetPtrValue<bool>());
             }
 
             /*std::cout << "\t[" << propName << ":" << *value;

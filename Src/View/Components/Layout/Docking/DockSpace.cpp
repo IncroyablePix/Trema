@@ -80,8 +80,7 @@ namespace Trema::View
             }
             else
             {
-                auto dock = ImGui::DockBuilderSplitNode(dockspaceId, ImGuiDir_Left | ImGuiDir_Right | ImGuiDir_Up | ImGuiDir_Down, element->GetDockSize(), nullptr, &dockspaceId);
-                ImGui::DockBuilderDockWindow(element->NameId(), dock);
+                ImGui::DockBuilderDockWindow(element->NameId(), dockspaceId);
             }
         }
     }
