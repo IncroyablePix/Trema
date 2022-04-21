@@ -2,7 +2,7 @@
 // Created by JajaFil on 4/9/2022.
 //
 
-#include "../../../../Src/View/Style/Tokenizer/Tokenizer.h"
+#include "../../../../Trema/View/Style/Tokenizer/Tokenizer.h"
 #include <catch2/catch_test_macros.hpp>
 
 using namespace Trema::View;
@@ -123,5 +123,10 @@ namespace Trema::Test::View
         // Then
         REQUIRE(mistakes.size() == 1);
         REQUIRE(mistakes[0].Code == UnfinishedString);
+    }
+
+    TEST_CASE("")
+    {
+
     }
 }

@@ -1,26 +1,19 @@
-#include <iostream>
 #include <string>
 #include <regex>
 #include <fstream>
-#include "View/SDL2/SDL2Window.h"
-#include "View/Components/Container/WindowContainer.h"
-#include "View/Components/Widgets/Button.h"
-#include "View/Components/Widgets/Options/Radio.h"
-#include "View/Components/Widgets/Options/Combo.h"
-#include "View/Components/Widgets/Text.h"
-#include "View/Components/Widgets/Checkbox.h"
-#include "View/Components/Widgets/Table.h"
-#include "View/Components/Widgets/Input/TextInput.h"
-#include "View/Components/Widgets/Input/TextArea.h"
-#include "View/Parser/TinyXML/TinyXMLViewParser.h"
-#include "View/Components/Windows/FileDialog.h"
-#include "View/Style/Tokenizer/Tokenizer.h"
-#include "View/Components/TopMenu/MenuOption.h"
-#include "View/Style/StackedStyleParser.h"
+#include "Trema/View/SDL2/SDL2Window.h"
+#include "Trema/View/Components/Widgets/Button.h"
+#include "Trema/View/Components/Widgets/Text.h"
+#include "Trema/View/Components/Widgets/Table.h"
+#include "Trema/View/Components/Widgets/Input/TextInput.h"
+#include "Trema/View/Parser/TinyXML/TinyXMLViewParser.h"
+#include "Trema/View/Components/Windows/FileDialog.h"
+#include "Trema/View/Style/Tokenizer/Tokenizer.h"
+#include "Trema/View/Style/StackedStyleParser.h"
 
 using namespace Trema::View;
 
-void SetDarkStyle()
+/*void SetDarkStyle()
 {
     ImGuiStyle * style = &ImGui::GetStyle();
 
@@ -87,7 +80,7 @@ std::vector<std::string> split(const std::string& input, const std::string& rege
     std::regex re(regex);
     std::sregex_token_iterator first{input.begin(), input.end(), re, -1}, last;
     return {first, last};
-}
+}*/
 
 int main(int argc, char** argv)
 {
@@ -101,14 +94,40 @@ int main(int argc, char** argv)
     parser.SetupWindowFromFile("./sample_1.txml", window);
     auto mistakes = parser.GetMistakes();
 
-    for(const auto &mistake : mistakes)
+    int id = 0;
+
+    auto nameInput = window->GetElementById<TextInput>("nameInput");
+    auto scoreInput = window->GetElementById<TextInput>("scoreInput");
+
+    auto scoresBoard = window->GetElementById<Table>("scoresBoard");
+
+    auto addButton = window->GetElementById<Button>("addButton");
+
+    addButton->AddOnClickListener("pute", [&nameInput, &scoreInput, &id, &scoresBoard](const Trema::View::Button &)
+    {
+        auto newId = ++id;
+        auto name = nameInput->GetText();
+        auto score = scoreInput->GetText();
+
+        std::stringstream ss;
+        ss << newId;
+
+        auto row = TableRow::CreateTableRow(scoresBoard, name);
+        row->AddChild(Text::CreateText(row, ss.str(), true));
+        row->AddChild(Text::CreateText(row, name, true));
+        row->AddChild(Text::CreateText(row, score));
+
+        scoresBoard->AddValue(std::move(row));
+    });
+
+    /*for(const auto &mistake : mistakes)
     {
         std::cerr << mistake << "\n";
     }
 
-    std::cout << std::endl;
+    std::cout << std::endl;*/
 
-    auto newFile = window->GetElementById<MenuOption>("newFile");
+    /*auto newFile = window->GetElementById<MenuOption>("newFile");
 
     if(newFile)
     {
@@ -119,7 +138,7 @@ int main(int argc, char** argv)
                     std::cout << path << std::endl;
                 }, Trema::View::Files);
         });
-    }
+    }*/
 
     window->Run();
 
