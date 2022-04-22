@@ -97,6 +97,8 @@ namespace Trema::View
         inline StyleColor& HeaderActiveColor() { return m_headerColorActive; }
         inline StyleColor& TableHeaderColor() { return m_tableHeaderActive; }
         inline StyleColor& PopupBackgroundColor() { return m_popupBackgroundColor; }
+
+        static bool GetFromPx(const std::string &value, float &floatValue) ;
     };
 }
 

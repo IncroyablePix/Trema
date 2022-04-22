@@ -58,12 +58,14 @@ namespace Trema::View
         auto available = ImGui::GetContentRegionAvail();
 
         if(GetFromWord(m_width, w)) { }
-        else if(GetFromPercents(m_width, w)) { }
+        else if(GetFromPercents(m_width, w)) { w *= available.x; }
+        else if(GetFromPx(m_width, w)) { }
 
         if(GetFromWord(m_height, h)) { }
-        else if(GetFromPercents(m_height, h)) { }
+        else if(GetFromPercents(m_height, h)) { h *= available.y; }
+        else if(GetFromPx(m_height, h)) { }
 
-        return { available.x * w, available.y * h };
+        return { w, h };
     }
 
     bool ElementStyle::GetFromPercents(const std::string& value, float& floatValue)
@@ -71,6 +73,17 @@ namespace Trema::View
         if(std::regex_match(value, std::regex(R"(^-?\d*(\.\d+)?%$)")))
         {
             floatValue = strtof(value.c_str(), nullptr) / 100.0f;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool ElementStyle::GetFromPx(const std::string& value, float& floatValue)
+    {
+        if(std::regex_match(value, std::regex(R"(^\d+px$)")))
+        {
+            floatValue = strtof(value.c_str(), nullptr);
             return true;
         }
 
