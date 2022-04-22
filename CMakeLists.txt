@@ -41,12 +41,16 @@ add_executable(${PROJECT_NAME} ${PROJECT_FILES})
 message("Linking Trema...")
 target_link_libraries(${PROJECT_NAME} PUBLIC Trema)
 
-### Windows
+### Windows ###
 if(OS STREQUAL "NT")
     message("Linking Windows specifics...")
     target_link_libraries(${PROJECT_NAME} PUBLIC -lmingw32) # -mwindows
     add_definitions(-DSDL_MAIN_HANDLED)
 endif()
+
+### cURL ###
+message("Linking cURL")
+target_link_libraries(${PROJECT_NAME} PUBLIC )
 
 ### MinGW ###
 target_link_options(${PROJECT_NAME} PUBLIC -static-libgcc -static-libstdc++)

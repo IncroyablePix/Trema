@@ -1,6 +1,7 @@
 #include <string>
 #include <regex>
 #include <fstream>
+#include <iostream>
 #include "Trema/View/SDL2/SDL2Window.h"
 #include "Trema/View/Components/Widgets/Button.h"
 #include "Trema/View/Components/Widgets/Text.h"
@@ -10,6 +11,7 @@
 #include "Trema/View/Components/Windows/FileDialog.h"
 #include "Trema/View/Style/Tokenizer/Tokenizer.h"
 #include "Trema/View/Style/StackedStyleParser.h"
+#include "Trema/View/Components/Widgets/ColorPicker.h"
 
 using namespace Trema::View;
 
@@ -118,6 +120,12 @@ int main(int argc, char** argv)
         row->AddChild(Text::CreateText(row, score));
 
         scoresBoard->AddValue(std::move(row));
+    });
+
+    auto colorPicker = window->GetElementById<ColorPicker>("colors");
+    colorPicker->AddOnChangeListener("pute", [](const Trema::View::ColorPicker &cp)
+    {
+        std::cout << cp.GetColorInt() << std::endl;
     });
 
     /*for(const auto &mistake : mistakes)

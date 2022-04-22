@@ -163,6 +163,16 @@ namespace Trema::View
                 if(type == TYPE_BOOL)
                     style.SetWindowHeaderVisibility(value->GetPtrValue<bool>());
             }
+            else if(propName == "width")
+            {
+                if(type == TYPE_STR)
+                    style.SetWidth(value->GetValue<char*>());
+            }
+            else if(propName == "height")
+            {
+                if(type == TYPE_STR)
+                    style.SetHeight(value->GetValue<char*>());
+            }
 
             /*std::cout << "\t[" << propName << ":" << *value;
             if(type == TYPE_NUM)

@@ -28,6 +28,7 @@
 #include "../Components/Layout/LayoutException.h"
 #include "../Style/StyleApplier.h"
 #include "../Components/Widgets/SliderFloat.h"
+#include "../Components/Widgets/ColorPicker.h"
 
 namespace Trema::View
 {
@@ -236,6 +237,11 @@ namespace Trema::View
         else if(elementName == "SliderFloat")
         {
             element = SliderFloat::CreateSliderFloat(std::move(parent), std::move(name));
+        }
+
+        else if(elementName == "ColorPicker")
+        {
+            element = ColorPicker::CreateColorPicker(std::move(parent), std::move(name));
         }
 
         //---

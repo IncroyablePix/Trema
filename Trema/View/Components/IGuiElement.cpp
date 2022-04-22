@@ -53,6 +53,7 @@ namespace Trema::View
         ImGui::PopStyleVar((int) m_styles);
         m_styles = 0;
 
+
         ImGui::PopStyleColor((int) m_colors);
         m_colors = 0;
     }
