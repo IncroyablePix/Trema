@@ -35,11 +35,16 @@ namespace Trema::View
 
     void IGuiElement::BeginStyle()
     {
+        auto size = Style.GetSize();
+
         if(Style.GetAlpha() > 0)
         {
             ImGui::PushStyleVar(ImGuiStyleVar_Alpha, Style.GetAlpha());
             m_styles++;
         }
+
+        if(size.x != 0.0f)
+            ImGui::SetNextItemWidth(size.x);
 
         if(Style.TextColor().HasColor())
         {
@@ -52,7 +57,6 @@ namespace Trema::View
     {
         ImGui::PopStyleVar((int) m_styles);
         m_styles = 0;
-
 
         ImGui::PopStyleColor((int) m_colors);
         m_colors = 0;

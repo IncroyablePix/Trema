@@ -242,6 +242,12 @@ namespace Trema::View
         else if(elementName == "ColorPicker")
         {
             element = ColorPicker::CreateColorPicker(std::move(parent), std::move(name));
+
+            if(attributes.find("preview") != attributes.end())
+                ((ColorPicker*)element.get())->TogglePreview(StrToBool(attributes["preview"]));
+
+            if(attributes.find("input") != attributes.end())
+                ((ColorPicker*)element.get())->ToggleInput(StrToBool(attributes["input"]));
         }
 
         //---

@@ -43,7 +43,7 @@ namespace Trema::View
 
     private:
         static int StrToInt(const std::string& str);
-        bool StrToBool(const std::string &str);
+        static bool StrToBool(const std::string &str);
         std::vector<CompilationMistake> m_mistakes;
     };
 }

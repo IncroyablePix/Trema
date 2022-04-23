@@ -18,7 +18,8 @@ namespace Trema::View
 
     void ColorPicker::Show()
     {
-        if(ImGui::ColorPicker4(NameId(), m_crossHairColor.data(), ImGuiColorEditFlags_NoSmallPreview))
+        BeginStyle();
+        if(ImGui::ColorPicker4(NameId(), m_crossHairColor.data(), GetFlags()))
         {
             auto future = std::async(std::launch::async, [this]()
             {
@@ -28,6 +29,7 @@ namespace Trema::View
                 }
             });
         }
+        EndStyle();
     }
 
     void ColorPicker::BeginStyle()
@@ -35,12 +37,11 @@ namespace Trema::View
         IGuiElement::BeginStyle();
 
         auto size = Style.GetSize();
-        ImGui::PushItemWidth(size.x);
+        ImGui::SetNextItemWidth(size.x);
     }
 
     void ColorPicker::EndStyle()
     {
-        ImGui::PopItemWidth();
         IGuiElement::EndStyle();
     }
 
@@ -62,5 +63,18 @@ namespace Trema::View
     unsigned int ColorPicker::GetColorInt() const
     {
         return ImGui::ColorConvertFloat4ToU32({ m_crossHairColor[0], m_crossHairColor[1], m_crossHairColor[2], m_crossHairColor[3] });
+    }
+
+    int ColorPicker::GetFlags() const
+    {
+        int flags = ImGuiColorEditFlags_NoSmallPreview | ImGuiColorEditFlags_NoOptions;
+
+        if(!m_preview)
+            flags |= ImGuiColorEditFlags_NoSidePreview;
+
+        if(!m_hasInput)
+            flags |= ImGuiColorEditFlags_NoInputs;
+
+        return flags;
     }
 }

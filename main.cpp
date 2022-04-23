@@ -96,7 +96,7 @@ int main(int argc, char** argv)
     parser.SetupWindowFromFile("./sample_1.txml", window);
     auto mistakes = parser.GetMistakes();
 
-    int id = 0;
+    /*int id = 0;
 
     auto nameInput = window->GetElementById<TextInput>("nameInput");
     auto scoreInput = window->GetElementById<TextInput>("scoreInput");
@@ -120,13 +120,13 @@ int main(int argc, char** argv)
         row->AddChild(Text::CreateText(row, score));
 
         scoresBoard->AddValue(std::move(row));
-    });
+    });*/
 
-    auto colorPicker = window->GetElementById<ColorPicker>("colors");
+    /*auto colorPicker = window->GetElementById<ColorPicker>("colors");
     colorPicker->AddOnChangeListener("pute", [](const Trema::View::ColorPicker &cp)
     {
         std::cout << cp.GetColorInt() << std::endl;
-    });
+    });*/
 
     /*for(const auto &mistake : mistakes)
     {
