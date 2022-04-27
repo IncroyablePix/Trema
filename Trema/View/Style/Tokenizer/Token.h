@@ -23,6 +23,7 @@ namespace Trema::View
         T_LSTRING = 11, // " " || ' '
         T_LNUMBER = 12, // number
         T_LBOOL = 13,
+        T_COMMENT = 14, // /* */
         T_STOP = -1 // End of expression
     } TokenType;
 

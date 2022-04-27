@@ -27,8 +27,9 @@
 #include "../Components/Layout/StackSpace/StackSpace.h"
 #include "../Components/Layout/LayoutException.h"
 #include "../Style/StyleApplier.h"
-#include "../Components/Widgets/SliderFloat.h"
+#include "../Components/Widgets/Sliders/SliderFloat.h"
 #include "../Components/Widgets/ColorPicker.h"
+#include "../Components/Widgets/Sliders/SliderInt.h"
 
 namespace Trema::View
 {
@@ -96,9 +97,23 @@ namespace Trema::View
         }
     }
 
+    std::string IViewParser::GetElementName(const std::string &elementName, const std::unordered_map<std::string, std::string> &attributes, std::string& content)
+    {
+        if(attributes.find("name") != attributes.end())
+            return attributes.at("name");
+
+        if(!content.empty())
+            return content;
+
+        std::stringstream ss;
+        ss << "##" << elementName << (++m_nameCounter);
+
+        return ss.str();
+    }
+
     std::shared_ptr<IGuiElement> IViewParser::CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string &elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window, std::string content)
     {
-        auto name = attributes["name"];
+        auto name = std::move(GetElementName(elementName, attributes, content));
         auto id = attributes.find("id") == attributes.end() ? "" : attributes["id"];
         std::shared_ptr<IGuiElement> element;
 
@@ -237,6 +252,23 @@ namespace Trema::View
         else if(elementName == "SliderFloat")
         {
             element = SliderFloat::CreateSliderFloat(std::move(parent), std::move(name));
+
+            if(attributes.find("min") != attributes.end())
+                ((SliderFloat*)element.get())->SetMin(StrToFloat(attributes["min"]));
+
+            if(attributes.find("max") != attributes.end())
+                ((SliderFloat*)element.get())->SetMax(StrToFloat(attributes["max"]));
+        }
+
+        else if(elementName == "SliderInt")
+        {
+            element = SliderInt::CreateSliderInt(std::move(parent), std::move(name));
+
+            if(attributes.find("min") != attributes.end())
+                ((SliderInt*)element.get())->SetMin(StrToInt(attributes["min"]));
+
+            if(attributes.find("max") != attributes.end())
+                ((SliderInt*)element.get())->SetMax(StrToInt(attributes["max"]));
         }
 
         else if(elementName == "ColorPicker")
@@ -265,6 +297,16 @@ namespace Trema::View
             ss << "Unknown element \"" << elementName << "\"";
             throw ParsingException(ss.str().c_str());
         }
+    }
+
+    float IViewParser::StrToFloat(const std::string &str)
+    {
+        float val = 0;
+        std::stringstream ss;
+        ss << str;
+        ss >> val;
+
+        return val;
     }
 
     int IViewParser::StrToInt(const std::string &str)

@@ -25,6 +25,7 @@ namespace Trema::View
         void Render() override;
         void UploadFonts();
         void SetTitle(const std::string &title) override;
+        void Close() override;
 
         static std::shared_ptr<SDL2Window> CreateSDL2Window(const WindowInfo &info);
 

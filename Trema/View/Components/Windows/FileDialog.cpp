@@ -46,6 +46,9 @@ namespace Trema::View
             case Files:
                 type = imgui_addons::ImGuiFileBrowser::DialogMode::OPEN;
                 break;
+            case SaveFile:
+                type = imgui_addons::ImGuiFileBrowser::DialogMode::SAVE;
+                break;
         }
 
         if(m_fileDialog->showFileDialog(NameId(), type, ImVec2(700, 310), m_extension))

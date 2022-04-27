@@ -22,6 +22,9 @@ namespace Trema::View
 
         void Show() override;
 
+        inline int GetOptionIndex() const { return m_option; }
+        inline std::string GetOption() const { return m_options[m_option]; }
+
         void AddOnClickListener(std::string name, std::function<void(const std::string&)> listener);
         static std::shared_ptr<Radio> CreateRadio(std::shared_ptr<IGuiElement> parent, std::string name);
 

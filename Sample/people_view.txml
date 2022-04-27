@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<App>
+    <Head>
+        <Font src="./JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
+        <Style src="./styles.tss" />
+        <Title>Trema sample window</Title>
+    </Head>
+    <Body>
+        <MainDockSpace name="layout" saveLayout="true">
+            <TopMenu>
+                <SubMenu name="File">
+                    <MenuOption id="save" shortcut="CTRL+O">Save</MenuOption>
+                    <Separator/>
+                    <MenuOption id="quit">Quit</MenuOption>
+                </SubMenu>
+            </TopMenu>
+            <WindowContainer id="winForms" name="Form" dockSlot="right">
+                <Text>Please enter people's data:</Text>
+                <Separator />
+                <TextInput id="firstName">First name</TextInput>
+                <TextInput id="lastName">Last name</TextInput>
+                <Separator />
+                <SliderInt id="height" min="0" max="250">Height</SliderInt>
+                <Text>Sex</Text>
+                <Radio id="sex">
+                    <Option name="F" />
+                    <Option name="M" />
+                </Radio>
+                <ColorPicker id="favouriteColour" preview="true">Favourite colour</ColorPicker>
+
+                <Combo id="diploma" name="Graduation">
+                    <Option>Not graduated</Option>
+                    <Option>Bachelor's degree</Option>
+                    <Option>Master's degree</Option>
+                    <Option>PhD</Option>
+                </Combo>
+
+                <WindowContainer id="formButtons">
+                    <Button id="addPerson">Add</Button>
+                    <Button id="clear">Clear</Button>
+                </WindowContainer>
+            </WindowContainer>
+            <WindowContainer id="winTable" name="People" dockSlot="center">
+                <Table id="peopleGrid" name="People grid" headers="First name;Last name;Height;Sex;Favourite colour;Diploma" />
+            </WindowContainer>
+        </MainDockSpace>
+    </Body>
+</App>

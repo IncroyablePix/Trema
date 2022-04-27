@@ -22,6 +22,7 @@ namespace Trema::View
         explicit Tokenizer(const std::string& code, std::vector<CompilationMistake> &mistakes);
         std::unique_ptr<Token> GetNextToken() override;
         inline bool Empty() const override  { return m_tokens.empty(); }
+        inline size_t Size() const override { return m_tokens.size(); }
     private:
 
         TokenType m_lastType;

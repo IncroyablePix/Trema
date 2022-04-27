@@ -45,6 +45,13 @@ namespace Trema::View
         static int StrToInt(const std::string& str);
         static bool StrToBool(const std::string &str);
         std::vector<CompilationMistake> m_mistakes;
+        unsigned long m_nameCounter { 0 };
+
+        std::string
+        GetElementName(const std::string &elementName, const std::unordered_map<std::string, std::string> &attributes,
+                       std::string &content);
+
+        float StrToFloat(const std::string &str);
     };
 }
 

@@ -148,7 +148,7 @@ namespace Trema::View
     SDL_Window *SDL2Window::CreateWindow(const WindowInfo &info)
     {
         InitializeSdl2();
-        return SDL_CreateWindow(info.Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, info.Width, info.Height, WindowFlags);
+        return SDL_CreateWindow("Trema window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, info.Width, info.Height, WindowFlags);
     }
 
     int SDL2Window::Run()
@@ -177,5 +177,10 @@ namespace Trema::View
     void SDL2Window::SetTitle(const std::string &title)
     {
         SDL_SetWindowTitle(m_window, title.c_str());
+    }
+
+    void SDL2Window::Close()
+    {
+        m_opened = false;
     }
 }

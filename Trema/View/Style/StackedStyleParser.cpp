@@ -4,7 +4,6 @@
 
 #include <fstream>
 #include <stack>
-#include <iostream>
 #include "StackedStyleParser.h"
 #include "../Exceptions/FileNotFoundException.h"
 #include "../Exceptions/ParsingException.h"
@@ -19,7 +18,7 @@ namespace Trema::View
     void StackedStyleParser::ParseFromCode(const std::string &code, std::vector<CompilationMistake>& mistakes)
     {
         Tokenizer tokenizer(code, mistakes);
-        //Tokenizer tokenizer("", mistakes);
+
         if(tokenizer.Empty())
             return;
 
@@ -31,7 +30,6 @@ namespace Trema::View
         auto currentToken = tokenizer.GetNextToken();
         while(!tokenizer.Empty() && currentToken->GetTokenType() != T_STOP)
         {
-            std::cout << currentToken->GetIdentity();
             switch(currentToken->GetTokenType())
             {
                 case T_IDENTITY:

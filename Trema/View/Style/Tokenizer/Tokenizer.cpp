@@ -21,6 +21,28 @@
 
 namespace Trema::View
 {
+    bool IsCommentStart(const char *string)
+    {
+        if(string[0] == '\0' || string[1] == '\0')
+            return false;
+
+        if(string[0] == '/' && string[1] == '*')
+            return true;
+
+        return false;
+    }
+
+    bool IsCommentEnd(const char* string)
+    {
+        if(string[0] == '\0' || string[1] == '\0')
+            return false;
+
+        if(string[0] == '*' && string[1] == '/')
+            return true;
+
+        return false;
+    }
+
     bool IsFloatNumber(const char* string, TokenType lastType)
     {
         if(string[0] == '\0')
@@ -301,6 +323,34 @@ namespace Trema::View
                 m_cursor = pos + l;
                 m_linePos += l;
                 m_lastType = T_IDENTIFIER;
+
+                return t;
+            }
+
+            else if(IsCommentStart(m_code + pos))
+            {
+                l = pos + 2;
+                while(!IsCommentEnd(m_code + l))
+                {
+                    if(m_code[pos] == '\n')
+                    {
+                        m_line ++;
+                        m_linePos = 0;
+                    }
+
+                    m_linePos ++;
+                    l ++;
+                }
+
+                l -= pos;
+                symbolPtr = new char[l - 1];
+                strncpy(symbolPtr, m_code + pos + 2, l - 2);
+                symbolPtr[l - 2] = '\0';
+
+                auto t = std::move(std::make_unique<Token>(T_COMMENT, m_linePos, m_line, symbolPtr));
+                m_cursor = pos + l + 2;
+                m_linePos += l + 2;
+                m_lastType = T_COMMENT;
 
                 return t;
             }

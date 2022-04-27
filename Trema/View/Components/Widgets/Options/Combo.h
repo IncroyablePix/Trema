@@ -21,6 +21,8 @@ namespace Trema::View
         void AddOption(std::string name);
         void AddOnClickListener(std::string name, std::function<void(const std::string&)> listener);
         void Show() override;
+
+        inline std::string GetOption() const { return m_selected; }
         static std::shared_ptr<Combo> CreateCombo(std::shared_ptr<IGuiElement> parent, std::string name);
 
     private:

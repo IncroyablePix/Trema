@@ -17,7 +17,6 @@ namespace Trema::View
 {
     struct WindowInfo
     {
-        std::string Title;
         double SecondsPerUpdate;
         int Width;
         int Height;
@@ -33,6 +32,7 @@ namespace Trema::View
         virtual void Update() = 0;
         virtual void Render() = 0;
         virtual int Run() = 0;
+        virtual void Close() = 0;
         virtual void SetTitle(const std::string &title) = 0;
         void SetDefaultFont(const std::string &name);
         void AddFont(const std::string& path, float size = 12.0f, const std::string& name = "");

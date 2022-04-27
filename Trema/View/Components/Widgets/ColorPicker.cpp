@@ -62,7 +62,14 @@ namespace Trema::View
 
     unsigned int ColorPicker::GetColorInt() const
     {
-        return ImGui::ColorConvertFloat4ToU32({ m_crossHairColor[0], m_crossHairColor[1], m_crossHairColor[2], m_crossHairColor[3] });
+        unsigned int color =
+            ((int)(m_crossHairColor[0] * 255)) << 24 |
+            ((int)(m_crossHairColor[1] * 255) << 16) |
+            ((int)(m_crossHairColor[2] * 255) << 8) |
+            ((int)(m_crossHairColor[3] * 255));
+
+            // ImGui::ColorConvertFloat4ToU32({ m_crossHairColor[0], m_crossHairColor[1], m_crossHairColor[2], m_crossHairColor[3] });
+        return color;
     }
 
     int ColorPicker::GetFlags() const

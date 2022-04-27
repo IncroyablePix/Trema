@@ -16,7 +16,8 @@ namespace Trema::View
     {
         Directory = 0,
         File = 1,
-        Files = 2
+        Files = 2,
+        SaveFile = 3,
     };
 
     class FileDialog : public IPopupComponent

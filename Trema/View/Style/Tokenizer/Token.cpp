@@ -63,6 +63,9 @@ namespace Trema::View
             case T_LBOOL:
                 ss << "LBOOL ('" << (*((bool*)m_value) ? "true" : "false") << "'):";
                 break;
+            case T_COMMENT:
+                ss << "COMMENT('" << ((char*)m_value) << "'):";
+                break;
             case T_STOP:
                 ss << "STOP:";
                 break;
