@@ -1,0 +1,6 @@
+[submodule "Catch2"]
+	path = Catch2
+	url = https://github.com/catchorg/Catch2.git
+[submodule "glfw"]
+	path = glfw
+	url = https://github.com/glfw/glfw.git

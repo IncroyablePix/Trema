@@ -19,7 +19,7 @@ namespace Trema::View
         SymbolTable();
         SymbolTable(const SymbolTable& st);
 
-        template<typename T> void SetVariable(const std::string &name, T* value)
+        template<typename T> void SetVariable(const std::string &name, TokenValue value)
         {
             if(std::is_same<T, double>::value)
             {

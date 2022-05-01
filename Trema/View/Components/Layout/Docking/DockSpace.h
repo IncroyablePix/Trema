@@ -36,7 +36,7 @@ namespace Trema::View
 
         virtual void Begin();
         virtual void End();
-        void AddContainer(std::shared_ptr<IContainer> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<IWindow> &window) override;
+        void AddContainer(std::shared_ptr<IContainer> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<Window> &window) override;
 
         void Show() override;
         void AddElement(std::shared_ptr<IContainer> element, DockSlot slot);

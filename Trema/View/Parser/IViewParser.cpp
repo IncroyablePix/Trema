@@ -7,14 +7,14 @@
 #include <utility>
 #include <vector>
 #include <iostream>
-#include "IViewParser.h"
+#include "ViewParser.h"
 #include "../Components/Container/WindowContainer.h"
 #include "../Components/Widgets/Options/Radio.h"
 #include "../Components/Widgets/Options/Combo.h"
 #include "../Components/Widgets/Button.h"
 #include "../Components/Widgets/Text.h"
 #include "../Components/Widgets/Checkbox.h"
-#include "../Components/Widgets/Table.h"
+#include "../Components/Widgets/DataContainers/Table.h"
 #include "../Components/Widgets/Input/TextInput.h"
 #include "../Components/Widgets/Input/TextArea.h"
 #include "../Exceptions/ParsingException.h"
@@ -33,13 +33,13 @@
 
 namespace Trema::View
 {
-    IViewParser::IViewParser(std::unique_ptr<IStyleParser> stylesParser) :
+    ViewParser::ViewParser(std::unique_ptr<IStyleParser> stylesParser) :
         m_stylesParser(std::move(stylesParser))
     {
 
     }
 
-    void IViewParser::ApplyStyles(const std::shared_ptr<IWindow>& window)
+    void ViewParser::ApplyStyles(const std::shared_ptr<Window>& window)
     {
         auto vals = m_stylesParser->GetVariables();
         StyleApplier applier;
@@ -52,7 +52,7 @@ namespace Trema::View
         }*/
     }
 
-    void IViewParser::HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window)
+    void ViewParser::HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<Window> window)
     {
         auto name = attributes["name"];
 
@@ -97,7 +97,7 @@ namespace Trema::View
         }
     }
 
-    std::string IViewParser::GetElementName(const std::string &elementName, const std::unordered_map<std::string, std::string> &attributes, std::string& content)
+    std::string ViewParser::GetElementName(const std::string &elementName, const std::unordered_map<std::string, std::string> &attributes, std::string& content)
     {
         if(attributes.find("name") != attributes.end())
             return attributes.at("name");
@@ -111,7 +111,7 @@ namespace Trema::View
         return ss.str();
     }
 
-    std::shared_ptr<IGuiElement> IViewParser::CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string &elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<IWindow> window, std::string content)
+    std::shared_ptr<IGuiElement> ViewParser::CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string &elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<Window> window, std::string content)
     {
         auto name = std::move(GetElementName(elementName, attributes, content));
         auto id = attributes.find("id") == attributes.end() ? "" : attributes["id"];
@@ -299,7 +299,7 @@ namespace Trema::View
         }
     }
 
-    float IViewParser::StrToFloat(const std::string &str)
+    float ViewParser::StrToFloat(const std::string &str)
     {
         float val = 0;
         std::stringstream ss;
@@ -309,7 +309,7 @@ namespace Trema::View
         return val;
     }
 
-    int IViewParser::StrToInt(const std::string &str)
+    int ViewParser::StrToInt(const std::string &str)
     {
         int integer = 0;
         std::stringstream ss;
@@ -319,12 +319,12 @@ namespace Trema::View
         return integer;
     }
 
-    bool IViewParser::StrToBool(const std::string &str)
+    bool ViewParser::StrToBool(const std::string &str)
     {
         return str == "true";
     }
 
-    void IViewParser::TryAddLayout(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<IWindow>& window)
+    void ViewParser::TryAddLayout(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<Window>& window)
     {
         if(IsType<ILayout>(element))
         {
@@ -337,7 +337,7 @@ namespace Trema::View
         }
     }
 
-    void IViewParser::TryAddAsChild(const std::shared_ptr<IGuiElement> &container, const std::shared_ptr<IGuiElement> &element, const std::string &elementName)
+    void ViewParser::TryAddAsChild(const std::shared_ptr<IGuiElement> &container, const std::shared_ptr<IGuiElement> &element, const std::string &elementName)
     {
         if (auto* c = dynamic_cast<IContainer*>(container.get()))
         {
@@ -351,10 +351,10 @@ namespace Trema::View
         }
     }
 
-    void IViewParser::TryAddToLayout(const std::shared_ptr<IGuiElement>& element,
-                                           const std::shared_ptr<IGuiElement> &container,
-                                           std::unordered_map<std::string, std::string>& attributes,
-                                           const std::shared_ptr<IWindow>& window)
+    void ViewParser::TryAddToLayout(const std::shared_ptr<IGuiElement>& element,
+                                    const std::shared_ptr<IGuiElement> &container,
+                                    std::unordered_map<std::string, std::string>& attributes,
+                                    const std::shared_ptr<Window>& window)
     {
         if(dynamic_cast<IContainer*>(element.get()) == nullptr)
             throw ParsingException("Only IContainer can fit into layout");
@@ -385,7 +385,7 @@ namespace Trema::View
         }
     }
 
-    void IViewParser::TryAddTopMenu(const std::shared_ptr<IGuiElement> &element, const std::shared_ptr<IWindow> &window)
+    void ViewParser::TryAddTopMenu(const std::shared_ptr<IGuiElement> &element, const std::shared_ptr<Window> &window)
     {
         if(IsType<TopMenu>(element))
         {

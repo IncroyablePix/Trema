@@ -6,9 +6,12 @@
 #define TREMA_TOKEN_H
 
 #include <string>
+#include <ostream>
+#include "../TokenValue.h"
 
 namespace Trema::View
-{    typedef enum
+{
+    typedef enum
     {
         T_LFNUMBER = 1, // number
         T_IDENTIFIER = 2, // property name, applier, variable
@@ -30,18 +33,24 @@ namespace Trema::View
     class Token
     {
     public:
-        Token(TokenType tokenType, unsigned int position, unsigned int line, void* value);
+        Token(TokenType tokenType, unsigned int position, unsigned int line, TokenValue value);
         ~Token();
         inline unsigned int GetPosition() const { return m_position; }
         inline unsigned int GetLine() const { return m_line; }
         inline TokenType GetTokenType() const { return m_tokenType; }
-        inline void* GetValue() const { return m_value; }
+        inline TokenValue GetValue() const { return m_value; }
+
+        TokenValue CopyValue() const;
+        TokenValue CopyValue(TokenValue v) const;
+
         std::string GetIdentity() const;
         void DeleteValue();
 
+        friend std::ostream &operator<<(std::ostream &os, const Token &token);
+
     protected:
         TokenType m_tokenType;
-        void* m_value;
+        TokenValue m_value;
         unsigned int m_position;
         unsigned int m_line;
     };

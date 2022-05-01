@@ -6,6 +6,7 @@
 #define TREMA_SAMPLE_COLORPICKER_H
 
 #include "../IGuiElement.h"
+#include <array>
 
 namespace Trema::View
 {

@@ -63,7 +63,7 @@ namespace Trema::View
 
     void StackSpace::AddContainer(std::shared_ptr<IContainer> container,
                                   std::unordered_map<std::string, std::string> &attributes,
-                                  const std::shared_ptr<IWindow> &window)
+                                  const std::shared_ptr<Window> &window)
     {
         if(container)
             m_elements.push_back(std::move(container));

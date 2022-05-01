@@ -10,17 +10,17 @@
 #include <unordered_map>
 #include <iomanip>
 #include "SymbolTable.h"
-#include "../IWindow.h"
+#include "../Windowing/Window.h"
 
 namespace Trema::View
 {
     class StyleApplier
     {
     public:
-        void ApplyStylesToWindow(const std::unordered_map<std::string, std::shared_ptr<SymbolTable>> &vals, const std::shared_ptr<IWindow>& window);
+        void ApplyStylesToWindow(const std::unordered_map<std::string, std::shared_ptr<SymbolTable>> &vals, const std::shared_ptr<Window>& window);
 
     private:
-        void SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, const std::shared_ptr<IWindow> &window);
+        void SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, const std::shared_ptr<Window> &window);
         void SetStyleForElement(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable);
         void SetStyle(ElementStyle &style, const std::shared_ptr<SymbolTable>& symbolTable);
         static char* CopyStr(const char* str);

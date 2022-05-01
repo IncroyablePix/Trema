@@ -17,7 +17,7 @@ namespace Trema::View
         explicit StackSpace(std::string title);
         ~StackSpace();
         void Show() override;
-        void AddContainer(std::shared_ptr<IContainer> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<IWindow> &window) override;
+        void AddContainer(std::shared_ptr<IContainer> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<Window> &window) override;
 
         static std::shared_ptr<StackSpace> CreateStackSpace(std::string title);
 

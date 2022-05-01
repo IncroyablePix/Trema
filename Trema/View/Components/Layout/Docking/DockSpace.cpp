@@ -10,7 +10,7 @@
 #include "../../../Exceptions/ParsingException.h"
 #include "../LayoutException.h"
 #include "../../TopMenu/TopMenu.h"
-#include "../../../IWindow.h"
+#include "../../../Windowing/Window.h"
 
 namespace Trema::View
 {
@@ -126,7 +126,7 @@ namespace Trema::View
 
     void DockSpace::AddContainer(std::shared_ptr<IContainer> container,
                                  std::unordered_map<std::string, std::string> &attributes,
-                                 const std::shared_ptr<IWindow> &window)
+                                 const std::shared_ptr<Window> &window)
     {
         if(attributes.find("dockSlot") == attributes.end())
             throw LayoutException("Missing attribute \"dockSlot\" for DockSpace child");

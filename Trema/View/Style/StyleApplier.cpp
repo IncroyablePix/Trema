@@ -11,7 +11,7 @@ namespace Trema::View
 {
 
     void StyleApplier::ApplyStylesToWindow(const std::unordered_map<std::string, std::shared_ptr<SymbolTable>> &vals,
-                                           const std::shared_ptr<IWindow>& window)
+                                           const std::shared_ptr<Window>& window)
     {
         for(const auto& [elementName, symbolTable] : vals)
         {
@@ -31,7 +31,7 @@ namespace Trema::View
             window->ApplyStyle();
     }
 
-    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, const std::shared_ptr<IWindow> &window)
+    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, const std::shared_ptr<Window> &window)
     {
         if(!window)
             return;
@@ -57,121 +57,121 @@ namespace Trema::View
             if(propName == "text-color")
             {
                 if(type == TYPE_NUM)
-                    style.TextColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.TextColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "text-color-disabled")
             {
                 if(type == TYPE_NUM)
-                    style.TextDisabledColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.TextDisabledColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "widget-background-color")
             {
                 if(type == TYPE_NUM)
-                    style.WidgetBackgroundColor().SetColor((int) (value->GetPtrValue<int64_t>()));
+                    style.WidgetBackgroundColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "menu-background-color")
             {
                 if(type == TYPE_NUM)
-                    style.MenuBackgroundColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.MenuBackgroundColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "background-color")
             {
                 if(type == TYPE_NUM)
-                    style.WindowColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.WindowColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "header-color")
             {
                 if(type == TYPE_NUM)
-                    style.HeaderColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.HeaderColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "header-color-active")
             {
                 if(type == TYPE_NUM)
-                    style.HeaderActiveColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.HeaderActiveColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "table-header-color")
             {
                 if(type == TYPE_NUM)
-                    style.TableHeaderColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.TableHeaderColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "popup-background-color")
             {
                 if(type == TYPE_NUM)
-                    style.PopupBackgroundColor().SetColor((int)(value->GetPtrValue<int64_t>()));
+                    style.PopupBackgroundColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "opacity")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetAlpha((float)std::clamp<double>((value->GetPtrValue<double>()), 0, 1));
+                    style.SetAlpha((float)std::clamp<double>(*value->GetValue().Float, 0, 1));
                 else if(type == TYPE_STR)
-                    style.SetAlpha(value->GetValue<char*>());
+                    style.SetAlpha(value->GetValue().String);
             }
             else if(propName == "orientation")
             {
                 if(type == TYPE_STR)
-                    style.SetOrientation(value->GetValue<char*>());
+                    style.SetOrientation(value->GetValue().String);
             }
             else if(propName == "window-padding-x")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetWindowPaddingX((float) value->GetPtrValue<double>());
+                    style.SetWindowPaddingX((float) *value->GetValue().Float);
                 else if(type == TYPE_NUM)
-                    style.SetWindowPaddingX((float) value->GetPtrValue<int64_t>());
+                    style.SetWindowPaddingX((float) *value->GetValue().Integer);
             }
             else if(propName == "window-padding-y")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetWindowPaddingY((float)value->GetPtrValue<double>());
+                    style.SetWindowPaddingY((float)*value->GetValue().Float);
                 else if(type == TYPE_NUM)
-                    style.SetWindowPaddingY((float)value->GetPtrValue<int64_t>());
+                    style.SetWindowPaddingY((float)*value->GetValue().Integer);
             }
             else if(propName == "window-rounding")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetWindowRounding((float)value->GetPtrValue<double>());
+                    style.SetWindowRounding((float)*value->GetValue().Float);
                 else if(type == TYPE_NUM)
-                    style.SetWindowRounding((float)value->GetPtrValue<int64_t>());
+                    style.SetWindowRounding((float)*value->GetValue().Integer);
             }
             else if(propName == "frame-padding-x")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetFramePaddingX((float) value->GetPtrValue<double>());
+                    style.SetFramePaddingX((float) *value->GetValue().Float);
                 else if(type == TYPE_NUM)
-                    style.SetFramePaddingX((float) value->GetPtrValue<int64_t>());
+                    style.SetFramePaddingX((float) *value->GetValue().Integer);
             }
             else if(propName == "frame-padding-y")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetFramePaddingY((float)value->GetPtrValue<double>());
+                    style.SetFramePaddingY((float)*value->GetValue().Float);
                 else if(type == TYPE_NUM)
-                    style.SetFramePaddingY((float)value->GetPtrValue<int64_t>());
+                    style.SetFramePaddingY((float)*value->GetValue().Integer);
             }
             else if(propName == "frame-rounding")
             {
                 if(type == TYPE_FLOAT)
-                    style.SetFrameRounding((float)value->GetPtrValue<double>());
+                    style.SetFrameRounding((float)*value->GetValue().Float);
                 else if(type == TYPE_NUM)
-                    style.SetFrameRounding((float)value->GetPtrValue<int64_t>());
+                    style.SetFrameRounding((float)*value->GetValue().Integer);
             }
             else if(propName == "font")
             {
                 if(type == TYPE_STR)
-                    style.SetFont(value->GetValue<char*>());
+                    style.SetFont(value->GetValue().String);
             }
             else if(propName == "header")
             {
                 if(type == TYPE_BOOL)
-                    style.SetWindowHeaderVisibility(value->GetPtrValue<bool>());
+                    style.SetWindowHeaderVisibility(*value->GetValue().Boolean);
             }
             else if(propName == "width")
             {
                 if(type == TYPE_STR)
-                    style.SetWidth(value->GetValue<char*>());
+                    style.SetWidth(value->GetValue().String);
             }
             else if(propName == "height")
             {
                 if(type == TYPE_STR)
-                    style.SetHeight(value->GetValue<char*>());
+                    style.SetHeight(value->GetValue().String);
             }
 
             /*std::cout << "\t[" << propName << ":" << *value;

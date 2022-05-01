@@ -9,13 +9,12 @@
 
 namespace Trema::View
 {
-    Token::Token(TokenType tokenType, unsigned int position, unsigned int line, void* value) :
+    Token::Token(TokenType tokenType, unsigned int position, unsigned int line, TokenValue value) :
             m_tokenType(tokenType),
             m_position(position),
             m_line(line),
             m_value(value)
     {
-
     }
 
     std::string Token::GetIdentity() const
@@ -25,13 +24,13 @@ namespace Trema::View
         switch(m_tokenType)
         {
             case T_LNUMBER:
-                ss << "NUMBER ('" << *((int64_t*) m_value) << " - " << ToHex(*((int64_t*) m_value)) << "'):";
+                ss << "NUMBER ('" << *m_value.Integer << " - " << ToHex(*m_value.Integer) << "'):";
                 break;
             case T_LFNUMBER:
-                ss << "FLOAT_NUMBER ('" << *((double*) m_value) << "'):";
+                ss << "FLOAT_NUMBER ('" << *m_value.Float << "'):";
                 break;
             case T_IDENTIFIER:
-                ss << "IDENTIFIER ('" << ((char*)m_value) << "'):";
+                ss << "IDENTIFIER ('" << m_value.String << "'):";
                 break;
             case T_IDENTITY:
                 ss << "IDENTITY ('#'):";
@@ -58,13 +57,13 @@ namespace Trema::View
                 ss << "VARASSIGN ('='):";
                 break;
             case T_LSTRING:
-                ss << "LSTRING ('" << ((char*)m_value) << "'):";
+                ss << "LSTRING ('" << m_value.String << "'):";
                 break;
             case T_LBOOL:
-                ss << "LBOOL ('" << (*((bool*)m_value) ? "true" : "false") << "'):";
+                ss << "LBOOL ('" << (*m_value.Boolean ? "true" : "false") << "'):";
                 break;
             case T_COMMENT:
-                ss << "COMMENT('" << ((char*)m_value) << "'):";
+                ss << "COMMENT('" << m_value.String << "'):";
                 break;
             case T_STOP:
                 ss << "STOP:";
@@ -76,22 +75,28 @@ namespace Trema::View
         return str;
     }
 
+    std::ostream &operator<<(std::ostream &os, const Token &token)
+    {
+        os << token.GetIdentity();
+        return os;
+    }
+
     void Token::DeleteValue()
     {
         switch(m_tokenType)
         {
             case T_IDENTIFIER:
             case T_LSTRING:
-                delete[] static_cast<char*>(m_value);
+                delete[] m_value.String;
                 break;
             case T_LNUMBER:
-                delete static_cast<int64_t*>(m_value);
+                delete m_value.Integer;
                 break;
             case T_LFNUMBER:
-                delete static_cast<double*>(m_value);
+                delete m_value.Float;
                 break;
             case T_LBOOL:
-                delete static_cast<bool*>(m_value);
+                delete m_value.Boolean;
                 break;
             default:
                 break;

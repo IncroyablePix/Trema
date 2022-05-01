@@ -10,28 +10,8 @@
 
 namespace Trema::View
 {
-    Variable::Variable(void *value, VariableType type) : m_type(type), m_value(nullptr)
+    Variable::Variable(TokenValue value, VariableType type) : m_type(type), m_value(value)
     {
-        switch(type)
-        {
-            case TYPE_STR:
-            {
-                auto len = strlen((const char *) value);
-                m_value = new char[len];
-
-                strcpy((char *) m_value, (const char *) value);
-            }
-            break;
-            case TYPE_NUM:
-                m_value = new int64_t(*((int64_t*)(value)));
-                break;
-            case TYPE_FLOAT:
-                m_value = new double(*((double*)(value)));
-                break;
-            case TYPE_BOOL:
-                m_value = new bool(*((bool*)(value)));
-                break;
-        }
     }
 
     void Variable::DeleteValue()
@@ -39,16 +19,16 @@ namespace Trema::View
         switch(m_type)
         {
             case TYPE_STR:
-                delete[] static_cast<char*>(m_value);
+                delete[] m_value.String;
                 break;
             case TYPE_NUM:
-                delete static_cast<int64_t*>(m_value);
+                delete m_value.Integer;
                 break;
             case TYPE_FLOAT:
-                delete static_cast<double*>(m_value);
+                delete m_value.Float;
                 break;
             case TYPE_BOOL:
-                delete static_cast<bool*>(m_value);
+                delete m_value.Boolean;
                 break;
             default:
                 break;
@@ -62,16 +42,16 @@ namespace Trema::View
         switch(GetType())
         {
             case TYPE_STR:
-                ss << (char*)(m_value);
+                ss << (char*)(m_value.String);
                 break;
             case TYPE_NUM:
-                ss << *((int64_t*)(m_value)) << " - " << ToHex(*((int64_t*)(m_value)));
+                ss << *((int64_t*)(m_value.Integer)) << " - " << ToHex(*((int64_t*)(m_value.Integer)));
                 break;
             case TYPE_FLOAT:
-                ss << *((double*)(m_value));
+                ss << *((double*)(m_value.Float));
                 break;
             case TYPE_BOOL:
-                ss << *((bool*)(m_value));
+                ss << *((bool*)(m_value.Boolean));
                 break;
         }
 
@@ -87,5 +67,50 @@ namespace Trema::View
     Variable::~Variable()
     {
         DeleteValue();
+    }
+
+    TokenValue Variable::CopyValue() const
+    {
+        return CopyValue(m_value);
+    }
+
+    TokenValue Variable::CopyValue(TokenValue toCopy) const
+    {
+        TokenValue value { };
+
+        switch(GetType())
+        {
+            case TYPE_STR:
+            {
+                auto len = strlen(toCopy.String);
+                auto *v = new char[len];
+                strcpy_s((char *) v, len, toCopy.String);
+                value.String = v;
+                break;
+            }
+            case TYPE_NUM:
+            {
+                auto *v = new int64_t;
+                *((int64_t *) v) = *(toCopy.Integer);
+                value.Integer = v;
+                break;
+            }
+            case TYPE_FLOAT:
+            {
+                auto *v = new double;
+                *((double *) v) = *(toCopy.Float);
+                value.Float = v;
+                break;
+            }
+            case TYPE_BOOL:
+            {
+                auto *v = new bool;
+                *((bool *) v) = *(toCopy.Boolean);
+                value.Boolean = v;
+                break;
+            }
+        }
+
+        return value;
     }
 }

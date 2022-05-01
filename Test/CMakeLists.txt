@@ -7,8 +7,8 @@ file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES true *.h *.cpp)
 set(SOURCES ${TEST_SOURCES})
 
 ############ TESTING ############
-find_package(Catch2 3 REQUIRED)
-add_executable(${PROJECT_NAME} ${TEST_SOURCES})
+#find_package(Catch2 3 REQUIRED)
+add_executable(${PROJECT_NAME} ${TEST_SOURCES} View/Utils/FileSplitsTests.cpp)
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME} PRIVATE Catch2::Catch2WithMain)
 include(CTest)

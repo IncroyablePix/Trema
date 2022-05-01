@@ -37,7 +37,6 @@ file(GLOB RESOURCE_FILES
         ${CMAKE_SOURCE_DIR}/Sample/*.tss)
 
 ### Testing
-
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 ### Resource files ###
@@ -48,8 +47,12 @@ foreach(RSC ${RESOURCE_FILES})
 endforeach()
 
 ### Trema ###
+target_include_directories(${PROJECT_NAME}
+        PUBLIC ../Trema)
+
 message("Linking Trema...")
 target_link_libraries(${PROJECT_NAME} PUBLIC Trema)
+
 
 ### Windows ###
 if(OS STREQUAL "NT")

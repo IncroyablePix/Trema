@@ -20,7 +20,7 @@
                 <TextInput id="firstName">First name</TextInput>
                 <TextInput id="lastName">Last name</TextInput>
                 <Separator />
-                <SliderInt id="height" min="0" max="250">Height</SliderInt>
+                <SliderInt id="height" min="30" max="250">Height</SliderInt>
                 <Text>Sex</Text>
                 <Radio id="sex">
                     <Option name="F" />

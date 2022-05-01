@@ -38,7 +38,11 @@ namespace Trema::View
     {
         auto fileName = GetFileName(path);
         auto extStart = fileName.find_last_of('.');
-        auto ext = extStart == std::string::npos ? "" : fileName.substr(0, extStart);
+
+        if(extStart == std::string::npos)
+            return fileName;
+
+        auto ext = fileName.substr(0, extStart);
 
         std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c)
         {

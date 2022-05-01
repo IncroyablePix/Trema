@@ -7,6 +7,7 @@
 
 
 #include <functional>
+#include <algorithm>
 #include "../../IGuiElement.h"
 
 namespace Trema::View
@@ -19,8 +20,8 @@ namespace Trema::View
         void AddOnCheckListener(std::string name, std::function<void(const SliderFloat& slider, float value)> listener);
         void Show() override;
 
-        inline void SetMin(float min) { m_min = min; }
-        inline void SetMax(float max) { m_max = max; }
+        inline void SetMin(float min) { m_min = min; m_value = std::clamp<float>(m_value, m_min, m_max); }
+        inline void SetMax(float max) { m_max = max; m_value = std::clamp<float>(m_value, m_min, m_max); }
 
         inline float GetValue() const { return m_value; }
 

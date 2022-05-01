@@ -2,20 +2,19 @@
 #include <regex>
 #include <fstream>
 #include <iostream>
-#include "../Trema/View/SDL2/SDL2Window.h"
-#include "../Trema/View/Components/Widgets/Button.h"
-#include "../Trema/View/Components/Widgets/Text.h"
-#include "../Trema/View/Components/Widgets/Table.h"
-#include "../Trema/View/Components/Widgets/Input/TextInput.h"
-#include "../Trema/View/Parser/TinyXML/TinyXMLViewParser.h"
-#include "../Trema/View/Components/Windows/FileDialog.h"
-#include "../Trema/View/Style/Tokenizer/Tokenizer.h"
-#include "../Trema/View/Style/StackedStyleParser.h"
-#include "../Trema/View/Components/Widgets/ColorPicker.h"
-#include "../Trema/View/Components/Widgets/Sliders/SliderInt.h"
-#include "../Trema/View/Components/Widgets/Options/Radio.h"
-#include "../Trema/View/Components/Widgets/Options/Combo.h"
-#include "../Trema/View/Components/TopMenu/MenuOption.h"
+#include <View/Components/Widgets/Input/TextInput.h>
+#include <View/Components/Widgets/Sliders/SliderInt.h>
+#include <View/Components/Widgets/Options/Radio.h>
+#include <View/Components/Widgets/ColorPicker.h>
+#include <View/Components/Widgets/Options/Combo.h>
+#include <View/Components/Widgets/DataContainers/Table.h>
+#include <View/Components/Widgets/Button.h>
+#include <View/Components/TopMenu/MenuOption.h>
+#include <View/Style/Parser/StackedStyleParser.h>
+#include <View/Parser/TinyXML/TinyXMLViewParser.h>
+#include <View/Components/Windows/FileDialog.h>
+#include <View/Components/Widgets/Text.h>
+#include <View/Windowing/GLFW/GLFWWindow.h>
 
 using namespace Trema::View;
 
@@ -93,7 +92,7 @@ int main(int argc, char** argv)
     auto info = WindowInfo { .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
     auto stylesParser = std::make_unique<StackedStyleParser>();
     auto parser = TinyXMLViewParser(std::move(stylesParser));
-    auto window = SDL2Window::CreateSDL2Window(info);
+    auto window = GLFWWindow::CreateGLFWWindow(info);
 
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
     parser.SetupWindowFromFile("./people_view.txml", window);

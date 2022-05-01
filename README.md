@@ -376,28 +376,39 @@ Admits strings in two formats:
 # Installation/Build
 
 ## Dependencies
-This project has a couple of dependencies that you will need to install:
-- SDL2
+This project has one dependency that you will need to install:
 - Vulkan
 
 Other dependencies are embedded:
+- GLFW
 - Dear ImGUI
 - TinyXML
 
 Those are just included in the project, and it's *better for you* since it doesn't require any action from your side.
-
+Since they are statically linked, which has its downsides too, you might want to dynamically link them, but the goal of this project is to keep things as simple as possible.
 
 ### Vulkan
-You just have to install Vulkan and CMake will handle everything else.
+You just have to install [Vulkan](https://vulkan.lunarg.com/) and CMake will handle everything else.
 
-### SDL2
-SDL2 is a little trickier to get to work with CMake. 
-
+#### Linux
 On *Linux*, you just need to install it and you are done.
 
-On *Windows*, you need to download it in a first time, and extract somewhere. 
+```shell
+sudo apt-get install libsdl2-dev
+sudo yum install libsdl2-dev
+sudo dnf install libsdl2-dev
+```
+...according to your package manager.
+
+#### Windows
+On *Windows*, you need to [download it](https://www.libsdl.org/download-2.0.php) in a first time, and extract somewhere. 
 You need to define an **environment variable** going by the name of **SDL2** to the root path of SDL2.
 Root path means the directory that contains the "x86_64-w64-mingw32", "i686-w64-mingw32", "docs", "test", etc. directories.
+
+If you are too lazy to do this on your own, you can just run this PowerShell script:
+```ps
+
+```
 
 ## Actual build
 As a cmake project it's pretty easy to build the project.
@@ -406,14 +417,20 @@ Open a terminal and navigate to the root directory of the project.
 
 ```shell
 cmake -S . -B build
-cmake cmake --build build
+cmake --build build
 ```
 
 This will build all the binaries including:
 - Trema_Test: The test suite
-- libTrema.(so/dll): The shared library that contains all the functionalities
 - Trema_Sample: A sample program that shows some capabilities
+- Trema: The shared library that contains all the functionalities
 
 to the *build/bin/* directory.
 
 Also, files such as fonts and resources will be copied to the same directory to be read by the sample executable.
+
+## Test project
+Though not exhaustive, there is a test project that has a dependency on [Catch2](https://github.com/catchorg/Catch2), which is also embedded in this project.
+
+## Toolchains
+This test 
