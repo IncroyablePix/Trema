@@ -416,7 +416,27 @@ As a cmake project it's pretty easy to build the project.
 Once everything previously mentioned done, make sure you have **CMake 3.20** installed.
 Open a terminal and navigate to the root directory of the project.
 
-### Unix-like
+### Linux
+
+You might need to install some extra windowing packages:
+
+#### CMake
+If you struggle installing CMake 3.20+, do not install it with apt or such. Try with **pip**
+```shell
+sudo pip install cmake
+```
+
+You might need to install the following libraries
+```shell
+sudo apt-get install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+```
+
+and Vulkan itself
+
+```shell
+sudo apt install vulkan-sdk
+```
+
 ```shell
 cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
 cmake --build build --target all
