@@ -433,4 +433,14 @@ Also, files such as fonts and resources will be copied to the same directory to 
 Though not exhaustive, there is a test project that has a dependency on [Catch2](https://github.com/catchorg/Catch2), which is also embedded in this project.
 
 ## Toolchains
-This test 
+This project has been tested with the following toolchains :
+
+### Windows
+- MinGW64     11.1.0
+- MSVC x64    19.31.31107
+
+### Linux
+- g++   
+
+### MacOS
+- none
