@@ -388,7 +388,8 @@ Those are just included in the project, and it's *better for you* since it doesn
 Since they are statically linked, which has its downsides too, you might want to dynamically link them, but the goal of this project is to keep things as simple as possible.
 
 ### Vulkan
-You just have to install [Vulkan](https://vulkan.lunarg.com/) and CMake will handle everything else.
+You just have to install [Vulkan SDK](https://vulkan.lunarg.com/) and CMake will handle everything else.
+If not done, you should set the **VK_SDK_PATH** environment variable as well to point to your Vulkan installation.
 
 #### Linux
 On *Linux*, you just need to install it and you are done.
@@ -415,8 +416,24 @@ As a cmake project it's pretty easy to build the project.
 Once everything previously mentioned done, make sure you have **CMake 3.20** installed.
 Open a terminal and navigate to the root directory of the project.
 
+### Unix-like
 ```shell
-cmake -S . -B build
+cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+cmake --build build --target all
+```
+
+### Windows
+#### MSVC
+```shell
+cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 17 2022" -A x64 -S . -B build
+cmake --build build --target ALL_BUILD --config Release
+```
+
+N.-B.: The binaries will be built to *.\build\bin\Release*, but the resource files will be sent to *.\build\bin* and I didn't find how to fix this yet, so you have to manually change the files' location.
+
+#### MinGW
+```shell
+cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
 ```
 
@@ -437,7 +454,9 @@ This project has been tested with the following toolchains :
 
 ### Windows
 - MinGW64     11.1.0
-- MSVC x64    19.31.31107
+- MSVC x64    19.16.27043.0
+
+I would personally recommend to use MSVC since it doesn't require to provide any extra .dll with deployed version but MinGW is fine too.
 
 ### Linux
 - g++   

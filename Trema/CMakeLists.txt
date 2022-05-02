@@ -25,7 +25,6 @@ endif()
 ############ DEPENDENCIES ############
 ### Vulkan ###
 message("Including VULKAN...")
-set(ENV{VULKAN_SDK} $ENV{VK_SDK_PATH})
 find_package(Vulkan REQUIRED FATAL_ERROR)
 message("Done!")
 
