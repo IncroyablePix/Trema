@@ -1,10 +1,10 @@
 
 # Trema
-ImGUI wrapper with XML view descriptors
+ImGUI Object Oriented wrapper with XML view descriptors, styling and async event processing.
 
 # Abstract
 Have you ever had any consideration about GUI applications in C++? 
-Trema is a wrapper around Dear ImGui that allows to write views as XML files. It uses SDL2 & Vulkan as backend, Dear ImGui for components and TinyXML for XML fiiles parsing.
+Trema is a wrapper around Dear ImGui that allows to write views as XML files and styling in a CSS. It uses GLFW & Vulkan as backend, Dear ImGui for components and TinyXML for XML files parsing.
 
 **Since Dear ImGui stands for Immediate Mode GUI, the whole application will re-render for every frame. TL;DR => CPU & GPU Usage is greater than for Qt, wxWidgets, etc.**
 
@@ -391,26 +391,6 @@ Since they are statically linked, which has its downsides too, you might want to
 You just have to install [Vulkan SDK](https://vulkan.lunarg.com/) and CMake will handle everything else.
 If not done, you should set the **VK_SDK_PATH** environment variable as well to point to your Vulkan installation.
 
-#### Linux
-On *Linux*, you just need to install it and you are done.
-
-```shell
-sudo apt-get install libsdl2-dev
-sudo yum install libsdl2-dev
-sudo dnf install libsdl2-dev
-```
-...according to your package manager.
-
-#### Windows
-On *Windows*, you need to [download it](https://www.libsdl.org/download-2.0.php) in a first time, and extract somewhere. 
-You need to define an **environment variable** going by the name of **SDL2** to the root path of SDL2.
-Root path means the directory that contains the "x86_64-w64-mingw32", "i686-w64-mingw32", "docs", "test", etc. directories.
-
-If you are too lazy to do this on your own, you can just run this PowerShell script:
-```ps
-
-```
-
 ## Actual build
 As a cmake project it's pretty easy to build the project.
 Once everything previously mentioned done, make sure you have **CMake 3.20** installed.
@@ -426,6 +406,7 @@ If you struggle installing CMake 3.20+, do not install it with apt or such. Try 
 sudo pip install cmake
 ```
 
+### External GUI dependencies 
 You might need to install the following libraries
 ```shell
 sudo apt-get install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
@@ -476,7 +457,7 @@ This project has been tested with the following toolchains :
 - MinGW64     11.1.0
 - MSVC x64    19.16.27043.0
 
-I would personally recommend to use MSVC since it doesn't require to provide any extra .dll with deployed version but MinGW is fine too.
+I would personally recommend to use MSVC on Windows since it doesn't require to provide any extra .dll with deployed version but MinGW is fine too.
 
 ### Linux
 - g++   
