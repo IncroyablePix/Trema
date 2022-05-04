@@ -23,6 +23,7 @@ namespace Trema::View
     {
 #ifdef WIN32
         SetConsoleOutputCP(65001); // UTF-8
+        ShowWindow(GetConsoleWindow(), SW_HIDE); // Hide Windows terminal
 #endif
     }
 
