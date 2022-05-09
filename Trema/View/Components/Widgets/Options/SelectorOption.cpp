@@ -10,8 +10,8 @@
 namespace Trema::View
 {
 
-    SelectorOption::SelectorOption(std::shared_ptr<IGuiElement> parent, std::string name) :
-        IGuiElement(std::move(parent), std::move(name))
+    SelectorOption::SelectorOption(std::shared_ptr<GuiElement> parent, std::string name) :
+            GuiElement(std::move(parent), std::move(name))
     {
 
     }
@@ -22,7 +22,7 @@ namespace Trema::View
     }
 
     std::shared_ptr<SelectorOption>
-    SelectorOption::CreateSelectorOption(std::shared_ptr<IGuiElement> parent, std::string name)
+    SelectorOption::CreateSelectorOption(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<SelectorOption>(std::move(parent), std::move(name));
     }

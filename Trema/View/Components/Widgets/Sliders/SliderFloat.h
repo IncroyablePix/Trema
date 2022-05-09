@@ -8,14 +8,14 @@
 
 #include <functional>
 #include <algorithm>
-#include "../../IGuiElement.h"
+#include "../../GuiElement.h"
 
 namespace Trema::View
 {
-    class SliderFloat : public IGuiElement
+    class SliderFloat : public GuiElement
     {
     public:
-        SliderFloat(std::shared_ptr<IGuiElement> parent, std::string name, float min, float max);
+        SliderFloat(std::shared_ptr<GuiElement> parent, std::string name, float min, float max);
         ~SliderFloat() = default;
         void AddOnCheckListener(std::string name, std::function<void(const SliderFloat& slider, float value)> listener);
         void Show() override;
@@ -25,7 +25,7 @@ namespace Trema::View
 
         inline float GetValue() const { return m_value; }
 
-        static std::shared_ptr<SliderFloat> CreateSliderFloat(std::shared_ptr<IGuiElement> parent, std::string name, float min = 0.0f, float max = 100.0f);
+        static std::shared_ptr<SliderFloat> CreateSliderFloat(std::shared_ptr<GuiElement> parent, std::string name, float min = 0.0f, float max = 100.0f);
 
     private:
         float m_value { 0.0f };

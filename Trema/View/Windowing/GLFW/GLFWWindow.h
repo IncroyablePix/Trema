@@ -17,13 +17,20 @@ namespace Trema::View
         ~GLFWWindow();
         void PollEvent() override;
         void SetTitle(const std::string &title) override;
+        void ToggleFullscreen(bool fullscreen) override;
+        void ToggleTitleBar(bool titleBar) override;
+        void ToggleWindowOptions(bool fullscreen, bool titleBar) override;
+        void SetSize(int width, int height) override;
+        void SetWidth(int width) override;
+        void SetHeight(int height) override;
 
         static std::shared_ptr<GLFWWindow> CreateGLFWWindow(const WindowInfo &info);
 
     private:
-        GLFWwindow* m_window;
+        GLFWwindow* m_window { nullptr };
         static void InitializeGlfw();
-        static GLFWwindow* CreateWindow(const WindowInfo &info);
+        void CreateWindow();
+        void InitializeGlfwVulkan();
     };
     static bool GlfwInitialized { false };
 }

@@ -37,7 +37,7 @@ namespace Trema::View
         return std::make_shared<TopMenu>(std::move(name));
     }
 
-    void TopMenu::AddChild(std::shared_ptr<IGuiElement> child)
+    void TopMenu::AddChild(std::shared_ptr<GuiElement> child)
     {
         if(!IsType<SubMenu>(child))
             throw FamilyException(R"(Invalid type appended to "TopMenu", expected "SubMenu".)");

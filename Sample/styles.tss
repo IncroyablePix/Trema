@@ -39,6 +39,7 @@ pink: 0xFF8BC4FF;
 #winForms {
     header: false;
     text-color: pink;
+    font: "Roboto";
 
     #favouriteColour {
         width: "250px";

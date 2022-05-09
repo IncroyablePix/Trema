@@ -5,15 +5,15 @@
 #ifndef TREMA_SAMPLE_COLORPICKER_H
 #define TREMA_SAMPLE_COLORPICKER_H
 
-#include "../IGuiElement.h"
+#include "../GuiElement.h"
 #include <array>
 
 namespace Trema::View
 {
-    class ColorPicker : public IGuiElement
+    class ColorPicker : public GuiElement
     {
     public:
-        ColorPicker(std::shared_ptr<IGuiElement> parent, std::string name);
+        ColorPicker(std::shared_ptr<GuiElement> parent, std::string name);
         void Show() override;
         void BeginStyle() override;
         void EndStyle() override;
@@ -21,7 +21,7 @@ namespace Trema::View
         std::array<float, 4> GetColor() const;
         unsigned int GetColorInt() const;
         void AddOnChangeListener(std::string name, std::function<void(const ColorPicker& colorPicker)> listener);
-        static std::shared_ptr<ColorPicker> CreateColorPicker(std::shared_ptr<IGuiElement> parent, std::string name);
+        static std::shared_ptr<ColorPicker> CreateColorPicker(std::shared_ptr<GuiElement> parent, std::string name);
 
         inline bool HasPreview() const { return m_preview; }
         inline void TogglePreview(bool toggle) { m_preview = toggle; }

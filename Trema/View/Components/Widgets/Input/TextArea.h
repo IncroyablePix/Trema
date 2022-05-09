@@ -13,11 +13,11 @@ namespace Trema::View
     class TextArea : public TextInput
     {
     public:
-        TextArea(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
+        TextArea(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
         ~TextArea();
         void Show() override;
 
-        static std::shared_ptr<TextArea> CreateTextArea(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
+        static std::shared_ptr<TextArea> CreateTextArea(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
     };
 }
 

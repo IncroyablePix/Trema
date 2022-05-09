@@ -5,14 +5,14 @@
 #ifndef TREMA_PROJECT_SLIDERINT_H
 #define TREMA_PROJECT_SLIDERINT_H
 
-#include "../../IGuiElement.h"
+#include "../../GuiElement.h"
 
 namespace Trema::View
 {
-    class SliderInt : public IGuiElement
+    class SliderInt : public GuiElement
     {
         public:
-            SliderInt(std::shared_ptr<IGuiElement> parent, std::string name, int min, int max);
+            SliderInt(std::shared_ptr<GuiElement> parent, std::string name, int min, int max);
             ~SliderInt() = default;
             void AddOnCheckListener(std::string name, std::function<void(const SliderInt& slider, int value)> listener);
             void Show() override;
@@ -22,7 +22,7 @@ namespace Trema::View
 
             inline int GetValue() const { return m_value; }
 
-            static std::shared_ptr<SliderInt> CreateSliderInt(std::shared_ptr<IGuiElement> parent, std::string name, int min = 0.0f, int max = 100.0f);
+            static std::shared_ptr<SliderInt> CreateSliderInt(std::shared_ptr<GuiElement> parent, std::string name, int min = 0.0f, int max = 100.0f);
 
         private:
             int m_value { 0 };

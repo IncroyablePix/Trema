@@ -8,7 +8,7 @@
 #include <array>
 #include <vector>
 #include <sstream>
-#include "../../IGuiElement.h"
+#include "../../GuiElement.h"
 #include "../../../ImGUI/imgui.h"
 #include "../../Container/IContainer.h"
 #include "../FamilyException.h"
@@ -17,18 +17,18 @@ namespace Trema::View
 {
     struct TableRow : public IContainer
     {
-        explicit TableRow(std::shared_ptr<IGuiElement> parent, std::string name, std::vector<std::shared_ptr<IGuiElement>> elements) :
+        explicit TableRow(std::shared_ptr<GuiElement> parent, std::string name, std::vector<std::shared_ptr<GuiElement>> elements) :
                 IContainer(std::move(parent), std::move(name)),
                 Elements(std::move(elements))
         {
         }
 
-        void AddChild(std::shared_ptr<IGuiElement> child) override
+        void AddChild(std::shared_ptr<GuiElement> child) override
         {
             Elements.push_back(child);
         }
 
-        std::vector<std::shared_ptr<IGuiElement>> Elements;
+        std::vector<std::shared_ptr<GuiElement>> Elements;
 
         void Show() override
         {
@@ -42,9 +42,9 @@ namespace Trema::View
             EndStyle();
         }
 
-        static std::shared_ptr<TableRow> CreateTableRow(std::shared_ptr<IGuiElement> parent, std::string name)
+        static std::shared_ptr<TableRow> CreateTableRow(std::shared_ptr<GuiElement> parent, std::string name)
         {
-            return std::make_shared<TableRow>(std::move(parent), std::move(name), std::vector<std::shared_ptr<IGuiElement>>());
+            return std::make_shared<TableRow>(std::move(parent), std::move(name), std::vector<std::shared_ptr<GuiElement>>());
         }
     };
 
@@ -52,7 +52,7 @@ namespace Trema::View
     class Table : public IContainer
     {
     public:
-        Table(std::shared_ptr<IGuiElement> parent, std::string name, std::vector<std::string> titles) :
+        Table(std::shared_ptr<GuiElement> parent, std::string name, std::vector<std::string> titles) :
             IContainer(std::move(parent), std::move(name)),
             m_tableColumns(titles.size()),
             m_titles(std::move(titles)),
@@ -63,7 +63,7 @@ namespace Trema::View
 
         ~Table() = default;
 
-        void AddChild(std::shared_ptr<IGuiElement> child) override
+        void AddChild(std::shared_ptr<GuiElement> child) override
         {
             if(IsType<TableRow>(child))
             {
@@ -111,7 +111,7 @@ namespace Trema::View
             m_displayHeaders = toggle;
         }
 
-        static std::shared_ptr<Table> CreateTable(std::shared_ptr<IGuiElement> parent, std::string name, std::vector<std::string> titles)
+        static std::shared_ptr<Table> CreateTable(std::shared_ptr<GuiElement> parent, std::string name, std::vector<std::string> titles)
         {
             return std::make_shared<Table>(std::move(parent), std::move(name), std::move(titles));
         }

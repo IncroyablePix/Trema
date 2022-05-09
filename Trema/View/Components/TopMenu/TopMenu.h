@@ -6,7 +6,7 @@
 #define TREMA_TOPMENU_H
 
 
-#include "../IGuiElement.h"
+#include "../GuiElement.h"
 #include "../Container/IContainer.h"
 
 namespace Trema::View
@@ -17,7 +17,7 @@ namespace Trema::View
         explicit TopMenu(std::string name);
         ~TopMenu();
         void Show() override;
-        void AddChild(std::shared_ptr<IGuiElement> child) override;
+        void AddChild(std::shared_ptr<GuiElement> child) override;
         static std::shared_ptr<TopMenu> CreateTopMenu(std::string name);
 
     private:

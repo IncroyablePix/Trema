@@ -5,11 +5,11 @@
 #include "SubMenu.h"
 #include "MenuOption.h"
 #include "../Widgets/FamilyException.h"
-#include "../Widgets/Separator.h"
+#include "../Widgets/Pure/Separator.h"
 
 namespace Trema::View
 {
-    SubMenu::SubMenu(std::shared_ptr<IGuiElement> parent, std::string name) :
+    SubMenu::SubMenu(std::shared_ptr<GuiElement> parent, std::string name) :
         IContainer(std::move(parent), std::move(name))
     {
 
@@ -31,12 +31,12 @@ namespace Trema::View
         }
     }
 
-    std::shared_ptr<SubMenu> SubMenu::CreateSubMenu(std::shared_ptr<IGuiElement> parent, std::string name)
+    std::shared_ptr<SubMenu> SubMenu::CreateSubMenu(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<SubMenu>(std::move(parent), std::move(name));
     }
 
-    void SubMenu::AddChild(std::shared_ptr<IGuiElement> child)
+    void SubMenu::AddChild(std::shared_ptr<GuiElement> child)
     {
         if(!IsType<MenuOption>(child) && !IsType<Separator>(child))
             throw FamilyException(R"(Invalid type appended to "SubMenu", expected "MenuOption", "Separator".)");

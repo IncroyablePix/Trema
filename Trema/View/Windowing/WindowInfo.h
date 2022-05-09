@@ -10,7 +10,6 @@ namespace Trema::View
 {
     struct WindowInfo
     {
-        double SecondsPerUpdate;
         int Width;
         int Height;
     };

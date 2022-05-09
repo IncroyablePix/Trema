@@ -22,8 +22,15 @@ namespace Trema::View
     {
     public:
         Window(const WindowInfo &info);
+
         virtual void PollEvent() = 0;
         virtual void SetTitle(const std::string &title) = 0;
+        virtual void ToggleFullscreen(bool fullscreen) = 0;
+        virtual void ToggleTitleBar(bool titleBar) = 0;
+        virtual void ToggleWindowOptions(bool fullscreen, bool titleBar) = 0;
+        virtual void SetSize(int width, int height) = 0;
+        virtual void SetWidth(int width) = 0;
+        virtual void SetHeight(int height) = 0;
 
         int Run();
         void InitializeDearImGUI() const;
@@ -42,7 +49,10 @@ namespace Trema::View
         void SetLayout(std::shared_ptr<ILayout> layout);
         void SetTopMenu(std::shared_ptr<TopMenu> topMenu);
 
-        inline void AddElementId(const std::string& id, std::shared_ptr<IGuiElement> element)
+        inline bool IsFullscreen() const { return m_fullscreen; }
+        inline bool IsTitleBarEnabled() const { return m_titleBar; }
+
+        inline void AddElementId(const std::string& id, std::shared_ptr<GuiElement> element)
         {
             m_elementsById[id] = std::move(element);
         }
@@ -82,18 +92,20 @@ namespace Trema::View
         ElementStyle Style;
 
     protected:
-        std::unordered_map<std::string, std::shared_ptr<IGuiElement>> m_elementsById;
+        std::unordered_map<std::string, std::shared_ptr<GuiElement>> m_elementsById;
         std::shared_ptr<ILayout> m_layout;
         std::shared_ptr<TopMenu> m_menu;
         std::shared_ptr<IWindowBackendStrategy> m_windowBackendStrategy;
-        std::string m_title;
-        std::unordered_map<std::string, ImFont*> m_fonts;
-        ImFont* m_standardFont;
-        double m_secondsPerUpdate { };
+
+        std::string m_title { "Trema" };
         int m_width;
         int m_height;
+
+        ImFont* m_standardFont;
         std::unique_ptr<VulkanRenderer> m_renderer;
         bool m_opened;
+        bool m_fullscreen { false };
+        bool m_titleBar { false };
 
         std::unordered_map<std::string, std::shared_ptr<IPopupComponent>> m_popupComponents;
     };

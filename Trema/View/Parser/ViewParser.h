@@ -21,21 +21,21 @@ namespace Trema::View
     public:
         explicit ViewParser(std::unique_ptr<IStyleParser> stylesParser);
         virtual void SetupWindowFromFile(const std::wstring &path, std::shared_ptr<Window> window) = 0;
-        virtual void SetupWindowFromFile(const std::string &path, std::shared_ptr<Window> window) = 0;
+        virtual void LoadView(const std::string &path, std::shared_ptr<Window> window) = 0;
         virtual void SetupWindowFromString(const std::string &code, std::shared_ptr<Window> window) = 0;
         inline const std::vector<CompilationMistake>& GetMistakes() const { return m_mistakes; };
 
     protected:
         void HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<Window> window);
-        std::shared_ptr<IGuiElement> CreateFromName(std::shared_ptr<IGuiElement> parent, const std::string& elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<Window> window, std::string content);
-        static void TryAddLayout(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<Window>& window);
-        static void TryAddTopMenu(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<Window>& window);
-        static void TryAddAsChild(const std::shared_ptr<IGuiElement>& container, const std::shared_ptr<IGuiElement>& element, const std::string &elementName);
-        void TryAddToLayout(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<IGuiElement> &container,
+        std::shared_ptr<GuiElement> CreateFromName(std::shared_ptr<GuiElement> parent, const std::string& elementName, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<Window> window, std::string content);
+        static void TryAddLayout(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<Window>& window);
+        static void TryAddTopMenu(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<Window>& window);
+        static void TryAddAsChild(const std::shared_ptr<GuiElement>& container, const std::shared_ptr<GuiElement>& element, const std::string &elementName);
+        void TryAddToLayout(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<GuiElement> &container,
                             std::unordered_map<std::string, std::string>& attributes, const std::shared_ptr<Window>& window);
 
         template<class T>
-        inline static bool IsType(const std::shared_ptr<IGuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
+        inline static bool IsType(const std::shared_ptr<GuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
     protected:
         void ApplyStyles(const std::shared_ptr<Window>& window);
 

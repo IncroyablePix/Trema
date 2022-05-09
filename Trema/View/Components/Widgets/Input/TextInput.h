@@ -5,23 +5,23 @@
 #ifndef TREMA_TEXTINPUT_H
 #define TREMA_TEXTINPUT_H
 
-#include "../../IGuiElement.h"
+#include "../../GuiElement.h"
 #include <unordered_map>
 #include <functional>
 
 namespace Trema::View
 {
-    class TextInput : public IGuiElement
+    class TextInput : public GuiElement
     {
     public:
-        TextInput(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
+        TextInput(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
         virtual ~TextInput();
         std::string GetText();
         void SetText(const std::string& text);
         void Show() override;
         void AddOnChangeListener(std::string name, std::function<void(std::string text)> listener);
 
-        static std::shared_ptr<TextInput> CreateTextInput(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
+        static std::shared_ptr<TextInput> CreateTextInput(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
 
     protected:
         static const size_t defaultBufferSize = 256;

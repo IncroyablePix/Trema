@@ -7,7 +7,7 @@
 
 
 #include <functional>
-#include "../../IGuiElement.h"
+#include "../../GuiElement.h"
 #include "../../Container/IContainer.h"
 
 namespace Trema::View
@@ -15,10 +15,10 @@ namespace Trema::View
     class Radio : public IContainer
     {
     public:
-        Radio(std::shared_ptr<IGuiElement> parent, std::string name);
+        Radio(std::shared_ptr<GuiElement> parent, std::string name);
         ~Radio();
         void AddOption(std::string name);
-        void AddChild(std::shared_ptr<IGuiElement> child) override;
+        void AddChild(std::shared_ptr<GuiElement> child) override;
 
         void Show() override;
 
@@ -26,7 +26,7 @@ namespace Trema::View
         inline std::string GetOption() const { return m_options[m_option]; }
 
         void AddOnClickListener(std::string name, std::function<void(const std::string&)> listener);
-        static std::shared_ptr<Radio> CreateRadio(std::shared_ptr<IGuiElement> parent, std::string name);
+        static std::shared_ptr<Radio> CreateRadio(std::shared_ptr<GuiElement> parent, std::string name);
 
     private:
         int m_option { 0 };

@@ -8,19 +8,19 @@
 
 #include <unordered_map>
 #include <vector>
-#include "../IGuiElement.h"
+#include "../GuiElement.h"
 
 namespace Trema::View
 {
-    class IContainer : public IGuiElement
+    class IContainer : public GuiElement
     {
     public:
-        explicit IContainer(std::shared_ptr<IGuiElement> parent, std::string name);
-        virtual void AddChild(std::shared_ptr<IGuiElement> child);
-        inline std::vector<std::shared_ptr<IGuiElement>>& GetChildren() { return m_children; }
+        explicit IContainer(std::shared_ptr<GuiElement> parent, std::string name);
+        virtual void AddChild(std::shared_ptr<GuiElement> child);
+        inline std::vector<std::shared_ptr<GuiElement>>& GetChildren() { return m_children; }
 
     protected:
-        std::vector<std::shared_ptr<IGuiElement>> m_children;
+        std::vector<std::shared_ptr<GuiElement>> m_children;
         static bool SubContainer;
     };
 }

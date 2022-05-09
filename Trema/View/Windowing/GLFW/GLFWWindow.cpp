@@ -6,23 +6,30 @@
 #include "GLFWWindow.h"
 #include "GLFWBackendStrategy.h"
 #include "../WindowInitializationException.h"
+#include "../Fonts/FontsRepository.h"
 
 namespace Trema::View
 {
     GLFWWindow::GLFWWindow(const WindowInfo &info) :
         Window(info),
-        m_window(CreateWindow(info))
+        m_window(nullptr)
     {
-        InitializeDearImGUI();
-        InitializeVulkan(std::make_shared<GLFWBackendStrategy>(m_window));
-        m_renderer->Init();
-        m_renderer->LoadFonts();
+        CreateWindow();
     }
 
     GLFWWindow::~GLFWWindow()
     {
         glfwDestroyWindow(m_window);
         glfwTerminate();
+    }
+
+    void GLFWWindow::InitializeGlfwVulkan()
+    {
+        InitializeDearImGUI();
+        InitializeVulkan(std::make_shared<GLFWBackendStrategy>(m_window));
+        m_renderer->Init();
+        FontsRepository::GetInstance()->ReloadFonts();
+        m_renderer->LoadFonts();
     }
 
     void GLFWWindow::PollEvent()
@@ -69,10 +76,76 @@ namespace Trema::View
         }
     }
 
-    GLFWwindow *GLFWWindow::CreateWindow(const WindowInfo &info)
+    void GLFWWindow::CreateWindow()
     {
         InitializeGlfw();
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        return glfwCreateWindow(info.Width, info.Height, "Trema window", nullptr, nullptr);
+
+        if(m_window)
+        {
+            m_renderer.reset();
+            glfwDestroyWindow(m_window);
+        }
+
+        if(m_fullscreen)
+        {
+            auto monitor = glfwGetPrimaryMonitor();
+            const auto mode = glfwGetVideoMode(monitor);
+            m_window = glfwCreateWindow(mode->width, mode->height, m_title.c_str(), monitor, nullptr);
+        }
+        else
+        {
+            m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
+        }
+        InitializeGlfwVulkan();
     }
-} // View
+
+    void GLFWWindow::ToggleWindowOptions(bool fullscreen, bool titleBar)
+    {
+        if (fullscreen != m_fullscreen || titleBar != m_titleBar)
+        {
+            m_fullscreen = fullscreen;
+            m_titleBar = titleBar;
+            CreateWindow();
+        }
+    }
+
+    void GLFWWindow::ToggleFullscreen(bool fullscreen)
+    {
+        if (fullscreen != m_fullscreen)
+        {
+            m_fullscreen = fullscreen;
+            CreateWindow();
+        }
+    }
+
+    void GLFWWindow::ToggleTitleBar(bool titleBar)
+    {
+        if (titleBar != m_titleBar)
+        {
+            m_titleBar = titleBar;
+            CreateWindow();
+        }
+    }
+
+    void GLFWWindow::SetSize(int width, int height)
+    {
+        glfwSetWindowSize(m_window, m_width = width, m_height = height);
+    }
+
+    void GLFWWindow::SetWidth(int width)
+    {
+        if (width > 0)
+        {
+            glfwSetWindowSize(m_window, m_width = width, m_height);
+        }
+    }
+
+    void GLFWWindow::SetHeight(int height)
+    {
+        if (height > 0)
+        {
+            glfwSetWindowSize(m_window, m_width, m_height = height);
+        }
+    }
+}

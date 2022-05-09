@@ -7,7 +7,7 @@
 namespace Trema::View
 {
     ILayout::ILayout(std::string name) :
-        IGuiElement(nullptr, std::move(name))
+            GuiElement(nullptr, std::move(name))
     {
 
     }

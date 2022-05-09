@@ -5,13 +5,13 @@
 #ifndef TREMA_ILAYOUT_H
 #define TREMA_ILAYOUT_H
 
-#include "../IGuiElement.h"
+#include "../GuiElement.h"
 #include "../Container/IContainer.h"
 
 namespace Trema::View
 {
     class Window;
-    class ILayout : public IGuiElement
+    class ILayout : public GuiElement
     {
     public:
         ILayout(std::string name);

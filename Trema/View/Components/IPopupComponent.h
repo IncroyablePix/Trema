@@ -6,11 +6,11 @@
 #define TREMA_IPOPUPCOMPONENT_H
 
 #include <memory>
-#include "IGuiElement.h"
+#include "GuiElement.h"
 
 namespace Trema::View
 {
-    class IPopupComponent : public IGuiElement
+    class IPopupComponent : public GuiElement
     {
     public:
         IPopupComponent(std::string name);

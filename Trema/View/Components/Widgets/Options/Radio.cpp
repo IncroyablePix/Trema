@@ -10,7 +10,7 @@
 
 namespace Trema::View
 {
-    Radio::Radio(std::shared_ptr<IGuiElement> parent, std::string name) :
+    Radio::Radio(std::shared_ptr<GuiElement> parent, std::string name) :
         IContainer(std::move(parent), std::move(name))
     {
 
@@ -60,12 +60,12 @@ namespace Trema::View
         EndStyle();
     }
 
-    std::shared_ptr<Radio> Radio::CreateRadio(std::shared_ptr<IGuiElement> parent, std::string name)
+    std::shared_ptr<Radio> Radio::CreateRadio(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<Radio>(std::move(parent), std::move(name));
     }
 
-    void Radio::AddChild(std::shared_ptr<IGuiElement> child)
+    void Radio::AddChild(std::shared_ptr<GuiElement> child)
     {
         //if(IsType<Radio>(child))
         AddOption(child->GetName());

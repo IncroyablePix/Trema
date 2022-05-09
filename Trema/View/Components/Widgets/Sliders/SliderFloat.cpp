@@ -7,10 +7,10 @@
 
 namespace Trema::View
 {
-    SliderFloat::SliderFloat(std::shared_ptr<IGuiElement> parent, std::string name, float min = 0.0f, float max = 100.0f) :
-        IGuiElement(std::move(parent), std::move(name)),
-        m_min(min),
-        m_max(max)
+    SliderFloat::SliderFloat(std::shared_ptr<GuiElement> parent, std::string name, float min = 0.0f, float max = 100.0f) :
+            GuiElement(std::move(parent), std::move(name)),
+            m_min(min),
+            m_max(max)
     {
         m_value = std::clamp<float>(0.0, m_min, m_max);
     }
@@ -39,7 +39,7 @@ namespace Trema::View
     }
 
     std::shared_ptr<SliderFloat>
-    SliderFloat::CreateSliderFloat(std::shared_ptr<IGuiElement> parent, std::string name, float min, float max)
+    SliderFloat::CreateSliderFloat(std::shared_ptr<GuiElement> parent, std::string name, float min, float max)
     {
         return std::make_shared<SliderFloat>(std::move(parent), std::move(name), min, max);
     }

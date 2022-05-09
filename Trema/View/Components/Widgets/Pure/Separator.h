@@ -1,0 +1,22 @@
+//
+// Created by JajaFil on 3/28/2022.
+//
+
+#ifndef TREMA_SEPARATOR_H
+#define TREMA_SEPARATOR_H
+
+#include "../../GuiElement.h"
+
+namespace Trema::View
+{
+    class Separator : public GuiElement
+    {
+    public:
+        Separator(std::shared_ptr<GuiElement> parent, std::string name);
+        ~Separator();
+        void Show() override;
+        static std::shared_ptr<Separator> CreateSeparator(std::shared_ptr<GuiElement> parent, std::string name);
+    };
+}
+
+#endif //TREMA_SEPARATOR_H

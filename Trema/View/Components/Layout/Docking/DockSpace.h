@@ -9,7 +9,7 @@
 #include <array>
 #include <memory>
 #include <unordered_map>
-#include "../../IGuiElement.h"
+#include "../../GuiElement.h"
 #include "../../../ImGUI/imgui.h"
 #include "../../../ImGUI/imgui_internal.h"
 #include "../ILayout.h"

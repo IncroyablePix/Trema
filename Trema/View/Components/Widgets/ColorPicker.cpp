@@ -10,8 +10,8 @@
 namespace Trema::View
 {
 
-    ColorPicker::ColorPicker(std::shared_ptr<IGuiElement> parent, std::string name) :
-            IGuiElement(std::move(parent), std::move(name))
+    ColorPicker::ColorPicker(std::shared_ptr<GuiElement> parent, std::string name) :
+            GuiElement(std::move(parent), std::move(name))
     {
 
     }
@@ -34,7 +34,7 @@ namespace Trema::View
 
     void ColorPicker::BeginStyle()
     {
-        IGuiElement::BeginStyle();
+        GuiElement::BeginStyle();
 
         auto size = Style.GetSize();
         ImGui::SetNextItemWidth(size.x);
@@ -42,7 +42,7 @@ namespace Trema::View
 
     void ColorPicker::EndStyle()
     {
-        IGuiElement::EndStyle();
+        GuiElement::EndStyle();
     }
 
     void ColorPicker::AddOnChangeListener(std::string name, std::function<void(const ColorPicker &)> listener)
@@ -50,7 +50,7 @@ namespace Trema::View
         m_listeners[std::move(name)] = std::move(listener);
     }
 
-    std::shared_ptr<ColorPicker> ColorPicker::CreateColorPicker(std::shared_ptr<IGuiElement> parent, std::string name)
+    std::shared_ptr<ColorPicker> ColorPicker::CreateColorPicker(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<ColorPicker>(std::move(parent), std::move(name));
     }

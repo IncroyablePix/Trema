@@ -17,7 +17,7 @@ namespace Trema::View
 
     }
 
-    void TinyXMLViewParser::SetupWindowFromFile(const std::string &path, std::shared_ptr<Window> window)
+    void TinyXMLViewParser::LoadView(const std::string &path, std::shared_ptr<Window> window)
     {
         TiXmlDocument doc(path.c_str());
         auto error = doc.LoadFile();
@@ -98,12 +98,12 @@ namespace Trema::View
         ParseElement(child, nullptr, window);
     }
 
-    void TinyXMLViewParser::ParseElement(TiXmlElement *element, const std::shared_ptr<IGuiElement>& container, const std::shared_ptr<Window>& window)
+    void TinyXMLViewParser::ParseElement(TiXmlElement *element, const std::shared_ptr<GuiElement>& container, const std::shared_ptr<Window>& window)
     {
         auto elementName = element->Value();
         auto elementContent = element->GetText();
         std::unordered_map<std::string, std::string> attributes;
-        std::shared_ptr<IGuiElement> newElement;
+        std::shared_ptr<GuiElement> newElement;
 
         for(TiXmlAttribute* attribute = element->FirstAttribute(); attribute != nullptr; attribute = attribute->Next())
             attributes[attribute->Name()] = attribute->Value();
@@ -123,7 +123,7 @@ namespace Trema::View
             TryAddAsChild(container, newElement, elementName); // Add to container
     }
 
-    void TinyXMLViewParser::ParseChildren(TiXmlElement *element, const std::shared_ptr<IGuiElement> &container, const std::shared_ptr<Window> &window)
+    void TinyXMLViewParser::ParseChildren(TiXmlElement *element, const std::shared_ptr<GuiElement> &container, const std::shared_ptr<Window> &window)
     {
         for (TiXmlElement *child = element->FirstChildElement();
              child != nullptr; child = child->NextSiblingElement())

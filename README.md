@@ -45,6 +45,14 @@ Loads a stylesheet and applies it *after all elements have been loaded*.
 Sets the title of the window. The last Title element will be applied.
 - *content*: The title string
 
+#### WindowData
+Sets the window main options. **Some options might recreate a context and a window which is costly.**
+- fullscreen: Boolean value hinting the window to go fullscreen
+- titlebar: Boolean value toggling the title bar. Enabled fullscreen overrides this value to true.
+- width: The width of the window (Including the frame)
+- height: The height of the window (Including the frame)
+- *content*: None
+
 ### Body
 Body is an element that will contain the actual elements. 
 Right under the **body**, you need to have a *Layout* which will contain the different elements.

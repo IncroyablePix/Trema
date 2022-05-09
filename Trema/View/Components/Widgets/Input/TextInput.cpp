@@ -10,8 +10,8 @@
 namespace Trema::View
 {
 
-    TextInput::TextInput(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText, size_t bufferSize) :
-            IGuiElement(std::move(parent), std::move(name)),
+    TextInput::TextInput(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText, size_t bufferSize) :
+            GuiElement(std::move(parent), std::move(name)),
 //            m_text(defaultText.c_str()),
             m_bufferSize(bufferSize)
     {
@@ -46,7 +46,7 @@ namespace Trema::View
     }
 
     std::shared_ptr<TextInput>
-    TextInput::CreateTextInput(std::shared_ptr<IGuiElement> parent, std::string name, std::string defaultText,
+    TextInput::CreateTextInput(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText,
                                size_t bufferSize)
     {
         return std::make_shared<TextInput>(std::move(parent), std::move(name), std::move(defaultText), bufferSize);

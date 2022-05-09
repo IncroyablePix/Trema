@@ -13,7 +13,7 @@
 #include <View/Style/Parser/StackedStyleParser.h>
 #include <View/Parser/TinyXML/TinyXMLViewParser.h>
 #include <View/Components/Windows/FileDialog.h>
-#include <View/Components/Widgets/Text.h>
+#include "View/Components/Widgets/Pure/Text.h"
 #include <View/Windowing/GLFW/GLFWWindow.h>
 
 using namespace Trema::View;
@@ -89,13 +89,13 @@ std::vector<std::string> split(const std::string& input, const std::string& rege
 
 int main(int argc, char** argv)
 {
-    auto info = WindowInfo { .SecondsPerUpdate = 0.01, .Width = 1280, .Height = 720 };
+    auto info = WindowInfo { .Width = 1280, .Height = 720 };
+    auto window = GLFWWindow::CreateGLFWWindow(info);
     auto stylesParser = std::make_unique<StackedStyleParser>();
     auto parser = TinyXMLViewParser(std::move(stylesParser));
-    auto window = GLFWWindow::CreateGLFWWindow(info);
 
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
-    parser.SetupWindowFromFile("./people_view.txml", window);
+    parser.LoadView("./people_view.txml", window);
 
     // Fields
     auto count = 0;
@@ -151,6 +151,7 @@ int main(int argc, char** argv)
         data << firstName << ";"
             << lastName << ";"
             << std::dec << height << " cm;"
+            << sex << ";"
             << std::hex << favouriteColour << ";"
             << diploma << "\n";
 

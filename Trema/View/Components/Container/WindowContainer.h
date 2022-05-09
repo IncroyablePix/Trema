@@ -13,11 +13,11 @@ namespace Trema::View
     class WindowContainer : public IContainer
     {
     public:
-        explicit WindowContainer(std::shared_ptr<IGuiElement> parent, std::string name);
+        explicit WindowContainer(std::shared_ptr<GuiElement> parent, std::string name);
         ~WindowContainer();
 
         void Show() override;
-        static std::shared_ptr<WindowContainer> CreateWindowContainer(std::shared_ptr<IGuiElement> parent, std::string name);
+        static std::shared_ptr<WindowContainer> CreateWindowContainer(std::shared_ptr<GuiElement> parent, std::string name);
 
     private:
         int GetWindowFlags();

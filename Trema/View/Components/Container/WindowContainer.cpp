@@ -10,7 +10,7 @@
 
 namespace Trema::View
 {
-    WindowContainer::WindowContainer(std::shared_ptr<IGuiElement> parent, std::string name) :
+    WindowContainer::WindowContainer(std::shared_ptr<GuiElement> parent, std::string name) :
         IContainer(std::move(parent), std::move(name))
     {
 
@@ -40,7 +40,7 @@ namespace Trema::View
     }
 
     std::shared_ptr<WindowContainer>
-    WindowContainer::CreateWindowContainer(std::shared_ptr<IGuiElement> parent, std::string name)
+    WindowContainer::CreateWindowContainer(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<WindowContainer>(std::move(parent), std::move(name));
     }

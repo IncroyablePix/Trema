@@ -8,8 +8,8 @@
 namespace Trema::View
 {
 
-    Button::Button(std::shared_ptr<IGuiElement> parent, std::string name) :
-            IGuiElement(std::move(parent), std::move(name))
+    Button::Button(std::shared_ptr<GuiElement> parent, std::string name) :
+            GuiElement(std::move(parent), std::move(name))
     {
 
     }
@@ -41,7 +41,7 @@ namespace Trema::View
         EndStyle();
     }
 
-    std::shared_ptr<Button> Button::CreateButton(std::shared_ptr<IGuiElement> parent, std::string name)
+    std::shared_ptr<Button> Button::CreateButton(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<Button>(std::move(parent), std::move(name));
     }

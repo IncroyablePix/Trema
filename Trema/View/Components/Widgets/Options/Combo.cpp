@@ -9,7 +9,7 @@
 namespace Trema::View
 {
 
-    Combo::Combo(std::shared_ptr<IGuiElement> parent, std::string name) :
+    Combo::Combo(std::shared_ptr<GuiElement> parent, std::string name) :
             IContainer(std::move(parent), std::move(name)),
             m_selected("")
     {
@@ -21,7 +21,7 @@ namespace Trema::View
 
     }
 
-    void Combo::AddChild(std::shared_ptr<IGuiElement> child)
+    void Combo::AddChild(std::shared_ptr<GuiElement> child)
     {
         AddOption(child->GetName());
     }
@@ -75,7 +75,7 @@ namespace Trema::View
         EndStyle();
     }
 
-    std::shared_ptr<Combo> Combo::CreateCombo(std::shared_ptr<IGuiElement> parent, std::string name)
+    std::shared_ptr<Combo> Combo::CreateCombo(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<Combo>(std::move(parent), std::move(name));
     }

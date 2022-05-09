@@ -8,8 +8,8 @@
 
 namespace Trema::View
 {
-    Checkbox::Checkbox(std::shared_ptr<IGuiElement> parent, std::string name) :
-            IGuiElement(std::move(parent), std::move(name))
+    Checkbox::Checkbox(std::shared_ptr<GuiElement> parent, std::string name) :
+            GuiElement(std::move(parent), std::move(name))
     {
 
     }
@@ -40,7 +40,7 @@ namespace Trema::View
         EndStyle();
     }
 
-    std::shared_ptr<Checkbox> Checkbox::CreateCheckbox(std::shared_ptr<IGuiElement> parent, std::string name)
+    std::shared_ptr<Checkbox> Checkbox::CreateCheckbox(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<Checkbox>(std::move(parent), std::move(name));
     }

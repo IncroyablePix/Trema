@@ -10,9 +10,9 @@
 namespace Trema::View
 {
 
-    MenuOption::MenuOption(std::shared_ptr<IGuiElement> parent, std::string name, std::string shortcut) :
-        IGuiElement(std::move(parent), std::move(name)),
-        m_shortcut(std::move(shortcut))
+    MenuOption::MenuOption(std::shared_ptr<GuiElement> parent, std::string name, std::string shortcut) :
+            GuiElement(std::move(parent), std::move(name)),
+            m_shortcut(std::move(shortcut))
     {
     }
 
@@ -40,7 +40,7 @@ namespace Trema::View
         m_listeners[std::move(name)] = std::move(listener);
     }
 
-    std::shared_ptr<MenuOption> MenuOption::CreateMenuOption(std::shared_ptr<IGuiElement> parent, std::string name, std::string shortcut)
+    std::shared_ptr<MenuOption> MenuOption::CreateMenuOption(std::shared_ptr<GuiElement> parent, std::string name, std::string shortcut)
     {
         return std::make_shared<MenuOption>(std::move(parent), std::move(name), std::move(shortcut));
     }

@@ -22,7 +22,7 @@ namespace Trema::View
             else if(elementName[0] == '#') // Id
             {
                 auto id = elementName.substr(1);
-                auto element = window->GetElementById<IGuiElement>(id);
+                auto element = window->GetElementById<GuiElement>(id);
                 SetStyleForElement(element, symbolTable);
             }
         }
@@ -40,7 +40,7 @@ namespace Trema::View
         window->ApplyStyle();
     }
 
-    void StyleApplier::SetStyleForElement(const std::shared_ptr<IGuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable)
+    void StyleApplier::SetStyleForElement(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable)
     {
         if(!element) // TODO: Throw exception ?
             return;

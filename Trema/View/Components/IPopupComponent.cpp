@@ -9,7 +9,7 @@
 namespace Trema::View
 {
     IPopupComponent::IPopupComponent(std::string name) :
-    IGuiElement(nullptr, std::move(name))
+            GuiElement(nullptr, std::move(name))
     {
 
     }

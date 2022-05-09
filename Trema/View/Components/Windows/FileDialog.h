@@ -6,7 +6,7 @@
 #define TREMA_FILEDIALOG_H
 
 #include <functional>
-#include "../IGuiElement.h"
+#include "../GuiElement.h"
 #include "../IPopupComponent.h"
 #include "../../ImGUI/Extensions/FileDialog/ImGuiFileBrowser.h"
 

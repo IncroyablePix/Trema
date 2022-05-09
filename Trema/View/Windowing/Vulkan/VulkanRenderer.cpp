@@ -6,6 +6,7 @@
 #include "VulkanRenderer.h"
 #include "../WindowInitializationException.h"
 #include "IWindowBackendStrategy.h"
+#include "Vulkan.h"
 
 #undef IMGUI_VULKAN_DEBUG_REPORT
 
@@ -305,15 +306,6 @@ namespace Trema::View
     void VulkanRenderer::CleanupVulkanWindow()
     {
         ImGui_ImplVulkanH_DestroyWindow(m_instance, m_device, &m_mainWindowData, m_allocator);
-    }
-
-    void VulkanRenderer::CheckVkResult(VkResult error)
-    {
-        if (error == 0)
-            return;
-        //fprintf(stderr, "[vulkan] Error: VkResult = %d\n", err);
-        if (error < 0)
-            abort();
     }
 
     void VulkanRenderer::Render(ImGui_ImplVulkanH_Window *window, ImDrawData *drawData)

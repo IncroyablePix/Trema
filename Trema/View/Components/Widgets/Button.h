@@ -7,19 +7,19 @@
 
 #include <unordered_map>
 #include <functional>
-#include "../IGuiElement.h"
+#include "../GuiElement.h"
 
 namespace Trema::View
 {
-    class Button : public IGuiElement
+    class Button : public GuiElement
     {
     public:
-        Button(std::shared_ptr<IGuiElement> parent, std::string name);
+        Button(std::shared_ptr<GuiElement> parent, std::string name);
         ~Button();
         void AddOnClickListener(std::string name, std::function<void(const Button& button)> listener);
         void Show() override;
 
-        static std::shared_ptr<Button> CreateButton(std::shared_ptr<IGuiElement> parent, std::string name);
+        static std::shared_ptr<Button> CreateButton(std::shared_ptr<GuiElement> parent, std::string name);
     private:
         std::unordered_map<std::string, std::function<void(const Button& button)>> m_listeners;
     };

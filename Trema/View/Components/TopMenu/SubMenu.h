@@ -13,11 +13,11 @@ namespace Trema::View
     class SubMenu : public IContainer
     {
     public:
-        SubMenu(std::shared_ptr<IGuiElement> parent, std::string name);
+        SubMenu(std::shared_ptr<GuiElement> parent, std::string name);
         ~SubMenu();
         void Show() override;
-        static std::shared_ptr<SubMenu> CreateSubMenu(std::shared_ptr<IGuiElement> parent, std::string name);
-        void AddChild(std::shared_ptr<IGuiElement> child) override;
+        static std::shared_ptr<SubMenu> CreateSubMenu(std::shared_ptr<GuiElement> parent, std::string name);
+        void AddChild(std::shared_ptr<GuiElement> child) override;
 
     private:
     };
