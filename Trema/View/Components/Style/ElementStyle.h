@@ -31,11 +31,18 @@ namespace Trema::View
         StyleColor m_textColorDisabled;
         StyleColor m_windowBackgroundColor;
         StyleColor m_widgetBackgroundColor;
+        StyleColor m_widgetBackgroundColorHover;
+        StyleColor m_widgetBackgroundColorActive;
+        StyleColor m_buttonBackgroundColor;
+        StyleColor m_buttonBackgroundColorHover;
+        StyleColor m_buttonBackgroundColorActive;
         StyleColor m_menuBackgroundColor;
         StyleColor m_headerColor;
         StyleColor m_headerColorActive;
         StyleColor m_tableHeaderActive;
         StyleColor m_popupBackgroundColor;
+        StyleColor m_sliderGrabColor;
+        StyleColor m_sliderGrabActiveColor;
 
         ImVec2 m_windowPadding = {0.0f, 0.0f };
         ImVec2 m_framePadding = { 0.0f, 0.0f };
@@ -92,11 +99,18 @@ namespace Trema::View
         inline StyleColor& TextDisabledColor() { return m_textColorDisabled; }
         inline StyleColor& WindowColor() { return m_windowBackgroundColor; }
         inline StyleColor& WidgetBackgroundColor() { return m_widgetBackgroundColor; }
+        inline StyleColor& WidgetBackgroundColorHover() { return m_widgetBackgroundColorHover; }
+        inline StyleColor& WidgetBackgroundColorActive() { return m_widgetBackgroundColorActive; }
+        inline StyleColor& ButtonColor() { return m_buttonBackgroundColor; }
+        inline StyleColor& ButtonColorHover() { return m_buttonBackgroundColorHover; }
+        inline StyleColor& ButtonColorActive() { return m_buttonBackgroundColorActive; }
         inline StyleColor& MenuBackgroundColor() { return m_menuBackgroundColor; }
         inline StyleColor& HeaderColor() { return m_headerColor; }
         inline StyleColor& HeaderActiveColor() { return m_headerColorActive; }
         inline StyleColor& TableHeaderColor() { return m_tableHeaderActive; }
         inline StyleColor& PopupBackgroundColor() { return m_popupBackgroundColor; }
+        inline StyleColor& SliderGrabColor() { return m_sliderGrabColor; }
+        inline StyleColor& SliderGrabActiveColor() { return m_sliderGrabActiveColor; }
 
         static bool GetFromPx(const std::string &value, float &floatValue) ;
     };

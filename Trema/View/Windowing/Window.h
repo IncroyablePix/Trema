@@ -6,7 +6,7 @@
 #define TREMA_IWINDOW_H
 
 #include <string>
-#include "../Components/Layout/ILayout.h"
+#include "../Components/Layout/Layout.h"
 #include "../Components/TopMenu/TopMenu.h"
 #include "../Components/IPopupComponent.h"
 #include "../ImGUI/imgui.h"
@@ -46,7 +46,7 @@ namespace Trema::View
         bool IsOpened() const;
         void InitializeVulkan(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy);
 
-        void SetLayout(std::shared_ptr<ILayout> layout);
+        void SetLayout(std::shared_ptr<Layout> layout);
         void SetTopMenu(std::shared_ptr<TopMenu> topMenu);
 
         inline bool IsFullscreen() const { return m_fullscreen; }
@@ -93,7 +93,7 @@ namespace Trema::View
 
     protected:
         std::unordered_map<std::string, std::shared_ptr<GuiElement>> m_elementsById;
-        std::shared_ptr<ILayout> m_layout;
+        std::shared_ptr<Layout> m_layout;
         std::shared_ptr<TopMenu> m_menu;
         std::shared_ptr<IWindowBackendStrategy> m_windowBackendStrategy;
 

@@ -10,7 +10,7 @@ namespace Trema::View
 {
 
     Combo::Combo(std::shared_ptr<GuiElement> parent, std::string name) :
-            IContainer(std::move(parent), std::move(name)),
+            Container(std::move(parent), std::move(name)),
             m_selected("")
     {
 

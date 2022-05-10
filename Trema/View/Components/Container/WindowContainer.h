@@ -6,11 +6,11 @@
 #define TREMA_WINDOWCONTAINER_H
 
 
-#include "IContainer.h"
+#include "Container.h"
 
 namespace Trema::View
 {
-    class WindowContainer : public IContainer
+    class WindowContainer : public Container
     {
     public:
         explicit WindowContainer(std::shared_ptr<GuiElement> parent, std::string name);

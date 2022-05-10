@@ -97,6 +97,75 @@ namespace Trema::View
         return val;
     }
 
+    bool IsAllowedIdentifierStartChar(const char c)
+    {
+        switch(c)
+        {
+            case '-':
+            case '.':
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '\'':
+            case '\n':
+            case '\0':
+            case '"':
+            case ':':
+            case ';':
+            case '(':
+            case ')':
+            case '[':
+            case ']':
+            case '{':
+            case '}':
+            case '=':
+            case '#':
+            case '*':
+            case '/':
+            case ' ':
+            case '\t':
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    bool IsAllowedIdentifierChar(const char c)
+    {
+        switch(c)
+        {
+            case '.':
+            case '\'':
+            case '\n':
+            case '\0':
+            case '"':
+            case ':':
+            case ';':
+            case '(':
+            case ')':
+            case '[':
+            case ']':
+            case '{':
+            case '}':
+            case '=':
+            case '#':
+            case '*':
+            case '/':
+            case ' ':
+            case '\t':
+                return false;
+            default:
+                return true;
+        }
+    }
+
     Tokenizer::Tokenizer(const std::string& code, std::vector<CompilationMistake> &mistakes) :
         m_code(code.c_str()),
         m_cursor(0),
@@ -286,11 +355,11 @@ namespace Trema::View
                 }
             }
 
-            else if(std::isalpha(c))
+            else if (IsAllowedIdentifierStartChar(c))//(std::isalpha(c))
             {
                 l = pos + 1;
 
-                while(m_code[l] != '\0' && (std::isalpha(m_code[l]) || std::isdigit(m_code[l]) || m_code[l] == '_' || m_code[l] == '-'))
+                while(IsAllowedIdentifierChar(m_code[l]))//m_code[l] != '\0' && (std::isalpha(m_code[l]) || std::isdigit(m_code[l]) || m_code[l] == '_' || m_code[l] == '-'))
                 {
                     l ++;
                 }

@@ -2,7 +2,7 @@
 <App>
     <Head>
         <Font src="./JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
-        <Font src="./Roboto-SemiMedium.ttf" size="32.0" name="Roboto" />
+        <Font src="./Roboto-SemiMedium.ttf" size="16.0" name="Roboto" />
         <Style src="./styles.tss" />
         <Title>Trema sample window</Title>
         <WindowData fullscreen="false" />

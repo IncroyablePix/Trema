@@ -10,7 +10,7 @@
 namespace Trema::View
 {
     TopMenu::TopMenu(std::string name) :
-    IContainer(nullptr, std::move(name))
+            Container(nullptr, std::move(name))
     {
 
     }
@@ -42,6 +42,6 @@ namespace Trema::View
         if(!IsType<SubMenu>(child))
             throw FamilyException(R"(Invalid type appended to "TopMenu", expected "SubMenu".)");
 
-        IContainer::AddChild(child);
+        Container::AddChild(child);
     }
 }

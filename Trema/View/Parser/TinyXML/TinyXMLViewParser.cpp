@@ -115,7 +115,7 @@ namespace Trema::View
         ParseChildren(element, newElement, window);
         if(container == nullptr)
             TryAddLayout(newElement, window); // Try add as layout
-        else if(IsType<ILayout>(container))
+        else if(IsType<Layout>(container))
             TryAddToLayout(newElement, container, attributes, window); // Add container to layout
         else if(IsType<TopMenu>(newElement))
             TryAddTopMenu(newElement, window);

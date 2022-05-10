@@ -11,7 +11,7 @@
 namespace Trema::View
 {
     WindowContainer::WindowContainer(std::shared_ptr<GuiElement> parent, std::string name) :
-        IContainer(std::move(parent), std::move(name))
+            Container(std::move(parent), std::move(name))
     {
 
     }
@@ -24,13 +24,13 @@ namespace Trema::View
     void WindowContainer::Show()
     {
         BeginStyle();
-        if(!IContainer::SubContainer)
+        if(!Container::SubContainer)
         {
-            IContainer::SubContainer = true;
+            Container::SubContainer = true;
 
             ShowPureWindow();
 
-            IContainer::SubContainer = false;
+            Container::SubContainer = false;
         }
         else
         {

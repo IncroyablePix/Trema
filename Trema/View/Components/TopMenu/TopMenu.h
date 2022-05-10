@@ -7,11 +7,11 @@
 
 
 #include "../GuiElement.h"
-#include "../Container/IContainer.h"
+#include "../Container/Container.h"
 
 namespace Trema::View
 {
-    class TopMenu : public IContainer
+    class TopMenu : public Container
     {
     public:
         explicit TopMenu(std::string name);

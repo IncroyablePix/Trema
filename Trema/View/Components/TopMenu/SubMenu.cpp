@@ -10,7 +10,7 @@
 namespace Trema::View
 {
     SubMenu::SubMenu(std::shared_ptr<GuiElement> parent, std::string name) :
-        IContainer(std::move(parent), std::move(name))
+            Container(std::move(parent), std::move(name))
     {
 
     }
@@ -41,6 +41,6 @@ namespace Trema::View
         if(!IsType<MenuOption>(child) && !IsType<Separator>(child))
             throw FamilyException(R"(Invalid type appended to "SubMenu", expected "MenuOption", "Separator".)");
 
-        IContainer::AddChild(child);
+        Container::AddChild(child);
     }
 }

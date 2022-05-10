@@ -28,7 +28,7 @@ namespace Trema::View
 #endif
     }
 
-    void Window::SetLayout(std::shared_ptr<ILayout> layout)
+    void Window::SetLayout(std::shared_ptr<Layout> layout)
     {
         m_layout = std::move(layout);
     }
@@ -100,6 +100,21 @@ namespace Trema::View
         if(Style.WidgetBackgroundColor().HasColor())
             style->Colors[ImGuiCol_FrameBg] = Style.WidgetBackgroundColor().GetColor();
 
+        if(Style.WidgetBackgroundColorHover().HasColor())
+            style->Colors[ImGuiCol_FrameBgHovered] = Style.WidgetBackgroundColorHover().GetColor();
+
+        if(Style.WidgetBackgroundColorActive().HasColor())
+            style->Colors[ImGuiCol_FrameBgActive] = Style.WidgetBackgroundColorActive().GetColor();
+
+        if(Style.ButtonColor().HasColor())
+            style->Colors[ImGuiCol_Button] = Style.ButtonColor().GetColor();
+
+        if(Style.ButtonColorHover().HasColor())
+            style->Colors[ImGuiCol_ButtonHovered] = Style.ButtonColorHover().GetColor();
+
+        if(Style.ButtonColorActive().HasColor())
+            style->Colors[ImGuiCol_ButtonActive] = Style.ButtonColorActive().GetColor();
+
         if(Style.MenuBackgroundColor().HasColor())
             style->Colors[ImGuiCol_MenuBarBg] = Style.MenuBackgroundColor().GetColor();
 
@@ -115,8 +130,16 @@ namespace Trema::View
         if(Style.PopupBackgroundColor().HasColor())
             style->Colors[ImGuiCol_PopupBg] = Style.PopupBackgroundColor().GetColor();
 
+        if(Style.SliderGrabColor().HasColor())
+            style->Colors[ImGuiCol_SliderGrab] = Style.SliderGrabColor().GetColor();
+
+        if(Style.SliderGrabActiveColor().HasColor())
+            style->Colors[ImGuiCol_SliderGrabActive] = Style.SliderGrabActiveColor().GetColor();
+
         if(!Style.GetFont().empty())
             SetDefaultFont(Style.GetFont());
+
+
     }
 
     void Window::InitializeDearImGUI() const

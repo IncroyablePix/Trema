@@ -12,8 +12,8 @@
 #include "../../GuiElement.h"
 #include "../../../ImGUI/imgui.h"
 #include "../../../ImGUI/imgui_internal.h"
-#include "../ILayout.h"
-#include "../../Container/IContainer.h"
+#include "../Layout.h"
+#include "../../Container/Container.h"
 
 namespace Trema::View
 {
@@ -28,7 +28,7 @@ namespace Trema::View
 
     DockSlot DockSlotFromString(const std::string& name);
 
-    class DockSpace : public ILayout
+    class DockSpace : public Layout
     {
     public:
         explicit DockSpace(std::string title, ImGuiID dockspaceId, bool allowSave = true);
@@ -36,17 +36,17 @@ namespace Trema::View
 
         virtual void Begin();
         virtual void End();
-        void AddContainer(std::shared_ptr<IContainer> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<Window> &window) override;
+        void AddContainer(std::shared_ptr<Container> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<Window> &window) override;
 
         void Show() override;
-        void AddElement(std::shared_ptr<IContainer> element, DockSlot slot);
+        void AddElement(std::shared_ptr<Container> element, DockSlot slot);
         static std::shared_ptr<DockSpace> CreateDockSpace(std::string title, ImGuiID dockspaceId);
 
     protected:
         bool m_firstTime { true };
         bool m_allowSave { true };
         ImGuiID m_dockspaceId;
-        std::unordered_map<DockSlot, std::shared_ptr<IContainer>> m_elements;
+        std::unordered_map<DockSlot, std::shared_ptr<Container>> m_elements;
 
         void ShowElements(ImGuiID dockspaceId);
         bool IsSavedDock() const;

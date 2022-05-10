@@ -2,6 +2,7 @@
 // Created by JajaFil on 3/7/2022.
 //
 
+#include <iostream>
 #include <fstream>
 #include <stack>
 #include "StackedStyleParser.h"
@@ -61,6 +62,7 @@ namespace Trema::View
                 case T_LPAR:
                 case T_RPAR:
                 case T_STOP:
+                case T_COMMENT:
                     break;
             }
 
@@ -68,13 +70,6 @@ namespace Trema::View
         }
 
         SaveTopSymbolTable("*");
-
-        /*for(const auto& [name, st] : m_variables)
-        {
-            std::cout << name << ":\n" << *st;
-        }
-
-        std::cout << std::flush;*/
     }
 
     void StackedStyleParser::ParseFromFile(const std::string &path, std::vector<CompilationMistake>& mistakes)

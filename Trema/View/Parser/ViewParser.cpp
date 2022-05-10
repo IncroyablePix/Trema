@@ -343,9 +343,9 @@ namespace Trema::View
 
     void ViewParser::TryAddLayout(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<Window>& window)
     {
-        if(IsType<ILayout>(element))
+        if(IsType<Layout>(element))
         {
-            std::shared_ptr<ILayout> newLayout = std::dynamic_pointer_cast<ILayout>(element);
+            std::shared_ptr<Layout> newLayout = std::dynamic_pointer_cast<Layout>(element);
             window->SetLayout(newLayout);
         }
         else
@@ -356,7 +356,7 @@ namespace Trema::View
 
     void ViewParser::TryAddAsChild(const std::shared_ptr<GuiElement> &container, const std::shared_ptr<GuiElement> &element, const std::string &elementName)
     {
-        if (auto* c = dynamic_cast<IContainer*>(container.get()))
+        if (auto* c = dynamic_cast<Container*>(container.get()))
         {
             c->AddChild(element);
         }
@@ -373,12 +373,12 @@ namespace Trema::View
                                     std::unordered_map<std::string, std::string>& attributes,
                                     const std::shared_ptr<Window>& window)
     {
-        if(dynamic_cast<IContainer*>(element.get()) == nullptr)
-            throw ParsingException("Only IContainer can fit into layout");
+        if(dynamic_cast<Container*>(element.get()) == nullptr)
+            throw ParsingException("Only Container can fit into layout");
 
-        std::shared_ptr<IContainer> newContainer = std::dynamic_pointer_cast<IContainer>(element);
+        std::shared_ptr<Container> newContainer = std::dynamic_pointer_cast<Container>(element);
 
-        if(auto* layout = dynamic_cast<ILayout*>(container.get()))
+        if(auto* layout = dynamic_cast<Layout*>(container.get()))
         {
             if(IsType<TopMenu>(element))
             {

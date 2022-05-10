@@ -69,6 +69,31 @@ namespace Trema::View
                 if(type == TYPE_NUM)
                     style.WidgetBackgroundColor().SetColor((int)*value->GetValue().Integer);
             }
+            else if(propName == "widget-background-color-hover")
+            {
+                if(type == TYPE_NUM)
+                    style.WidgetBackgroundColorHover().SetColor((int)*value->GetValue().Integer);
+            }
+            else if(propName == "widget-background-color-active")
+            {
+                if(type == TYPE_NUM)
+                    style.WidgetBackgroundColorActive().SetColor((int)*value->GetValue().Integer);
+            }
+            else if(propName == "button-color")
+            {
+                if(type == TYPE_NUM)
+                    style.ButtonColor().SetColor((int)*value->GetValue().Integer);
+            }
+            else if(propName == "button-color-hover")
+            {
+                if(type == TYPE_NUM)
+                    style.ButtonColorHover().SetColor((int)*value->GetValue().Integer);
+            }
+            else if(propName == "button-color-active")
+            {
+                if(type == TYPE_NUM)
+                    style.ButtonColorActive().SetColor((int)*value->GetValue().Integer);
+            }
             else if(propName == "menu-background-color")
             {
                 if(type == TYPE_NUM)
@@ -98,6 +123,16 @@ namespace Trema::View
             {
                 if(type == TYPE_NUM)
                     style.PopupBackgroundColor().SetColor((int)*value->GetValue().Integer);
+            }
+            else if(propName == "slidergrab-color")
+            {
+                if(type == TYPE_NUM)
+                    style.SliderGrabColor().SetColor((int)*value->GetValue().Integer);
+            }
+            else if(propName == "slidergrab-color-active")
+            {
+                if(type == TYPE_NUM)
+                    style.SliderGrabActiveColor().SetColor((int)*value->GetValue().Integer);
             }
             else if(propName == "opacity")
             {

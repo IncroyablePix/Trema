@@ -8,11 +8,11 @@
 
 #include <functional>
 #include "../../GuiElement.h"
-#include "../../Container/IContainer.h"
+#include "../../Container/Container.h"
 
 namespace Trema::View
 {
-    class Radio : public IContainer
+    class Radio : public Container
     {
     public:
         Radio(std::shared_ptr<GuiElement> parent, std::string name);

@@ -15,9 +15,9 @@
 namespace Trema::View
 {
     DockSpace::DockSpace(std::string title, ImGuiID dockspaceId, bool allowSave) :
-        ILayout(std::move(title)),
-        m_allowSave(allowSave),
-        m_dockspaceId(dockspaceId)
+            Layout(std::move(title)),
+            m_allowSave(allowSave),
+            m_dockspaceId(dockspaceId)
     {
 
     }
@@ -27,7 +27,7 @@ namespace Trema::View
 
     }
 
-    void DockSpace::AddElement(std::shared_ptr<IContainer> element, DockSlot slot)
+    void DockSpace::AddElement(std::shared_ptr<Container> element, DockSlot slot)
     {
         m_elements[slot] = std::move(element);
     }
@@ -124,7 +124,7 @@ namespace Trema::View
         return file.is_open() && m_allowSave;
     }
 
-    void DockSpace::AddContainer(std::shared_ptr<IContainer> container,
+    void DockSpace::AddContainer(std::shared_ptr<Container> container,
                                  std::unordered_map<std::string, std::string> &attributes,
                                  const std::shared_ptr<Window> &window)
     {

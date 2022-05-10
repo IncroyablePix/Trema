@@ -6,11 +6,11 @@
 #define TREMA_SUBMENU_H
 
 #include <functional>
-#include "../Container/IContainer.h"
+#include "../Container/Container.h"
 
 namespace Trema::View
 {
-    class SubMenu : public IContainer
+    class SubMenu : public Container
     {
     public:
         SubMenu(std::shared_ptr<GuiElement> parent, std::string name);

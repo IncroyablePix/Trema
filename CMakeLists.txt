@@ -12,7 +12,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-list(APPEND CMAKE_PREFIIX_PATH $ENV{CATCH2_PATH})
+list(APPEND CMAKE_PREFIX_PATH $ENV{CATCH2_PATH})
 list(APPEND CMAKE_PREFIX_PATH $ENV{VK_SDK_PATH})
 
 ### GLFW Stuff ###
@@ -35,7 +35,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     message(BITS 32)
 endif()
 
-### Testing
+### Subdirectories
 add_subdirectory(glfw)
 add_subdirectory(Catch2)
 add_subdirectory(Trema)

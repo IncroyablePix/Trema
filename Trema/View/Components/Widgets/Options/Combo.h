@@ -7,12 +7,12 @@
 
 
 #include "../../GuiElement.h"
-#include "../../Container/IContainer.h"
+#include "../../Container/Container.h"
 #include <functional>
 
 namespace Trema::View
 {
-    class Combo : public IContainer
+    class Combo : public Container
     {
     public:
         Combo(std::shared_ptr<GuiElement> parent, std::string name);

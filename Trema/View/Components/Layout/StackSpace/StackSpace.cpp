@@ -9,7 +9,7 @@
 namespace Trema::View
 {
     StackSpace::StackSpace(std::string title) :
-        ILayout(std::move(title))
+            Layout(std::move(title))
     {
 
     }
@@ -61,7 +61,7 @@ namespace Trema::View
         EndStyle();
     }
 
-    void StackSpace::AddContainer(std::shared_ptr<IContainer> container,
+    void StackSpace::AddContainer(std::shared_ptr<Container> container,
                                   std::unordered_map<std::string, std::string> &attributes,
                                   const std::shared_ptr<Window> &window)
     {

@@ -6,25 +6,25 @@
 #define TREMA_STACKSPACE_H
 
 #include <vector>
-#include "../ILayout.h"
-#include "../../Container/IContainer.h"
+#include "../Layout.h"
+#include "../../Container/Container.h"
 
 namespace Trema::View
 {
-    class StackSpace : public ILayout
+    class StackSpace : public Layout
     {
     public:
         explicit StackSpace(std::string title);
         ~StackSpace();
         void Show() override;
-        void AddContainer(std::shared_ptr<IContainer> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<Window> &window) override;
+        void AddContainer(std::shared_ptr<Container> container, std::unordered_map<std::string, std::string> &attributes, const std::shared_ptr<Window> &window) override;
 
         static std::shared_ptr<StackSpace> CreateStackSpace(std::string title);
 
     private:
         void Begin();
         void End();
-        std::vector<std::shared_ptr<IContainer>> m_elements;
+        std::vector<std::shared_ptr<Container>> m_elements;
     };
 }
 

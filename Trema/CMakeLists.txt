@@ -6,22 +6,6 @@ file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
 set(SOURCES ${SOURCES})
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-
-### Platform ###
-if(WIN64 OR WIN32)
-    set(OS NT)
-elseif(UNIX)
-    set(OS UNIX)
-elseif(APPLE)
-    set(OS MAC)
-endif()
-
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(BITS 64)
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set(BITS 32)
-endif()
-
 ############ DEPENDENCIES ############
 ### Vulkan ###
 message("Including VULKAN...")

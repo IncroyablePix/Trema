@@ -3,6 +3,9 @@ disabledTextColor: 0x3D3A49FF;
 windowBg: 0x0F0C11FF;
 topColor: 0x19161EFF;
 activeColor: 0x111116FF;
+sliderGrabColor: 0xCCCCD34F;
+widgetColor: 0x19161EFF;
+activeWidgetColor: 0x8E8E93FF;
 
 azure: 0x007FFFFF;
 black: 0x000000FF;
@@ -13,12 +16,22 @@ red: 0xCC0000FF;
 redText: 0x660000FF;
 pink: 0xFF8BC4FF;
 
+
 /* Applies globally to the whole window */
 * {
     header: false;
     background-color: windowBg;
+    slidergrab-color: topColor;
+    slidergrab-color-active: windowBg;
 
-    widget-background-color: topColor;
+    button-color: topColor;
+    button-color-hover: disabledTextColor;
+    button-color-active: activeWidgetColor;
+
+    widget-background-color: widgetColor;
+    widget-background-color-hover: disabledTextColor;
+    widget-background-color-active: activeWidgetColor;
+
     menu-background-color: topColor;
     popup-background-color: activeColor;
     header-color: topColor;

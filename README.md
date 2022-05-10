@@ -283,7 +283,32 @@ The color of the text when disabled (buttons, etc.).
 Admits only integer numbers in RGBA form.
 
 ### widget-background-color
-The background color of widgets such as text inputs etc. 
+The background color of widgets such as text inputs etc.
+
+Admits only integer numbers in RGBA form.
+
+### widget-background-color-hover
+The background color of widgets such as text inputs etc. when hovered with mouse.
+
+Admits only integer numbers in RGBA form.
+
+### widget-background-color-active
+The background color of widgets such as text inputs etc. when they have focus.
+
+Admits only integer numbers in RGBA form.
+
+### button-color
+The background color for buttons.
+
+Admits only integer numbers in RGBA form.
+
+### button-color-hover
+The background color for buttons when hovered with mouse.
+
+Admits only integer numbers in RGBA form.
+
+### button-color-active
+The background color for buttons when they are clicked onto.
 
 Admits only integer numbers in RGBA form.
 
@@ -314,6 +339,16 @@ Admits only integer numbers in RGBA form.
 
 ### popup-background-color
 The background color for a popup window.
+
+Admits only integer numbers in RGBA form.
+
+### slidergrab-color
+The color of a slider grab.
+
+Admits only integer numbers in RGBA form.
+
+## slidergrab-color-active
+The color of a slider grab when focused.
 
 Admits only integer numbers in RGBA form.
 

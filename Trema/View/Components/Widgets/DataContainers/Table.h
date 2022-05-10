@@ -10,15 +10,15 @@
 #include <sstream>
 #include "../../GuiElement.h"
 #include "../../../ImGUI/imgui.h"
-#include "../../Container/IContainer.h"
+#include "../../Container/Container.h"
 #include "../FamilyException.h"
 
 namespace Trema::View
 {
-    struct TableRow : public IContainer
+    struct TableRow : public Container
     {
         explicit TableRow(std::shared_ptr<GuiElement> parent, std::string name, std::vector<std::shared_ptr<GuiElement>> elements) :
-                IContainer(std::move(parent), std::move(name)),
+                Container(std::move(parent), std::move(name)),
                 Elements(std::move(elements))
         {
         }
@@ -49,14 +49,14 @@ namespace Trema::View
     };
 
 
-    class Table : public IContainer
+    class Table : public Container
     {
     public:
         Table(std::shared_ptr<GuiElement> parent, std::string name, std::vector<std::string> titles) :
-            IContainer(std::move(parent), std::move(name)),
-            m_tableColumns(titles.size()),
-            m_titles(std::move(titles)),
-            m_displayHeaders(true)
+                Container(std::move(parent), std::move(name)),
+                m_tableColumns(titles.size()),
+                m_titles(std::move(titles)),
+                m_displayHeaders(true)
         {
 
         }
