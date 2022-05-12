@@ -201,6 +201,12 @@ A square shaped color picker from which you can get a color in several formats.
 - input: Input text for hex formatted colors.
 - *content*: The name of the color picker and the default label.
 
+#### Image
+An image that you can load and display.
+- name: The name of the image.
+- src: The source file for the image
+- *content*: NOP
+
 # TSS
 TSS (Trema Style Sheet) is a styling language specific to Trema which is used to style components without having to do it in C++.
 Its syntax strongly resembles to CSS with features such as scoping for shared variables.
@@ -347,7 +353,7 @@ The color of a slider grab.
 
 Admits only integer numbers in RGBA form.
 
-## slidergrab-color-active
+### slidergrab-color-active
 The color of a slider grab when focused.
 
 Admits only integer numbers in RGBA form.

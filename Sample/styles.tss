@@ -54,6 +54,11 @@ pink: 0xFF8BC4FF;
     text-color: pink;
     font: "Roboto";
 
+    #peopleImg {
+        width: "100%";
+        height: "auto";
+    }
+
     #favouriteColour {
         width: "250px";
     }

@@ -30,6 +30,7 @@
 #include "../Components/Widgets/Sliders/SliderFloat.h"
 #include "../Components/Widgets/ColorPicker.h"
 #include "../Components/Widgets/Sliders/SliderInt.h"
+#include "../Components/Widgets/Pure/Image/Image.h"
 
 namespace Trema::View
 {
@@ -297,6 +298,18 @@ namespace Trema::View
 
             if(attributes.find("input") != attributes.end())
                 ((ColorPicker*)element.get())->ToggleInput(StrToBool(attributes["input"]));
+        }
+
+        else if(elementName == "Image")
+        {
+            std::string src;
+
+            if(attributes.find("src") != attributes.end())
+                src = attributes["src"];
+
+            std::shared_ptr<IRenderImage> imageRender = window->AddImage(name, src);
+
+            element = Image::CreateImage(std::move(parent), std::move(name), std::move(imageRender));
         }
 
         //---

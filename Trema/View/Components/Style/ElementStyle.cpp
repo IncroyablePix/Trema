@@ -54,7 +54,7 @@ namespace Trema::View
 
     ImVec2 ElementStyle::GetSize() const
     {
-        float w = 0.0f, h = 0.0f;
+        float w = -0.0f, h = -0.0f;
         auto available = ImGui::GetContentRegionAvail();
 
         if(GetFromWord(m_width, w)) { }

@@ -9,6 +9,9 @@
 #include <memory>
 #include "../../ImGUI/imgui_impl_vulkan.h"
 #include "IWindowBackendStrategy.h"
+#include "../../Components/Widgets/Pure/Image/ImageFormat.h"
+#include <functional>
+#include <vector>
 
 #ifdef _DEBUG
 #define IMGUI_VULKAN_DEBUG_REPORT
@@ -25,7 +28,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugReport(VkDebugReportFlagsEXT flags, V
 
 namespace Trema::View
 {
-    class VulkanRenderer
+    class VulkanRenderer : public std::enable_shared_from_this<VulkanRenderer>
     {
     public:
         explicit VulkanRenderer(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy);
@@ -36,7 +39,15 @@ namespace Trema::View
         void Render(ImGui_ImplVulkanH_Window* window, ImDrawData* drawData);
         void FramePresent(ImGui_ImplVulkanH_Window* window);
         void ResizeSwapChain();
+        inline VkDevice GetDevice() const { return m_device; }
+        inline VkPhysicalDevice GetPhysicalDevice() const { return m_physicalDevice; }
         inline ImGui_ImplVulkanH_Window* GetWindowData() { return &m_mainWindowData; }
+
+        static VkFormat GetVulkanFormat(ImageFormat imageFormat);
+        uint32_t GetVulkanMemoryType(VkMemoryPropertyFlags properties, uint32_t type_bits) const;
+        void SubmitResourceFree(std::function<void()>&& func);
+        void FlushCommandBuffer(VkCommandBuffer commandBuffer);
+        VkCommandBuffer GetCommandBuffer(bool begin);
 
         void UploadFonts();
 
@@ -50,6 +61,11 @@ namespace Trema::View
         VkDebugReportCallbackEXT m_debugReport = VK_NULL_HANDLE;
         VkPipelineCache m_pipelineCache = VK_NULL_HANDLE;
         VkDescriptorPool m_descriptorPool = VK_NULL_HANDLE;
+
+        uint32_t m_currentFrameIndex = 0;
+
+        std::vector<std::vector<VkCommandBuffer>> m_allocatedCommandBuffers;
+        std::vector<std::vector<std::function<void()>>> m_resourceFreeQueue;
 
         ImGui_ImplVulkanH_Window m_mainWindowData;
         uint32_t m_minImageCount = 2;

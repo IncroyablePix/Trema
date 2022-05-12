@@ -32,6 +32,7 @@ file(GLOB_RECURSE SAMPLE_SOURCES LIST_DIRECTORIES true *.h *.cpp)
 set(SOURCES ${SAMPLE_SOURCES})
 
 file(GLOB RESOURCE_FILES
+        ${CMAKE_SOURCE_DIR}/Sample/*.png
         ${CMAKE_SOURCE_DIR}/Sample/*.ttf
         ${CMAKE_SOURCE_DIR}/Sample/*.txml
         ${CMAKE_SOURCE_DIR}/Sample/*.tss)

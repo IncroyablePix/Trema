@@ -11,6 +11,7 @@
 #ifdef WIN32
 #include "windows.h"
 #include "Fonts/FontsRepository.h"
+#include "Vulkan/VulkanImage.h"
 
 #endif
 
@@ -170,7 +171,7 @@ namespace Trema::View
 
     void Window::InitializeVulkan(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy)
     {
-        m_renderer = std::make_unique<VulkanRenderer>(windowBackendStrategy);
+        m_renderer = std::make_shared<VulkanRenderer>(windowBackendStrategy);
         m_windowBackendStrategy = std::move(windowBackendStrategy);
     }
 
@@ -230,5 +231,13 @@ namespace Trema::View
             m_renderer->Render(wd, drawData);
             m_renderer->FramePresent(wd);
         }
+    }
+
+    std::shared_ptr<IRenderImage> Window::AddImage(const std::string &image, const std::string &source)
+    {
+        auto renderImage = std::make_shared<VulkanImage>(source, m_renderer);
+        m_renderImages[image] = renderImage;
+
+        return renderImage;
     }
 }

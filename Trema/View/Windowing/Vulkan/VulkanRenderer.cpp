@@ -27,6 +27,9 @@ namespace Trema::View
         int w, h;
         m_windowBackendStrategy->GetWindowDimensions(w, h);
         SetupVulkanWindow(GetWindowData(), surface, w, h);
+
+        m_allocatedCommandBuffers.resize(GetWindowData()->ImageCount);
+        m_resourceFreeQueue.resize(GetWindowData()->ImageCount);
     }
 
     void VulkanRenderer::Init()
@@ -57,6 +60,15 @@ namespace Trema::View
         error = vkDeviceWaitIdle(m_device);
         CheckVkResult(error);
 
+        for(auto &queue : m_resourceFreeQueue)
+        {
+            for(auto &f : queue)
+            {
+                f();
+            }
+        }
+        m_resourceFreeQueue.clear();
+
         ImGui_ImplVulkan_Shutdown();
         ImGui::DestroyContext();
         CleanupVulkanWindow();
@@ -67,22 +79,7 @@ namespace Trema::View
     {
         ImGui_ImplVulkanH_Window* wd = &m_mainWindowData;
         VkResult error;
-        // Load Fonts
-        // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-        // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-        // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-        // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-        // - Read 'docs/FONTS.md' for more instructions and details.
-        // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-        //io.Fonts->AddFontDefault();
-        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-        //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-        //IM_ASSERT(font != NULL);
 
-        // Upload Fonts
         {
             // Use any command queue
             VkCommandPool commandPool = wd->Frames[wd->FrameIndex].CommandPool;
@@ -90,10 +87,9 @@ namespace Trema::View
 
             error = vkResetCommandPool(m_device, commandPool, 0);
             CheckVkResult(error);
-            VkCommandBufferBeginInfo begin_info = {};
-            begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-            begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-            error = vkBeginCommandBuffer(commandBuffer, &begin_info);
+            VkCommandBufferBeginInfo beginInfo = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+            beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+            error = vkBeginCommandBuffer(commandBuffer, &beginInfo);
             CheckVkResult(error);
 
             ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
@@ -119,7 +115,6 @@ namespace Trema::View
     {
         window->Surface = surface;
 
-        // Check for WSI support
         VkBool32 res;
         vkGetPhysicalDeviceSurfaceSupportKHR(m_physicalDevice, m_queueFamily, window->Surface, &res);
         if (res != VK_TRUE)
@@ -127,21 +122,17 @@ namespace Trema::View
             throw WindowInitializationException("Vulkan Error: No WSI support on physical device 0");
         }
 
-        // Select Surface Format
         const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
         const VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
         window->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(m_physicalDevice, window->Surface, requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
 
-        // Select Present Mode
 #ifdef IMGUI_UNLIMITED_FRAME_RATE
         VkPresentModeKHR presentModes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR };
 #else
         VkPresentModeKHR presentModes[] = { VK_PRESENT_MODE_FIFO_KHR };
 #endif
         window->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(m_physicalDevice, window->Surface, &presentModes[0], IM_ARRAYSIZE(presentModes));
-        //printf("[vulkan] Selected PresentMode = %d\n", window->PresentMode);
 
-        // Create SwapChain, RenderPass, Framebuffer, etc.
         IM_ASSERT(m_minImageCount >= 2);
         ImGui_ImplVulkanH_CreateOrResizeWindow(m_instance, m_physicalDevice, m_device, window, m_queueFamily, m_allocator, width, height, m_minImageCount);
     }
@@ -204,9 +195,6 @@ namespace Trema::View
             error = vkEnumeratePhysicalDevices(m_instance, &gpuCount, gpus);
             CheckVkResult(error);
 
-            // If a number >1 of GPUs got reported, find discrete GPU if present, or use first one available. This covers
-            // most common cases (multi-gpu/integrated+dedicated graphics). Handling more complicated setups (multiple
-            // dedicated GPUs) is out of scope of this sample.
             int useGPU = 0;
             for (int i = 0; i < (int)gpuCount; i++)
             {
@@ -243,21 +231,23 @@ namespace Trema::View
 
         // Create Logical Device (with 1 queue)
         {
-            int device_extension_count = 1;
-            const char* device_extensions[] = { "VK_KHR_swapchain" };
-            const float queue_priority[] = { 1.0f };
-            VkDeviceQueueCreateInfo queue_info[1] = {};
-            queue_info[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-            queue_info[0].queueFamilyIndex = m_queueFamily;
-            queue_info[0].queueCount = 1;
-            queue_info[0].pQueuePriorities = queue_priority;
-            VkDeviceCreateInfo create_info = {};
-            create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-            create_info.queueCreateInfoCount = sizeof(queue_info) / sizeof(queue_info[0]);
-            create_info.pQueueCreateInfos = queue_info;
-            create_info.enabledExtensionCount = device_extension_count;
-            create_info.ppEnabledExtensionNames = device_extensions;
-            error = vkCreateDevice(m_physicalDevice, &create_info, m_allocator, &m_device);
+            int deviceExtensionCount = 1;
+            const char* deviceExtensions[] = {"VK_KHR_swapchain" };
+            const float queuePriority[] = {1.0f };
+            VkDeviceQueueCreateInfo queueInfo[1] = {};
+            queueInfo[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+            queueInfo[0].queueFamilyIndex = m_queueFamily;
+            queueInfo[0].queueCount = 1;
+            queueInfo[0].pQueuePriorities = queuePriority;
+            VkDeviceCreateInfo createInfo =
+                    {
+                            .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                            .queueCreateInfoCount = sizeof(queueInfo) / sizeof(queueInfo[0]),
+                            .pQueueCreateInfos = queueInfo,
+                            .enabledExtensionCount = static_cast<uint32_t>(deviceExtensionCount),
+                            .ppEnabledExtensionNames = deviceExtensions,
+                    };
+            error = vkCreateDevice(m_physicalDevice, &createInfo, m_allocator, &m_device);
             CheckVkResult(error);
             vkGetDeviceQueue(m_device, m_queueFamily, 0, &m_queue);
         }
@@ -278,13 +268,16 @@ namespace Trema::View
                             { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
                             { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
                     };
-            VkDescriptorPoolCreateInfo pool_info = {};
-            pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-            pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-            pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
-            pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
-            pool_info.pPoolSizes = pool_sizes;
-            error = vkCreateDescriptorPool(m_device, &pool_info, m_allocator, &m_descriptorPool);
+            VkDescriptorPoolCreateInfo poolInfo =
+                    {
+                            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                            .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
+                            .maxSets = 1000 * IM_ARRAYSIZE(pool_sizes),
+                            .poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes),
+                            .pPoolSizes = pool_sizes,
+                    };
+
+            error = vkCreateDescriptorPool(m_device, &poolInfo, m_allocator, &m_descriptorPool);
             CheckVkResult(error);
         }
     }
@@ -322,6 +315,8 @@ namespace Trema::View
         }
         CheckVkResult(err);
 
+        m_currentFrameIndex = (m_currentFrameIndex + 1) % m_mainWindowData.ImageCount;
+
         ImGui_ImplVulkanH_Frame* fd = &window->Frames[window->FrameIndex];
         {
             err = vkWaitForFences(m_device, 1, &fd->Fence, VK_TRUE, UINT64_MAX);    // wait indefinitely instead of periodically checking
@@ -330,24 +325,57 @@ namespace Trema::View
             err = vkResetFences(m_device, 1, &fd->Fence);
             CheckVkResult(err);
         }
+
+        {
+            for(auto& f : m_resourceFreeQueue[m_currentFrameIndex])
+                f();
+
+
+            m_resourceFreeQueue[m_currentFrameIndex].clear();
+        }
+
+        {
+            auto& allocatedCommandBuffers = m_allocatedCommandBuffers[window->FrameIndex];
+            if (!allocatedCommandBuffers.empty())
+            {
+                vkFreeCommandBuffers(m_device, fd->CommandPool, (uint32_t)allocatedCommandBuffers.size(), allocatedCommandBuffers.data());
+                allocatedCommandBuffers.clear();
+            }
+
+            err = vkResetCommandPool(m_device, fd->CommandPool, 0);
+            CheckVkResult(err);
+            VkCommandBufferBeginInfo info = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+            info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+            err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
+            CheckVkResult(err);
+        }
+
         {
             err = vkResetCommandPool(m_device, fd->CommandPool, 0);
             CheckVkResult(err);
-            VkCommandBufferBeginInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+            VkCommandBufferBeginInfo info = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
             info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
             err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
             CheckVkResult(err);
         }
         {
-            VkRenderPassBeginInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            info.renderPass = window->RenderPass;
-            info.framebuffer = fd->Framebuffer;
-            info.renderArea.extent.width = window->Width;
-            info.renderArea.extent.height = window->Height;
-            info.clearValueCount = 1;
-            info.pClearValues = &window->ClearValue;
+            VkRenderPassBeginInfo info =
+                    {
+                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                            .renderPass = window->RenderPass,
+                            .framebuffer = fd->Framebuffer,
+                            .renderArea =
+                                    {
+                                    .extent =
+                                            {
+                                                    .width = static_cast<uint32_t>(window->Width),
+                                                    .height = static_cast<uint32_t>(window->Height),
+                                            }
+                                },
+                            .clearValueCount = 1,
+                            .pClearValues = &window->ClearValue,
+                    };
+
             vkCmdBeginRenderPass(fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
         }
 
@@ -358,15 +386,17 @@ namespace Trema::View
         vkCmdEndRenderPass(fd->CommandBuffer);
         {
             VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            VkSubmitInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            info.waitSemaphoreCount = 1;
-            info.pWaitSemaphores = &image_acquired_semaphore;
-            info.pWaitDstStageMask = &wait_stage;
-            info.commandBufferCount = 1;
-            info.pCommandBuffers = &fd->CommandBuffer;
-            info.signalSemaphoreCount = 1;
-            info.pSignalSemaphores = &render_complete_semaphore;
+            VkSubmitInfo info =
+                    {
+                            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                            .waitSemaphoreCount = 1,
+                            .pWaitSemaphores = &image_acquired_semaphore,
+                            .pWaitDstStageMask = &wait_stage,
+                            .commandBufferCount = 1,
+                            .pCommandBuffers = &fd->CommandBuffer,
+                            .signalSemaphoreCount = 1,
+                            .pSignalSemaphores = &render_complete_semaphore,
+                    };
 
             err = vkEndCommandBuffer(fd->CommandBuffer);
             CheckVkResult(err);
@@ -381,13 +411,16 @@ namespace Trema::View
             return;
 
         VkSemaphore renderCompleteSemaphore = window->FrameSemaphores[window->SemaphoreIndex].RenderCompleteSemaphore;
-        VkPresentInfoKHR info = {};
-        info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-        info.waitSemaphoreCount = 1;
-        info.pWaitSemaphores = &renderCompleteSemaphore;
-        info.swapchainCount = 1;
-        info.pSwapchains = &window->Swapchain;
-        info.pImageIndices = &window->FrameIndex;
+        VkPresentInfoKHR info =
+                {
+                        .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+                        .waitSemaphoreCount = 1,
+                        .pWaitSemaphores = &renderCompleteSemaphore,
+                        .swapchainCount = 1,
+                        .pSwapchains = &window->Swapchain,
+                        .pImageIndices = &window->FrameIndex,
+                };
+
         VkResult err = vkQueuePresentKHR(m_queue, &info);
         if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
         {
@@ -408,6 +441,10 @@ namespace Trema::View
             ImGui_ImplVulkan_SetMinImageCount(m_minImageCount);
             ImGui_ImplVulkanH_CreateOrResizeWindow(m_instance, m_physicalDevice, m_device, &m_mainWindowData, m_queueFamily, m_allocator, w, h, m_minImageCount);
             m_mainWindowData.FrameIndex = 0;
+
+            m_allocatedCommandBuffers.clear();
+            m_allocatedCommandBuffers.resize(m_mainWindowData.ImageCount);
+
             m_swapChainRebuild = false;
         }
     }
@@ -431,8 +468,7 @@ namespace Trema::View
         err = vkResetCommandPool(m_device, commandPool, 0);
         CheckVkResult(err);
 
-        VkCommandBufferBeginInfo beginInfo = { };
-        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        VkCommandBufferBeginInfo beginInfo = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
         beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
         err = vkBeginCommandBuffer(commandBuffer, &beginInfo);
         CheckVkResult(err);
@@ -454,5 +490,99 @@ namespace Trema::View
         err = vkDeviceWaitIdle(m_device);
         CheckVkResult(err);
         ImGui_ImplVulkan_DestroyFontUploadObjects();
+    }
+
+    VkFormat VulkanRenderer::GetVulkanFormat(ImageFormat imageFormat)
+    {
+        switch (imageFormat)
+        {
+            case ImageFormat::RGBA:
+                return VK_FORMAT_R8G8B8A8_UNORM;
+            case ImageFormat::RGBA32F:
+                return VK_FORMAT_R32G32B32A32_SFLOAT;
+            case ImageFormat::None:
+                break;
+        }
+        return (VkFormat)0;
+    }
+
+    uint32_t VulkanRenderer::GetVulkanMemoryType(VkMemoryPropertyFlags properties, uint32_t type_bits) const
+    {
+        VkPhysicalDeviceMemoryProperties prop;
+        vkGetPhysicalDeviceMemoryProperties(m_physicalDevice, &prop);
+        for (uint32_t i = 0; i < prop.memoryTypeCount; i++)
+        {
+            if ((prop.memoryTypes[i].propertyFlags & properties) == properties && type_bits & (1 << i))
+            {
+                return i;
+            }
+        }
+
+        return 0xffffffff;
+    }
+
+    void VulkanRenderer::SubmitResourceFree(std::function<void()> &&func)
+    {
+        m_resourceFreeQueue[m_currentFrameIndex].emplace_back(func);
+    }
+
+    void VulkanRenderer::FlushCommandBuffer(VkCommandBuffer commandBuffer)
+    {
+        const uint64_t DEFAULT_FENCE_TIMEOUT = 100000000000;
+
+        VkSubmitInfo end_info =
+                {
+                    .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                    .commandBufferCount = 1,
+                    .pCommandBuffers = &commandBuffer,
+                };
+        auto err = vkEndCommandBuffer(commandBuffer);
+        CheckVkResult(err);
+
+        VkFenceCreateInfo fenceCreateInfo =
+                {
+
+                        .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                        .flags = 0,
+                };
+        VkFence fence;
+        err = vkCreateFence(m_device, &fenceCreateInfo, nullptr, &fence);
+        CheckVkResult(err);
+
+        err = vkQueueSubmit(m_queue, 1, &end_info, fence);
+        CheckVkResult(err);
+
+        err = vkWaitForFences(m_device, 1, &fence, VK_TRUE, DEFAULT_FENCE_TIMEOUT);
+        CheckVkResult(err);
+
+        vkDestroyFence(m_device, fence, nullptr);
+    }
+
+    VkCommandBuffer VulkanRenderer::GetCommandBuffer(bool begin)
+    {
+        ImGui_ImplVulkanH_Window* wd = &m_mainWindowData;
+
+        // Use any command queue
+        VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
+
+        VkCommandBufferAllocateInfo cmdBufAllocateInfo =
+                {
+                        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                        .commandPool = command_pool,
+                        .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                        .commandBufferCount = 1,
+                };
+
+
+        VkCommandBuffer& commandBuffer = m_allocatedCommandBuffers[wd->FrameIndex].emplace_back();
+        auto err = vkAllocateCommandBuffers(m_device, &cmdBufAllocateInfo, &commandBuffer);
+        CheckVkResult(err);
+
+        VkCommandBufferBeginInfo beginInfo = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
+        beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(commandBuffer, &beginInfo);
+        CheckVkResult(err);
+
+        return commandBuffer;
     }
 }

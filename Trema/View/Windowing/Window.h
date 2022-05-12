@@ -13,6 +13,7 @@
 #include "Vulkan/IWindowBackendStrategy.h"
 #include "WindowInfo.h"
 #include "Vulkan/VulkanRenderer.h"
+#include "IRenderImage.h"
 #include <unordered_map>
 #include <vector>
 
@@ -36,6 +37,7 @@ namespace Trema::View
         void InitializeDearImGUI() const;
         void SetDefaultFont(const std::string &name);
         void AddFont(const std::string& path, float size = 12.0f, const std::string& name = "");
+        std::shared_ptr<IRenderImage> AddImage(const std::string& image, const std::string& source);
         void Build();
         void Update();
         void UploadFonts();
@@ -102,12 +104,13 @@ namespace Trema::View
         int m_height;
 
         ImFont* m_standardFont;
-        std::unique_ptr<VulkanRenderer> m_renderer;
+        std::shared_ptr<VulkanRenderer> m_renderer;
         bool m_opened;
         bool m_fullscreen { false };
         bool m_titleBar { false };
 
         std::unordered_map<std::string, std::shared_ptr<IPopupComponent>> m_popupComponents;
+        std::unordered_map<std::string, std::shared_ptr<IRenderImage>> m_renderImages;
     };
 }
 
