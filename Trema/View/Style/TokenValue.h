@@ -25,8 +25,10 @@ namespace Trema::View
 
             if(std::is_same<T, char*>::value)
             {
-                auto *v = new char[strlen(String)];
+                auto len = strlen(String);
+                auto *v = new char[len + 1];
                 strcpy((char *) v, String);
+                v[len] = '\0';
                 value.String = v;
             }
             else if(std::is_same<T, int64_t>::value)
