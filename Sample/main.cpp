@@ -50,8 +50,22 @@ int main(int argc, char** argv)
     std::stringstream data;
     data << "First name;Last name;Height;Sex;Favourite colour;Diploma\n";
 
+    auto clear = [&lastNameField, &firstNameField, &heightField, &sexField, &diplomaField]()
+            {
+                firstNameField->SetText("");
+                lastNameField->SetText("");
+                heightField->SetValue(50);
+                sexField->SetOption(0);
+                diplomaField->SetOption("");
+            };
+
+    clearButton->AddOnClickListener("Quit", [&clear](const Button& b)
+    {
+        clear();
+    });
+
     // Listener
-    addPersonButton->AddOnClickListener("Add", [&count, &lastNameField, &firstNameField, &heightField, &sexField, &favouriteColourField, &diplomaField, &peopleGrid, &data](const Trema::View::Button &)
+    addPersonButton->AddOnClickListener("Add", [&count, &lastNameField, &firstNameField, &heightField, &sexField, &favouriteColourField, &diplomaField, &peopleGrid, &data, &clear](const Trema::View::Button &)
     {
         auto newId = ++count;
         std::stringstream ss;
@@ -87,6 +101,7 @@ int main(int argc, char** argv)
             << diploma << "\n";
 
         peopleGrid->AddValue(row);
+        clear();
     });
 
     quitOption->AddOnClickListener("Quit", [&window](const Trema::View::MenuOption &)

@@ -38,6 +38,11 @@ namespace Trema::View
         EndStyle();
     }
 
+    void SliderInt::SetValue(int value)
+    {
+        m_value = std::clamp<int>(value, m_min, m_max);
+    }
+
     std::shared_ptr<SliderInt>
     SliderInt::CreateSliderInt(std::shared_ptr<GuiElement> parent, std::string name, int min, int max)
     {

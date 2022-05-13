@@ -19,6 +19,7 @@ namespace Trema::View
 
             inline void SetMin(int min) { m_min = min; m_value = std::clamp<int>(m_value, m_min, m_max); }
             inline void SetMax(int max) { m_max = max; m_value = std::clamp<int>(m_value, m_min, m_max); }
+            void SetValue(int value);
 
             inline int GetValue() const { return m_value; }
 

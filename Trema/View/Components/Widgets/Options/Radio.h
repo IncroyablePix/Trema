@@ -22,6 +22,7 @@ namespace Trema::View
 
         void Show() override;
 
+        inline void SetOption(int option) { m_option = option; }
         inline int GetOptionIndex() const { return m_option; }
         inline std::string GetOption() const { return m_options[m_option]; }
 
