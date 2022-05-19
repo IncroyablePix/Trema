@@ -20,6 +20,7 @@ namespace Trema::View
     {
     public:
         explicit ViewParser(std::unique_ptr<IStyleParser> stylesParser);
+        virtual ~ViewParser() = default;
         virtual void SetupWindowFromFile(const std::wstring &path, std::shared_ptr<Window> window) = 0;
         virtual void LoadView(const std::string &path, std::shared_ptr<Window> window) = 0;
         virtual void SetupWindowFromString(const std::string &code, std::shared_ptr<Window> window) = 0;

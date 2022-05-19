@@ -23,6 +23,8 @@ namespace Trema::View
     {
     public:
         Window(const WindowInfo &info);
+        Window operator=(const Window&) = delete;
+        Window(const VulkanRenderer&) = delete;
 
         virtual void PollEvent() = 0;
         virtual void SetTitle(const std::string &title) = 0;

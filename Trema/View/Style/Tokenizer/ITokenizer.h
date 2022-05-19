@@ -13,6 +13,7 @@ namespace Trema::View
     class ITokenizer
     {
     public:
+        virtual ~ITokenizer() = default;
         virtual std::unique_ptr<Token> GetNextToken() = 0;
         virtual bool Empty() const = 0;
         virtual size_t Size() const = 0;

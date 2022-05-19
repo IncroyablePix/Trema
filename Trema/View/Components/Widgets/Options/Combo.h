@@ -16,7 +16,9 @@ namespace Trema::View
     {
     public:
         Combo(std::shared_ptr<GuiElement> parent, std::string name);
-        ~Combo();
+        Combo(const Combo&) = delete;
+        Combo& operator=(const Combo&) = delete;
+        ~Combo() override;
         void AddChild(std::shared_ptr<GuiElement> child) override;
         void AddOption(std::string name);
         void AddOnClickListener(std::string name, std::function<void(const std::string&)> listener);

@@ -14,11 +14,6 @@ namespace Trema::View
 
     }
 
-    StackSpace::~StackSpace()
-    {
-
-    }
-
     void StackSpace::Show()
     {
         Begin();

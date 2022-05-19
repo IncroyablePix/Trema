@@ -38,6 +38,26 @@ namespace Trema::View
     {
         auto size = Style.GetSize();
 
+        if(!m_isWindow)
+        {
+            auto margin = Style.GetMargin();
+
+            if(margin.x != 0.0)
+            {
+                ImGui::Dummy({margin.w, margin.x });
+                if(margin.w != 0.0)
+                {
+                    ImGui::Dummy({margin.w, margin.x });
+                    ImGui::SameLine();
+                }
+            }
+            else if(margin.w != 0.0)
+            {
+                ImGui::Dummy({margin.w, 0.0f });
+                ImGui::SameLine();
+            }
+        }
+
         if(Style.GetAlpha() > 0)
         {
             ImGui::PushStyleVar(ImGuiStyleVar_Alpha, Style.GetAlpha());
@@ -69,7 +89,21 @@ namespace Trema::View
         m_colors = 0;
 
         if(m_font)
+        {
             ImGui::PopFont();
+        }
+
+        if(!m_isWindow)
+        {
+            auto margin = Style.GetMargin();
+            /*ImVec2 cursorPos = ImGui::GetCursorPos();
+            ImGui::SetCursorPos({ cursorPos.x + margin.x, cursorPos.y + margin.w });*/
+            if(margin.y != 0.0 || margin.z != 0.0)
+            {
+                ImGui::SameLine();
+                ImGui::Dummy({margin.y, margin.z});
+            }
+        }
     }
 
     ImVec2 GuiElement::GetItemSize() const

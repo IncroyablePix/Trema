@@ -13,9 +13,12 @@ namespace Trema::View
     {
     public:
         MainDockSpace(std::string title, ImGuiID dockspaceId, bool allowSave = true);
+        MainDockSpace(const MainDockSpace&) = delete;
+        MainDockSpace& operator=(const MainDockSpace&) = delete;
+        ~MainDockSpace() override = default;
+
         void Begin() override;
         void End() override;
-        ~MainDockSpace();
         void Show() override;
 
         static std::shared_ptr<MainDockSpace> CreateMainDockSpace(std::string title, ImGuiID dockspaceId, bool saveLayout);

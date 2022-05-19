@@ -18,6 +18,7 @@ namespace Trema::View
     public:
         SymbolTable();
         SymbolTable(const SymbolTable& st);
+        SymbolTable& operator=(const SymbolTable&) = delete;
 
         template<typename T> void SetVariable(const std::string &name, TokenValue value)
         {

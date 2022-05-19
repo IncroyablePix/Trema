@@ -13,7 +13,9 @@ namespace Trema::View
     class GLFWBackendStrategy : public IWindowBackendStrategy
     {
     public:
-        explicit GLFWBackendStrategy(GLFWwindow* window);
+        GLFWBackendStrategy(GLFWwindow* window);
+        GLFWBackendStrategy operator=(const GLFWBackendStrategy&) = delete;
+        explicit GLFWBackendStrategy(const GLFWBackendStrategy&) = delete;
         void InitWindowBackend() override;
         const char **GetExtensions(uint32_t &extensionCount) override;
         VkSurfaceKHR CreateSurface(VkInstance instance, VkAllocationCallbacks* allocator, VkResult &error) override;

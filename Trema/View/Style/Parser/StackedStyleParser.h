@@ -17,6 +17,9 @@ namespace Trema::View
     {
     public:
         StackedStyleParser();
+        StackedStyleParser(const StackedStyleParser&) = delete;
+        StackedStyleParser& operator=(const StackedStyleParser&) = delete;
+        ~StackedStyleParser() override = default;
         void ParseFromCode(const std::string &code, std::vector<CompilationMistake>& mistakes) override;
         void ParseFromFile(const std::string &path, std::vector<CompilationMistake>& mistakes) override;
 

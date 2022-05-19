@@ -14,7 +14,6 @@ namespace Trema::View
         RGBA32F
     };
 
-
     char BytesPerPixel(ImageFormat format);
 }
 

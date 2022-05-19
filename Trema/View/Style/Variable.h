@@ -24,6 +24,8 @@ namespace Trema::View
     {
     public:
         Variable(TokenValue value, VariableType type);
+        Variable(const Variable&) = delete;
+        Variable& operator=(const Variable&) = delete;
         ~Variable();
 
         TokenValue CopyValue() const;

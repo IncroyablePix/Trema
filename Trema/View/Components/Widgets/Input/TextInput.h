@@ -15,6 +15,8 @@ namespace Trema::View
     {
     public:
         TextInput(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
+        TextInput(const TextInput&) = delete;
+        TextInput& operator=(const TextInput&) = delete;
         virtual ~TextInput();
         std::string GetText();
         void SetText(const std::string& text);

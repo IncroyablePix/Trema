@@ -15,6 +15,7 @@ namespace Trema::View
     {
     public:
         Layout(std::string name);
+        ~Layout() override = default;
         virtual void AddContainer(std::shared_ptr<Container> container,
                           std::unordered_map<std::string, std::string>& attributes,
                           const std::shared_ptr<Window>& window) = 0;

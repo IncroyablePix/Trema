@@ -93,7 +93,4 @@ namespace Trema::View
     {
         return std::make_shared<MainDockSpace>(std::move(title), dockspaceId, saveLayout);
     }
-
-    MainDockSpace::~MainDockSpace()
-    = default;
 }

@@ -14,7 +14,9 @@ namespace Trema::View
     {
     public:
         TextArea(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);
-        ~TextArea();
+        TextArea(const TextArea&) = delete;
+        TextArea& operator=(const TextArea&) = delete;
+        ~TextArea() override;
         void Show() override;
 
         static std::shared_ptr<TextArea> CreateTextArea(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText = "", size_t bufferSize = defaultBufferSize);

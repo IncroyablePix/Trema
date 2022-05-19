@@ -13,6 +13,9 @@ namespace Trema::View
     {
     public:
         SelectorOption(std::shared_ptr<GuiElement> parent, std::string name);
+        SelectorOption(const SelectorOption&) = delete;
+        SelectorOption& operator=(const SelectorOption&) = delete;
+        ~SelectorOption() override = default;
         void Show() override;
         static std::shared_ptr<SelectorOption> CreateSelectorOption(std::shared_ptr<GuiElement> parent, std::string name);
     };

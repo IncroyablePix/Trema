@@ -18,6 +18,8 @@ namespace Trema::View
     {
     public:
         Image(std::shared_ptr<GuiElement> parent, std::string name, std::shared_ptr<IRenderImage> renderImage);
+        Image(const Image&) = delete;
+        Image& operator=(const Image&) = delete;
         void Show() override;
 
         static std::shared_ptr<Image> CreateImage(std::shared_ptr<GuiElement> parent, std::string name, std::shared_ptr<IRenderImage> renderImage);

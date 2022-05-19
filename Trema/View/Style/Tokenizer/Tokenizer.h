@@ -20,6 +20,9 @@ namespace Trema::View
     {
     public:
         explicit Tokenizer(const std::string& code, std::vector<CompilationMistake> &mistakes);
+        Tokenizer(const Tokenizer&) = delete;
+        Tokenizer& operator=(const Tokenizer&) = delete;
+        ~Tokenizer() override = default;
         std::unique_ptr<Token> GetNextToken() override;
         inline bool Empty() const override  { return m_tokens.empty(); }
         inline size_t Size() const override { return m_tokens.size(); }

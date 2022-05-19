@@ -22,11 +22,6 @@ namespace Trema::View
 
     }
 
-    DockSpace::~DockSpace()
-    {
-
-    }
-
     void DockSpace::AddElement(std::shared_ptr<Container> element, DockSlot slot)
     {
         m_elements[slot] = std::move(element);

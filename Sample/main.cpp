@@ -1,7 +1,6 @@
 #include <string>
 #include <regex>
 #include <fstream>
-#include <iostream>
 #include <View/Components/Widgets/Input/TextInput.h>
 #include <View/Components/Widgets/Sliders/SliderInt.h>
 #include <View/Components/Widgets/Options/Radio.h>
@@ -22,11 +21,13 @@ int main(int argc, char** argv)
 {
     auto info = WindowInfo { .Width = 1280, .Height = 720 };
     auto window = GLFWWindow::CreateGLFWWindow(info);
-    auto stylesParser = std::make_unique<StackedStyleParser>();
-    auto parser = TinyXMLViewParser(std::move(stylesParser));
+    {
+        auto stylesParser = std::make_unique<StackedStyleParser>();
+        auto parser = TinyXMLViewParser(std::move(stylesParser));
+        parser.LoadView("./people_view.txml", window);
+    }
 
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
-    parser.LoadView("./people_view.txml", window);
 
     // Fields
     auto count = 0;

@@ -14,7 +14,9 @@ namespace Trema::View
     {
     public:
         SubMenu(std::shared_ptr<GuiElement> parent, std::string name);
-        ~SubMenu();
+        SubMenu(const SubMenu&) = delete;
+        SubMenu& operator=(const SubMenu&) = delete;
+        ~SubMenu() override;
         void Show() override;
         static std::shared_ptr<SubMenu> CreateSubMenu(std::shared_ptr<GuiElement> parent, std::string name);
         void AddChild(std::shared_ptr<GuiElement> child) override;

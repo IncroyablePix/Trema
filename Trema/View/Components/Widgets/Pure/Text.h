@@ -13,6 +13,8 @@ namespace Trema::View
     {
     public:
         Text(std::shared_ptr<GuiElement> parent, std::string name, bool wrapped = true);
+        Text(const Text&) = delete;
+        Text& operator=(const Text&) = delete;
         ~Text();
         void Show() override;
         const std::string & GetName() override;

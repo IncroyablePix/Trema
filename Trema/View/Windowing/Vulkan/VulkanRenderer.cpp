@@ -1,6 +1,7 @@
 //
 // Created by JajaFil on 2/12/2022.
-// Shamelessly sucked out of Dear ImGUI examples
+//
+// Shamelessly sucked out of Dear ImGUI examples ; abstracted by myself
 //
 
 #include "VulkanRenderer.h"
@@ -81,7 +82,6 @@ namespace Trema::View
         VkResult error;
 
         {
-            // Use any command queue
             VkCommandPool commandPool = wd->Frames[wd->FrameIndex].CommandPool;
             VkCommandBuffer commandBuffer = wd->Frames[wd->FrameIndex].CommandBuffer;
 
@@ -137,17 +137,15 @@ namespace Trema::View
         ImGui_ImplVulkanH_CreateOrResizeWindow(m_instance, m_physicalDevice, m_device, window, m_queueFamily, m_allocator, width, height, m_minImageCount);
     }
 
-    void VulkanRenderer::SetupVulkan(const char **extensions, uint32_t extensionCount)
+    void VulkanRenderer::InitializeVulkan(const char **extensions, uint32_t extensionCount)
     {
         VkResult error;
-        // Create Vulkan Instance
-        {
-            VkInstanceCreateInfo createInfo = {};
-            createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-            createInfo.enabledExtensionCount = extensionCount;
-            createInfo.ppEnabledExtensionNames = extensions;
+        VkInstanceCreateInfo createInfo = {};
+        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        createInfo.enabledExtensionCount = extensionCount;
+        createInfo.ppEnabledExtensionNames = extensions;
 #ifdef IMGUI_VULKAN_DEBUG_REPORT
-            // Enabling validation layers
+        // Enabling validation layers
         const char* layers[] = { "VK_LAYER_KHRONOS_validation" };
         createInfo.enabledLayerCount = 1;
         createInfo.ppEnabledLayerNames = layers;
@@ -177,109 +175,120 @@ namespace Trema::View
         err = vkCreateDebugReportCallbackEXT(m_instance, &debug_report_ci, g_Allocator, &g_DebugReport);
         CheckVkResult(err);
 #else
-            // Create Vulkan Instance without any debug feature
-            error = vkCreateInstance(&createInfo, m_allocator, &m_instance);
-            CheckVkResult(error);
-            IM_UNUSED(m_debugReport);
+        // Create Vulkan Instance without any debug feature
+        error = vkCreateInstance(&createInfo, m_allocator, &m_instance);
+        CheckVkResult(error);
+        IM_UNUSED(m_debugReport);
 #endif
-        }
+    }
 
-        // Select GPU
+    void VulkanRenderer::SelectGPU()
+    {
+        VkResult error;
+        uint32_t gpuCount;
+        error = vkEnumeratePhysicalDevices(m_instance, &gpuCount, nullptr);
+        CheckVkResult(error);
+        IM_ASSERT(gpuCount > 0);
+
+        auto* gpus = (VkPhysicalDevice*)malloc(sizeof(VkPhysicalDevice) * gpuCount);
+        error = vkEnumeratePhysicalDevices(m_instance, &gpuCount, gpus);
+        CheckVkResult(error);
+
+        int useGPU = 0;
+        for (int i = 0; i < (int)gpuCount; i++)
         {
-            uint32_t gpuCount;
-            error = vkEnumeratePhysicalDevices(m_instance, &gpuCount, nullptr);
-            CheckVkResult(error);
-            IM_ASSERT(gpuCount > 0);
-
-            auto* gpus = (VkPhysicalDevice*)malloc(sizeof(VkPhysicalDevice) * gpuCount);
-            error = vkEnumeratePhysicalDevices(m_instance, &gpuCount, gpus);
-            CheckVkResult(error);
-
-            int useGPU = 0;
-            for (int i = 0; i < (int)gpuCount; i++)
+            VkPhysicalDeviceProperties properties;
+            vkGetPhysicalDeviceProperties(gpus[i], &properties);
+            if (properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
             {
-                VkPhysicalDeviceProperties properties;
-                vkGetPhysicalDeviceProperties(gpus[i], &properties);
-                if (properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
-                {
-                    useGPU = i;
-                    break;
-                }
+                useGPU = i;
+                break;
             }
-
-            m_physicalDevice = gpus[useGPU];
-            free(gpus);
         }
 
-        // Select graphics queue family
+        m_physicalDevice = gpus[useGPU];
+        free(gpus);
+    }
+
+    void VulkanRenderer::SelectGraphicsQueueFamily()
+    {
+        uint32_t count;
+        vkGetPhysicalDeviceQueueFamilyProperties(m_physicalDevice, &count, nullptr);
+        auto queues = new VkQueueFamilyProperties[count];
+        vkGetPhysicalDeviceQueueFamilyProperties(m_physicalDevice, &count, queues);
+        for (uint32_t i = 0; i < count; i++)
         {
-            uint32_t count;
-            vkGetPhysicalDeviceQueueFamilyProperties(m_physicalDevice, &count, nullptr);
-            auto queues = new VkQueueFamilyProperties[count];
-            vkGetPhysicalDeviceQueueFamilyProperties(m_physicalDevice, &count, queues);
-            for (uint32_t i = 0; i < count; i++)
+            if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             {
-                if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
-                {
-                    m_queueFamily = i;
-                    break;
-                }
+                m_queueFamily = i;
+                break;
             }
-            delete []queues;
-            IM_ASSERT(m_queueFamily != (uint32_t)-1);
         }
+        delete []queues;
+        IM_ASSERT(m_queueFamily != (uint32_t)-1);
+    }
 
-        // Create Logical Device (with 1 queue)
-        {
-            int deviceExtensionCount = 1;
-            const char* deviceExtensions[] = {"VK_KHR_swapchain" };
-            const float queuePriority[] = {1.0f };
-            VkDeviceQueueCreateInfo queueInfo[1] = {};
-            queueInfo[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-            queueInfo[0].queueFamilyIndex = m_queueFamily;
-            queueInfo[0].queueCount = 1;
-            queueInfo[0].pQueuePriorities = queuePriority;
-            VkDeviceCreateInfo createInfo =
-                    {
-                            .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-                            .queueCreateInfoCount = sizeof(queueInfo) / sizeof(queueInfo[0]),
-                            .pQueueCreateInfos = queueInfo,
-                            .enabledExtensionCount = static_cast<uint32_t>(deviceExtensionCount),
-                            .ppEnabledExtensionNames = deviceExtensions,
-                    };
-            error = vkCreateDevice(m_physicalDevice, &createInfo, m_allocator, &m_device);
-            CheckVkResult(error);
-            vkGetDeviceQueue(m_device, m_queueFamily, 0, &m_queue);
-        }
+    void VulkanRenderer::CreateLogicalDevice()
+    {
+        VkResult error;
+        int deviceExtensionCount = 1;
+        const char* deviceExtensions[] = {"VK_KHR_swapchain" };
+        const float queuePriority[] = {1.0f };
+        VkDeviceQueueCreateInfo queueInfo[1] = {};
+        queueInfo[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queueInfo[0].queueFamilyIndex = m_queueFamily;
+        queueInfo[0].queueCount = 1;
+        queueInfo[0].pQueuePriorities = queuePriority;
+        VkDeviceCreateInfo createInfo =
+                {
+                        .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                        .queueCreateInfoCount = sizeof(queueInfo) / sizeof(queueInfo[0]),
+                        .pQueueCreateInfos = queueInfo,
+                        .enabledExtensionCount = static_cast<uint32_t>(deviceExtensionCount),
+                        .ppEnabledExtensionNames = deviceExtensions,
+                };
+        error = vkCreateDevice(m_physicalDevice, &createInfo, m_allocator, &m_device);
+        CheckVkResult(error);
+        vkGetDeviceQueue(m_device, m_queueFamily, 0, &m_queue);
+    }
 
-        // Create Descriptor Pool
-        {
-            VkDescriptorPoolSize pool_sizes[] =
-                    {
-                            { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
-                            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
-                            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
-                            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
-                            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
-                            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
-                            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
-                            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
-                            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
-                            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
-                            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
-                    };
-            VkDescriptorPoolCreateInfo poolInfo =
-                    {
-                            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                            .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
-                            .maxSets = 1000 * IM_ARRAYSIZE(pool_sizes),
-                            .poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes),
-                            .pPoolSizes = pool_sizes,
-                    };
+    void VulkanRenderer::CreateDescriptorPool()
+    {
+        VkResult error;
+        VkDescriptorPoolSize pool_sizes[] =
+                {
+                        { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+                        { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+                        { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+                        { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+                        { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+                        { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+                        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+                        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+                        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+                        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+                        { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+                };
+        VkDescriptorPoolCreateInfo poolInfo =
+                {
+                        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                        .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
+                        .maxSets = 1000 * IM_ARRAYSIZE(pool_sizes),
+                        .poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes),
+                        .pPoolSizes = pool_sizes,
+                };
 
-            error = vkCreateDescriptorPool(m_device, &poolInfo, m_allocator, &m_descriptorPool);
-            CheckVkResult(error);
-        }
+        error = vkCreateDescriptorPool(m_device, &poolInfo, m_allocator, &m_descriptorPool);
+        CheckVkResult(error);
+    }
+
+    void VulkanRenderer::SetupVulkan(const char **extensions, uint32_t extensionCount)
+    {
+        InitializeVulkan(extensions, extensionCount);
+        SelectGPU();
+        SelectGraphicsQueueFamily();
+        CreateLogicalDevice();
+        CreateDescriptorPool();
     }
 
     void VulkanRenderer::CleanupVulkan()
@@ -301,13 +310,91 @@ namespace Trema::View
         ImGui_ImplVulkanH_DestroyWindow(m_instance, m_device, &m_mainWindowData, m_allocator);
     }
 
+    void VulkanRenderer::FreeResourcesInQueue()
+    {
+        for(auto& freeFunction : m_resourceFreeQueue[m_currentFrameIndex])
+            freeFunction();
+
+        m_resourceFreeQueue[m_currentFrameIndex].clear();
+    }
+
+    void VulkanRenderer::FreeCommandBuffers(ImGui_ImplVulkanH_Window *window, ImGui_ImplVulkanH_Frame* fd)
+    {
+        VkResult err;
+        auto& allocatedCommandBuffers = m_allocatedCommandBuffers[window->FrameIndex];
+        if (!allocatedCommandBuffers.empty())
+        {
+            vkFreeCommandBuffers(m_device, fd->CommandPool, (uint32_t)allocatedCommandBuffers.size(), allocatedCommandBuffers.data());
+            allocatedCommandBuffers.clear();
+        }
+
+        err = vkResetCommandPool(m_device, fd->CommandPool, 0);
+        CheckVkResult(err);
+        VkCommandBufferBeginInfo info = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+        info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
+        CheckVkResult(err);
+    }
+
+    void VulkanRenderer::SendRenderPass(ImGui_ImplVulkanH_Window *window, ImGui_ImplVulkanH_Frame* fd)
+    {
+        VkRenderPassBeginInfo info =
+                {
+                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                        .renderPass = window->RenderPass,
+                        .framebuffer = fd->Framebuffer,
+                        .renderArea =
+                                {
+                                        .extent =
+                                                {
+                                                        .width = static_cast<uint32_t>(window->Width),
+                                                        .height = static_cast<uint32_t>(window->Height),
+                                                }
+                                },
+                        .clearValueCount = 1,
+                        .pClearValues = &window->ClearValue,
+                };
+
+        vkCmdBeginRenderPass(fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
+    }
+
+    void VulkanRenderer::SubmitCommandBuffer(VkSemaphore imageAcquiredSemaphore, VkSemaphore renderCompleteSemaphore, ImGui_ImplVulkanH_Frame* fd)
+    {
+        VkResult err;
+        vkCmdEndRenderPass(fd->CommandBuffer);
+        {
+            VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            VkSubmitInfo info =
+                    {
+                            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                            .waitSemaphoreCount = 1,
+                            .pWaitSemaphores = &imageAcquiredSemaphore,
+                            .pWaitDstStageMask = &wait_stage,
+                            .commandBufferCount = 1,
+                            .pCommandBuffers = &fd->CommandBuffer,
+                            .signalSemaphoreCount = 1,
+                            .pSignalSemaphores = &renderCompleteSemaphore,
+                    };
+
+            err = vkEndCommandBuffer(fd->CommandBuffer);
+            CheckVkResult(err);
+            err = vkQueueSubmit(m_queue, 1, &info, fd->Fence);
+            CheckVkResult(err);
+        }
+    }
+
+    void VulkanRenderer::RenderData(ImDrawData* drawData, ImGui_ImplVulkanH_Frame* fd)
+    {
+        ImGui_ImplVulkan_RenderDrawData(drawData, fd->CommandBuffer);
+    }
+
     void VulkanRenderer::Render(ImGui_ImplVulkanH_Window *window, ImDrawData *drawData)
     {
         VkResult err;
 
-        VkSemaphore image_acquired_semaphore  = window->FrameSemaphores[window->SemaphoreIndex].ImageAcquiredSemaphore;
-        VkSemaphore render_complete_semaphore = window->FrameSemaphores[window->SemaphoreIndex].RenderCompleteSemaphore;
-        err = vkAcquireNextImageKHR(m_device, window->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &window->FrameIndex);
+        VkSemaphore imageAcquiredSemaphore  = window->FrameSemaphores[window->SemaphoreIndex].ImageAcquiredSemaphore;
+        VkSemaphore renderCompleteSemaphore = window->FrameSemaphores[window->SemaphoreIndex].RenderCompleteSemaphore;
+        err = vkAcquireNextImageKHR(m_device, window->Swapchain, UINT64_MAX, imageAcquiredSemaphore, VK_NULL_HANDLE, &window->FrameIndex);
         if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
         {
             m_swapChainRebuild = true;
@@ -326,83 +413,12 @@ namespace Trema::View
             CheckVkResult(err);
         }
 
-        {
-            for(auto& f : m_resourceFreeQueue[m_currentFrameIndex])
-                f();
+        FreeResourcesInQueue();
+        FreeCommandBuffers(window, fd);
+        SendRenderPass(window, fd);
 
-
-            m_resourceFreeQueue[m_currentFrameIndex].clear();
-        }
-
-        {
-            auto& allocatedCommandBuffers = m_allocatedCommandBuffers[window->FrameIndex];
-            if (!allocatedCommandBuffers.empty())
-            {
-                vkFreeCommandBuffers(m_device, fd->CommandPool, (uint32_t)allocatedCommandBuffers.size(), allocatedCommandBuffers.data());
-                allocatedCommandBuffers.clear();
-            }
-
-            err = vkResetCommandPool(m_device, fd->CommandPool, 0);
-            CheckVkResult(err);
-            VkCommandBufferBeginInfo info = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-            info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-            err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
-            CheckVkResult(err);
-        }
-
-        {
-            err = vkResetCommandPool(m_device, fd->CommandPool, 0);
-            CheckVkResult(err);
-            VkCommandBufferBeginInfo info = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-            info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-            err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
-            CheckVkResult(err);
-        }
-        {
-            VkRenderPassBeginInfo info =
-                    {
-                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                            .renderPass = window->RenderPass,
-                            .framebuffer = fd->Framebuffer,
-                            .renderArea =
-                                    {
-                                    .extent =
-                                            {
-                                                    .width = static_cast<uint32_t>(window->Width),
-                                                    .height = static_cast<uint32_t>(window->Height),
-                                            }
-                                },
-                            .clearValueCount = 1,
-                            .pClearValues = &window->ClearValue,
-                    };
-
-            vkCmdBeginRenderPass(fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
-        }
-
-        // Record dear imgui primitives into command buffer
-        ImGui_ImplVulkan_RenderDrawData(drawData, fd->CommandBuffer);
-
-        // Submit command buffer
-        vkCmdEndRenderPass(fd->CommandBuffer);
-        {
-            VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            VkSubmitInfo info =
-                    {
-                            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-                            .waitSemaphoreCount = 1,
-                            .pWaitSemaphores = &image_acquired_semaphore,
-                            .pWaitDstStageMask = &wait_stage,
-                            .commandBufferCount = 1,
-                            .pCommandBuffers = &fd->CommandBuffer,
-                            .signalSemaphoreCount = 1,
-                            .pSignalSemaphores = &render_complete_semaphore,
-                    };
-
-            err = vkEndCommandBuffer(fd->CommandBuffer);
-            CheckVkResult(err);
-            err = vkQueueSubmit(m_queue, 1, &info, fd->Fence);
-            CheckVkResult(err);
-        }
+        RenderData(drawData, fd);
+        SubmitCommandBuffer(imageAcquiredSemaphore, renderCompleteSemaphore, fd);
     }
 
     void VulkanRenderer::FramePresent(ImGui_ImplVulkanH_Window *window)

@@ -14,6 +14,10 @@ namespace Trema::View
     {
     public:
         ColorPicker(std::shared_ptr<GuiElement> parent, std::string name);
+        ColorPicker(const ColorPicker&) = delete;
+        ColorPicker& operator=(const ColorPicker&) = delete;
+        ~ColorPicker() override = default;
+
         void Show() override;
         void BeginStyle() override;
         void EndStyle() override;

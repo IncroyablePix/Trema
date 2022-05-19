@@ -15,6 +15,8 @@ namespace Trema::View
     {
     public:
         Button(std::shared_ptr<GuiElement> parent, std::string name);
+        Button(const Button&) = delete;
+        Button& operator=(const Button&) = delete;
         ~Button();
         void AddOnClickListener(std::string name, std::function<void(const Button& button)> listener);
         void Show() override;

@@ -13,7 +13,9 @@ namespace Trema::View
     {
     public:
         Separator(std::shared_ptr<GuiElement> parent, std::string name);
-        ~Separator();
+        Separator(const Separator&) = delete;
+        Separator& operator=(const Separator&) = delete;
+        ~Separator() override;
         void Show() override;
         static std::shared_ptr<Separator> CreateSeparator(std::shared_ptr<GuiElement> parent, std::string name);
     };

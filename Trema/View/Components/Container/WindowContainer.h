@@ -14,7 +14,9 @@ namespace Trema::View
     {
     public:
         explicit WindowContainer(std::shared_ptr<GuiElement> parent, std::string name);
-        ~WindowContainer();
+        WindowContainer(const WindowContainer&) = delete;
+        WindowContainer& operator=(const WindowContainer&) = delete;
+        ~WindowContainer() override;
 
         void Show() override;
         static std::shared_ptr<WindowContainer> CreateWindowContainer(std::shared_ptr<GuiElement> parent, std::string name);

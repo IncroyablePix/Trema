@@ -208,6 +208,26 @@ namespace Trema::View
                 if(type == TYPE_STR)
                     style.SetHeight(value->GetValue().String);
             }
+            else if(propName == "margin-top")
+            {
+                if(type == TYPE_STR)
+                    style.SetMarginTop(value->GetValue().String);
+            }
+            else if(propName == "margin-right")
+            {
+                if(type == TYPE_STR)
+                    style.SetMarginRight(value->GetValue().String);
+            }
+            else if(propName == "margin-bottom")
+            {
+                if(type == TYPE_STR)
+                    style.SetMarginBottom(value->GetValue().String);
+            }
+            else if(propName == "margin-left")
+            {
+                if(type == TYPE_STR)
+                    style.SetMarginLeft(value->GetValue().String);
+            }
 
             /*std::cout << "\t[" << propName << ":" << *value;
             if(type == TYPE_NUM)

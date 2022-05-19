@@ -16,7 +16,9 @@ namespace Trema::View
     {
     public:
         Radio(std::shared_ptr<GuiElement> parent, std::string name);
-        ~Radio();
+        Radio(const Radio&) = delete;
+        Radio& operator=(const Radio&) = delete;
+        ~Radio() override;
         void AddOption(std::string name);
         void AddChild(std::shared_ptr<GuiElement> child) override;
 

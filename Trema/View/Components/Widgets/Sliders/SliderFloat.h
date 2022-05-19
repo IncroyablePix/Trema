@@ -16,6 +16,8 @@ namespace Trema::View
     {
     public:
         SliderFloat(std::shared_ptr<GuiElement> parent, std::string name, float min, float max);
+        SliderFloat(const SliderFloat&) = delete;
+        SliderFloat& operator=(const SliderFloat&) = delete;
         ~SliderFloat() = default;
         void AddOnCheckListener(std::string name, std::function<void(const SliderFloat& slider, float value)> listener);
         void Show() override;

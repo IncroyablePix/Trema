@@ -14,7 +14,10 @@ namespace Trema::View
     class TinyXMLViewParser : public ViewParser
     {
     public:
-        explicit TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser);
+        TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser);
+        TinyXMLViewParser(const TinyXMLViewParser&) = delete;
+        TinyXMLViewParser& operator=(const TinyXMLViewParser&) = delete;
+        ~TinyXMLViewParser() override = default;
         void LoadView(const std::string &path, std::shared_ptr<Window> window) override;
         void SetupWindowFromFile(const std::wstring &path, std::shared_ptr<Window> window) override;
         void SetupWindowFromString(const std::string &code, std::shared_ptr<Window> window) override;

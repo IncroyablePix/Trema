@@ -14,7 +14,6 @@ namespace Trema::View
     {
     public:
         explicit DisplayException(char const* message) noexcept;
-        //virtual char const* what() const noexcept;
     };
 };
 

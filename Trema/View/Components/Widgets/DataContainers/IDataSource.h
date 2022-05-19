@@ -11,7 +11,6 @@ namespace Trema::View
     class IDataSource
     {
     public:
-
         virtual void Notify() = 0;
     };
 }

@@ -15,7 +15,9 @@ namespace Trema::View
     {
     public:
         MenuOption(std::shared_ptr<GuiElement> parent, std::string name, std::string shortcut);
-        ~MenuOption();
+        MenuOption(const MenuOption&) = delete;
+        MenuOption& operator=(const MenuOption&) = delete;
+        ~MenuOption() override;
         void Show() override;
         void AddOnClickListener(std::string name, std::function<void(const MenuOption& button)> listener);
         static std::shared_ptr<MenuOption> CreateMenuOption(std::shared_ptr<GuiElement> parent, std::string name, std::string shortcut);

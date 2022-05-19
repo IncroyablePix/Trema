@@ -422,6 +422,34 @@ Admits strings in two formats:
 - "10px" - absolute
 - "10%" - relative to the container
 
+### margin-top
+The margin on the top of the element.
+
+Admits strings in two formats:
+- "10px" - absolute
+- "10%" - relative to the container
+
+### margin-right
+The margin on the right of the element.
+
+Admits strings in two formats:
+- "10px" - absolute
+- "10%" - relative to the container
+
+### margin-bottom
+The margin on the bottom of the element.
+
+Admits strings in two formats:
+- "10px" - absolute
+- "10%" - relative to the container
+
+### margin-left
+The margin on the left of the element.
+
+Admits strings in two formats:
+- "10px" - absolute
+- "10%" - relative to the container
+
 # Installation/Build
 
 ## Dependencies

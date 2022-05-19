@@ -14,7 +14,6 @@ namespace Trema::View
     {
     public:
         explicit LayoutException(char const* message) noexcept;
-
     };
 }
 

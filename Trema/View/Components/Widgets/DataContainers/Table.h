@@ -61,7 +61,9 @@ namespace Trema::View
 
         }
 
-        ~Table() = default;
+        Table(const Table&) = delete;
+        Table& operator=(const Table&) = delete;
+        ~Table() override = default;
 
         void AddChild(std::shared_ptr<GuiElement> child) override
         {

@@ -15,7 +15,11 @@ namespace Trema::View
     class Container : public GuiElement
     {
     public:
-        explicit Container(std::shared_ptr<GuiElement> parent, std::string name);
+        Container(std::shared_ptr<GuiElement> parent, std::string name);
+        Container(const Container&) = delete;
+        Container& operator=(const Container&) = delete;
+        virtual ~Container() = default;
+
         virtual void AddChild(std::shared_ptr<GuiElement> child);
         inline std::vector<std::shared_ptr<GuiElement>>& GetChildren() { return m_children; }
 

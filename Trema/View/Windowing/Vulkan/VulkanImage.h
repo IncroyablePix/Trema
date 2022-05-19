@@ -18,6 +18,8 @@ namespace Trema::View
     public:
         VulkanImage(std::string path, std::shared_ptr<VulkanRenderer> renderer);
         VulkanImage(uint32_t width, uint32_t height, ImageFormat format, std::shared_ptr<VulkanRenderer> renderer, const void* data = nullptr);
+        VulkanImage operator=(const VulkanImage&) = delete;
+        VulkanImage(const VulkanImage&) = delete;
         ~VulkanImage();
 
         void SetData(const void* data);
@@ -28,7 +30,15 @@ namespace Trema::View
         inline ImTextureID GetTextureID() const override { return GetDescriptorSet(); }
 
     private:
-        void AllocateMemory(size_t size);
+        void AllocateMemory();
+        void CreateUploadBuffer(size_t uploadSize);
+        void UploadToBuffer(const void* data, size_t uploadSize);
+        void CopyDataToImage();
+
+        void CreateImage(VkFormat vulkanFormat);
+        void CreateImageView(VkFormat vulkanFormat);
+        void CreateSampler();
+        void CreateDescriptorSet();
 
         std::shared_ptr<VulkanRenderer> m_renderer;
 

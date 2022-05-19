@@ -16,7 +16,9 @@ namespace Trema::View
     {
     public:
         Checkbox(std::shared_ptr<GuiElement> parent, std::string name);
-        ~Checkbox();
+        Checkbox(const Checkbox&) = delete;
+        Checkbox& operator=(const Checkbox&) = delete;
+        ~Checkbox() override;
         void AddOnCheckListener(std::string name, std::function<void(const Checkbox& checkbox, bool checked)> listener);
         void Show() override;
 

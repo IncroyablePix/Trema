@@ -32,7 +32,9 @@ namespace Trema::View
     {
     public:
         explicit DockSpace(std::string title, ImGuiID dockspaceId, bool allowSave = true);
-        ~DockSpace();
+        DockSpace(const DockSpace&) = delete;
+        DockSpace& operator=(const DockSpace&) = delete;
+        ~DockSpace() override = default;
 
         virtual void Begin();
         virtual void End();

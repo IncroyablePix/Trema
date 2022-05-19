@@ -13,7 +13,7 @@ namespace Trema::View
     Container::Container(std::shared_ptr<GuiElement> parent, std::string name) :
             GuiElement(std::move(parent), std::move(name))
     {
-
+        SetIsWindow(true);
     }
 
     void Container::AddChild(std::shared_ptr<GuiElement> child)

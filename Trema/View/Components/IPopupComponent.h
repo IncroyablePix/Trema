@@ -14,6 +14,7 @@ namespace Trema::View
     {
     public:
         IPopupComponent(std::string name);
+        virtual ~IPopupComponent() = default;
     };
 }
 

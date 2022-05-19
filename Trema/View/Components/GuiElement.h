@@ -14,6 +14,9 @@ namespace Trema::View
     {
     public:
         GuiElement(std::shared_ptr<GuiElement> parent, std::string name);
+        GuiElement(const GuiElement&) = delete;
+        GuiElement& operator=(const GuiElement&) = delete;
+        virtual ~GuiElement() = default;
 
         virtual void Show() = 0;
         virtual const std::string& GetName();
@@ -36,7 +39,9 @@ namespace Trema::View
         inline static bool IsType(const std::shared_ptr<GuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
         template<class T>
         inline static std::shared_ptr<T> CastTo(const std::shared_ptr<GuiElement> &element) { return std::dynamic_pointer_cast<T>(element); }
-        
+        inline void SetIsWindow(bool toggle) { m_isWindow = toggle; }
+
+        bool m_isWindow { false };
         std::shared_ptr<GuiElement> m_parent;
         float m_dockSize { 0.2f };
         std::string m_name;
@@ -46,6 +51,9 @@ namespace Trema::View
 
         std::string m_fontName;
         ImFont* m_font { nullptr };
+
+    private:
+        static bool IsInWindow();
     };
 }
 

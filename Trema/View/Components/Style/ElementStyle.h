@@ -27,6 +27,11 @@ namespace Trema::View
         std::string m_width { "auto" };
         std::string m_height { "auto" };
 
+        std::string m_marginTop { "0" };
+        std::string m_marginBottom { "0" };
+        std::string m_marginLeft { "0" };
+        std::string m_marginRight { "0" };
+
         StyleColor m_textColor;
         StyleColor m_textColorDisabled;
         StyleColor m_windowBackgroundColor;
@@ -93,7 +98,13 @@ namespace Trema::View
         void SetWidth(std::string width);
         void SetHeight(std::string height);
 
+        void SetMarginTop(std::string top);
+        void SetMarginBottom(std::string bottom);
+        void SetMarginLeft(std::string left);
+        void SetMarginRight(std::string right);
+
         ImVec2 GetSize() const;
+        ImVec4 GetMargin() const;
 
         inline StyleColor& TextColor() { return m_textColor; }
         inline StyleColor& TextDisabledColor() { return m_textColorDisabled; }

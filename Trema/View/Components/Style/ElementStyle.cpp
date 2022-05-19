@@ -52,6 +52,50 @@ namespace Trema::View
         m_height = std::move(height);
     }
 
+    void ElementStyle::SetMarginTop(std::string top)
+    {
+        m_marginTop = std::move(top);
+    }
+
+    void ElementStyle::SetMarginBottom(std::string bottom)
+    {
+        m_marginBottom = std::move(bottom);
+    }
+
+    void ElementStyle::SetMarginLeft(std::string left)
+    {
+        m_marginLeft = std::move(left);
+    }
+
+    void ElementStyle::SetMarginRight(std::string right)
+    {
+        m_marginRight = std::move(right);
+    }
+
+    ImVec4 ElementStyle::GetMargin() const
+    {
+        float top = 0.0f, bottom = 0.0f, right = 0.0f, left = 0.0f;
+        auto available = ImGui::GetContentRegionAvail();
+
+        if(GetFromWord(m_marginTop, top)) { }
+        else if(GetFromPercents(m_marginTop, top)) { top *= available.y; }
+        else if(GetFromPx(m_marginTop, top)) { }
+
+        if(GetFromWord(m_marginRight, right)) { }
+        else if(GetFromPercents(m_marginRight, right)) { right *= available.x; }
+        else if(GetFromPx(m_marginRight, right)) { }
+
+        if(GetFromWord(m_marginBottom, bottom)) { }
+        else if(GetFromPercents(m_marginBottom, bottom)) { bottom *= available.y; }
+        else if(GetFromPx(m_marginBottom, bottom)) { }
+
+        if(GetFromWord(m_marginLeft, left)) { }
+        else if(GetFromPercents(m_marginLeft, left)) { left *= available.x; }
+        else if(GetFromPx(m_marginLeft, left)) { }
+
+        return {top, right, bottom, left};
+    }
+
     ImVec2 ElementStyle::GetSize() const
     {
         float w = -0.0f, h = -0.0f;
@@ -93,6 +137,11 @@ namespace Trema::View
     bool ElementStyle::GetFromWord(const std::string &value, float &floatValue)
     {
         if(value == "auto")
+        {
+            floatValue = 0.0f;
+            return true;
+        }
+        else if(value == "0")
         {
             floatValue = 0.0f;
             return true;

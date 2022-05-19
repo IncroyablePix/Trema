@@ -14,6 +14,8 @@ namespace Trema::View
     {
     public:
         explicit GLFWWindow(const WindowInfo &info);
+        GLFWWindow operator=(const GLFWWindow&) = delete;
+        explicit GLFWWindow(const GLFWWindow&) = delete;
         ~GLFWWindow();
         void PollEvent() override;
         void SetTitle(const std::string &title) override;

@@ -32,6 +32,8 @@ namespace Trema::View
     {
     public:
         explicit VulkanRenderer(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy);
+        VulkanRenderer operator=(const VulkanRenderer&) = delete;
+        VulkanRenderer(const VulkanRenderer&) = delete;
         ~VulkanRenderer();
         void Init();
         void LoadFonts();
@@ -52,7 +54,7 @@ namespace Trema::View
         void UploadFonts();
 
     private:
-        VkAllocationCallbacks* m_allocator = nullptr;
+        VkAllocationCallbacks* m_allocator = VK_NULL_HANDLE;
         VkInstance m_instance = VK_NULL_HANDLE;
         VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
         VkDevice m_device = VK_NULL_HANDLE;
@@ -79,6 +81,17 @@ namespace Trema::View
         void SetupVulkanWindow(ImGui_ImplVulkanH_Window* window, VkSurfaceKHR surface, int width, int height);
         void CleanupVulkan();
         void CleanupVulkanWindow();
+        void InitializeVulkan(const char **extensions, uint32_t extensionCount);
+        void SelectGPU();
+        void SelectGraphicsQueueFamily();
+        void CreateLogicalDevice();
+        void CreateDescriptorPool();
+
+        void FreeResourcesInQueue();
+        void FreeCommandBuffers(ImGui_ImplVulkanH_Window *window, ImGui_ImplVulkanH_Frame* fd);
+        void SendRenderPass(ImGui_ImplVulkanH_Window *window, ImGui_ImplVulkanH_Frame* fd);
+        void RenderData(ImDrawData* drawData, ImGui_ImplVulkanH_Frame* fd);
+        void SubmitCommandBuffer(VkSemaphore imageAcquiredSemaphore, VkSemaphore renderCompleteSemaphore, ImGui_ImplVulkanH_Frame* fd);
     };
 }
 
