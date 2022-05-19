@@ -45,13 +45,9 @@ namespace Trema::View
             if(margin.x != 0.0)
             {
                 ImGui::Dummy({margin.w, margin.x });
-                if(margin.w != 0.0)
-                {
-                    ImGui::Dummy({margin.w, margin.x });
-                    ImGui::SameLine();
-                }
+
             }
-            else if(margin.w != 0.0)
+            if(margin.w != 0.0)
             {
                 ImGui::Dummy({margin.w, 0.0f });
                 ImGui::SameLine();
