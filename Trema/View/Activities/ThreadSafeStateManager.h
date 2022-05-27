@@ -13,6 +13,13 @@
 
 namespace Trema::View
 {
+    struct EndStruct
+    {
+        uint16_t RequestCode;
+        uint16_t ResultCode;
+        Intent Intent;
+    };
+
     class ThreadSafeStateManager : public IStateManager
     {
     public:
@@ -30,7 +37,9 @@ namespace Trema::View
         size_t Count() override;
         void Clear() override;
         void Wait() override;
-        void Update() override;
+        void UpdateState() override;
+        void UpdateCurrentActivity() override;
+        void QuitPending(uint16_t requestCode, uint16_t resultCode, Intent intent) override;
 
     private:
         std::stack<std::unique_ptr<Activity>> m_activities;
@@ -40,6 +49,7 @@ namespace Trema::View
         std::condition_variable m_blocking;
 
         std::unique_ptr<Activity> m_toLoad { nullptr };
+        std::unique_ptr<EndStruct> m_toQuit { nullptr };
     };
 }
 

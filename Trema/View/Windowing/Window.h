@@ -54,6 +54,7 @@ namespace Trema::View
         void InitializeVulkan(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy);
         void LoadView(const std::string &path);
         void StartActivityForResult(std::unique_ptr<Activity> activity);
+        void QuitActivity(uint16_t requestCode, uint16_t resultCode, Intent intent);
 
         inline bool IsFullscreen() const { return m_fullscreen; }
 

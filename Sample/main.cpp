@@ -1,6 +1,7 @@
 #include <string>
 #include <regex>
 #include <fstream>
+#include <iostream>
 #include <View/Components/Widgets/Input/TextInput.h>
 #include <View/Components/Widgets/Sliders/SliderInt.h>
 #include <View/Components/Widgets/Options/Radio.h>
@@ -18,10 +19,10 @@
 
 using namespace Trema::View;
 
-class MainActivity : public Activity
+class PeopleActivity : public Activity
 {
 public:
-    MainActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) : Activity(std::move(intent), std::move(window), requestCode)
+    PeopleActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) : Activity(std::move(intent), std::move(window), requestCode)
     {
 
     }
@@ -49,6 +50,7 @@ public:
         // Menu
         m_quitOption = GetElementById<MenuOption>("quit");
         m_saveOption = GetElementById<MenuOption>("save");
+        m_disconnectOption = GetElementById<MenuOption>("disconnect");
 
         // Data
         std::stringstream data;
@@ -99,9 +101,14 @@ public:
             Clear();
         });
 
-        m_quitOption->AddOnClickListener("Quit", [this](const Trema::View::MenuOption &)
+        m_quitOption->AddOnClickListener("Quit", [this](const MenuOption &)
         {
             QuitApplication();
+        });
+
+        m_disconnectOption->AddOnClickListener("Disconnect", [this](const MenuOption&)
+        {
+            QuitActivity();
         });
 
         m_saveOption->AddOnClickListener("Save", [this, &data](const Trema::View::MenuOption &)
@@ -135,6 +142,7 @@ private:
     std::shared_ptr<Button> m_clearButton;
 
     // Menu
+    std::shared_ptr<MenuOption> m_disconnectOption;
     std::shared_ptr<MenuOption> m_quitOption;
     std::shared_ptr<MenuOption> m_saveOption;
 
@@ -148,15 +156,6 @@ private:
         m_heightField->SetValue(50);
         m_sexField->SetOption(0);
         m_diplomaField->SetOption("");
-    }
-};
-
-template<>
-struct Trema::View::ActivityBuilder<MainActivity>
-{
-    static std::unique_ptr<MainActivity> CreateActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1)
-    {
-        return std::move(std::make_unique<MainActivity>(std::move(intent), std::move(window), requestCode));
     }
 };
 
@@ -178,7 +177,7 @@ public:
         m_loginButton = GetElementById<Button>("loginButton");
         m_loginButton->AddOnClickListener("Login", [this](const Button &)
         {
-            StartActivityForResult<MainActivity>(-1);
+            StartActivityForResult<PeopleActivity>(0);
         });
     }
 
@@ -186,19 +185,10 @@ private:
     std::shared_ptr<Button> m_loginButton;
 };
 
-template<>
-struct Trema::View::ActivityBuilder<LoginActivity>
-{
-    static std::unique_ptr<LoginActivity> CreateActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1)
-    {
-        return std::move(std::make_unique<LoginActivity>(std::move(intent), std::move(window), requestCode));
-    }
-};
-
 int main(int argc, char** argv)
 {
     auto window = GLFWWindow::CreateGLFWWindow();
-    window->StartActivityForResult(ActivityBuilder<LoginActivity>::CreateActivity(Intent{}, window));
+    window->StartActivityForResult(ActivityBuilder<LoginActivity>().CreateActivity(Intent{}, window));
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
     window->Run();
 

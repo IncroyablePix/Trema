@@ -26,6 +26,11 @@ namespace Trema::View
         return t;
     }
 
+    void ThreadSafeStateManager::UpdateCurrentActivity()
+    {
+        Top()->OnActivityUpdate();
+    }
+
     void ThreadSafeStateManager::Push(std::unique_ptr<Activity> item)
     {
         {
@@ -75,8 +80,29 @@ namespace Trema::View
         m_toLoad = std::move(item);
     }
 
-    void ThreadSafeStateManager::Update()
+    void ThreadSafeStateManager::QuitPending(uint16_t requestCode, uint16_t resultCode, Intent intent)
     {
+        m_toQuit = std::make_unique<EndStruct>();
+        m_toQuit->RequestCode = requestCode;
+        m_toQuit->ResultCode = resultCode;
+        m_toQuit->Intent = std::move(intent);
+    }
+
+    void ThreadSafeStateManager::UpdateState()
+    {
+        if(m_toQuit)
+        {
+            auto toLeave = Pop();
+            toLeave->OnActivityEnd();
+
+            if(!Empty())
+            {
+                auto& toResume = Top();
+                toResume->OnActivityResult(m_toQuit->RequestCode, m_toQuit->ResultCode, std::move(m_toQuit->Intent));
+                m_toQuit.reset();
+            }
+        }
+
         if(m_toLoad)
         {
             Push(std::move(m_toLoad));

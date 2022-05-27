@@ -12,6 +12,7 @@
             <TopMenu>
                 <SubMenu name="File">
                     <MenuOption id="save" shortcut="CTRL+O">Save</MenuOption>
+                    <MenuOption id="disconnect">Disconnect</MenuOption>
                     <Separator/>
                     <MenuOption id="quit">Quit</MenuOption>
                 </SubMenu>

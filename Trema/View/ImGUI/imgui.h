@@ -3100,8 +3100,8 @@ struct ImGuiViewport
 // - Application:  Enable feature with 'io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable'.
 // - Backend:      Hook ImGuiPlatformIO's Platform_* and Renderer_* callbacks (see below).
 //                 Set 'io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports' and 'io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports'.
-//                 Update ImGuiPlatformIO's Monitors list every frame.
-//                 Update MousePos every frame, in absolute coordinates.
+//                 UpdateState ImGuiPlatformIO's Monitors list every frame.
+//                 UpdateState MousePos every frame, in absolute coordinates.
 // - Application:  In your main loop, call ImGui::UpdatePlatformWindows(), ImGui::RenderPlatformWindowsDefault() after EndFrame() or Render().
 //                 You may skip calling RenderPlatformWindowsDefault() if its API is not convenient for your needs. Read comments below.
 // - Application:  Fix absolute coordinates used in ImGui::SetWindowPos() or ImGui::SetNextWindowPos() calls.
@@ -3166,7 +3166,7 @@ struct ImGuiPlatformIO
     void    (*Renderer_SwapBuffers)(ImGuiViewport* vp, void* render_arg);   // . . . R .  // (Optional) Call Present/SwapBuffers. 'render_arg' is the value passed to RenderPlatformWindowsDefault().
 
     // (Optional) Monitor list
-    // - Updated by: app/backend. Update every frame to dynamically support changing monitor or DPI configuration.
+    // - Updated by: app/backend. UpdateState every frame to dynamically support changing monitor or DPI configuration.
     // - Used by: dear imgui to query DPI info, clamp popups/tooltips within same monitor and not have them straddle monitors.
     ImVector<ImGuiPlatformMonitor>  Monitors;
 

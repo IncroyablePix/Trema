@@ -30,7 +30,7 @@ namespace Trema::View
 
     }
 
-    void Activity::OnActivityResult(uint16_t requestCode, uint16_t resultCode, const Intent& intent)
+    void Activity::OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent)
     {
 
     }
@@ -105,6 +105,11 @@ namespace Trema::View
         return m_intent.GetCharExtra(name);
     }
 
+    RawIntentValue Activity::GetExtra(const std::string &name)
+    {
+        return m_intent.GetExtra(name);
+    }
+
     void Activity::QuitApplication()
     {
         m_window->Close();
@@ -159,5 +164,15 @@ namespace Trema::View
     void Activity::SetDefaultFont(const std::string &name)
     {
         m_window->SetDefaultFont(Style.GetFont());
+    }
+
+    void Activity::QuitActivity(uint16_t requestCode, uint16_t resultCode, Intent intent)
+    {
+        m_window->QuitActivity(m_requestCode, resultCode, std::move(intent));
+    }
+
+    void Activity::QuitActivity(uint16_t resultCode, Intent intent)
+    {
+        QuitActivity(m_requestCode, resultCode, std::move(intent));
     }
 }

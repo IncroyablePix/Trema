@@ -527,7 +527,7 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
     if (install_callbacks)
         ImGui_ImplGlfw_InstallCallbacks(window);
 
-    // Update monitors the first time (note: monitor callback are broken in GLFW 3.2 and earlier, see github.com/glfw/glfw/issues/784)
+    // UpdateState monitors the first time (note: monitor callback are broken in GLFW 3.2 and earlier, see github.com/glfw/glfw/issues/784)
     ImGui_ImplGlfw_UpdateMonitors();
     glfwSetMonitorCallback(ImGui_ImplGlfw_MonitorCallback);
 
@@ -675,7 +675,7 @@ static void ImGui_ImplGlfw_UpdateMouseCursor()
     }
 }
 
-// Update gamepad inputs
+// UpdateState gamepad inputs
 static inline float Saturate(float v) { return v < 0.0f ? 0.0f : v  > 1.0f ? 1.0f : v; }
 static void ImGui_ImplGlfw_UpdateGamepads()
 {
@@ -788,7 +788,7 @@ void ImGui_ImplGlfw_NewFrame()
     ImGui_ImplGlfw_UpdateMouseData();
     ImGui_ImplGlfw_UpdateMouseCursor();
 
-    // Update game controllers (if enabled and available)
+    // UpdateState game controllers (if enabled and available)
     ImGui_ImplGlfw_UpdateGamepads();
 }
 

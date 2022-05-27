@@ -985,11 +985,11 @@ bool ImGui::ScrollbarEx(const ImRect& bb_frame, ImGuiID id, ImGuiAxis axis, ImS6
         const float scroll_v_norm = ImSaturate((clicked_v_norm - g.ScrollbarClickDeltaToGrabCenter - grab_h_norm * 0.5f) / (1.0f - grab_h_norm));
         *p_scroll_v = (ImS64)(scroll_v_norm * scroll_max);
 
-        // Update values for rendering
+        // UpdateState values for rendering
         scroll_ratio = ImSaturate((float)*p_scroll_v / (float)scroll_max);
         grab_v_norm = scroll_ratio * (scrollbar_size_v - grab_h_pixels) / scrollbar_size_v;
 
-        // Update distance to grab now that we have seeked and saturated
+        // UpdateState distance to grab now that we have seeked and saturated
         if (seek_absolute)
             g.ScrollbarClickDeltaToGrabCenter = clicked_v_norm - grab_v_norm - grab_h_norm * 0.5f;
     }
@@ -4403,7 +4403,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
             }
         }
 
-        // Update render selection flag after events have been handled, so selection highlight can be displayed during the same frame.
+        // UpdateState render selection flag after events have been handled, so selection highlight can be displayed during the same frame.
         render_selection |= state->HasSelection() && (RENDER_SELECTION_WHEN_INACTIVE || render_cursor);
     }
 
@@ -6272,7 +6272,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
         if (g.NavJustMovedToId == id)
             selected = pressed = true;
 
-    // Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
+    // UpdateState NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
     if (pressed || (hovered && (flags & ImGuiSelectableFlags_SetNavIdOnHover)))
     {
         if (!g.NavDisableMouseHover && g.NavWindow == window && g.NavLayer == window->DC.NavLayerCurrent)
@@ -7585,7 +7585,7 @@ static void ImGui::TabBarLayout(ImGuiTabBar* tab_bar)
     if (g.NavWindowingTarget != NULL && g.NavWindowingTarget->DockNode && g.NavWindowingTarget->DockNode->TabBar == tab_bar)
         tab_bar->VisibleTabId = scroll_to_tab_id = g.NavWindowingTarget->ID;
 
-    // Update scrolling
+    // UpdateState scrolling
     if (scroll_to_tab_id != 0)
         TabBarScrollToTab(tab_bar, scroll_to_tab_id, sections);
     tab_bar->ScrollingAnim = TabBarScrollClamp(tab_bar, tab_bar->ScrollingAnim);
@@ -8074,7 +8074,7 @@ bool    ImGui::TabItemEx(ImGuiTabBar* tab_bar, const char* label, bool* p_open, 
         tab_bar->TabsNames.append(label, label + strlen(label) + 1); // Append name _with_ the zero-terminator.
     }
 
-    // Update selected tab
+    // UpdateState selected tab
     if (tab_appearing && (tab_bar->Flags & ImGuiTabBarFlags_AutoSelectNewTabs) && tab_bar->NextSelectedTabId == 0)
         if (!tab_bar_appearing || tab_bar->SelectedTabId == 0)
             if (!is_tab_button)

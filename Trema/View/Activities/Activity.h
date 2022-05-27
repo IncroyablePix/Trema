@@ -22,7 +22,7 @@ namespace Trema::View
         virtual void OnActivityStart();
         virtual void OnCreateView();
         virtual void OnActivityEnd();
-        virtual void OnActivityResult(uint16_t requestCode, uint16_t resultCode, const Intent& intent);
+        virtual void OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent);
         virtual void OnActivityUpdate();
 
         void ApplyStyle();
@@ -46,10 +46,24 @@ namespace Trema::View
         }
 
         template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
+        void StartActivityForResult(ActivityBuilder<T> activityBuilder, uint16_t requestCode)
+        {
+            auto activity = activityBuilder.CreateActivity(Intent {}, m_window, requestCode);
+            m_window->StartActivityForResult(std::move(activity));
+        }
+
+        template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
         void StartActivityForResult(uint16_t requestCode)
         {
-            auto activity = ActivityBuilder<T>::CreateActivity(Intent {}, m_window, requestCode);
-            m_window->StartActivityForResult(std::move(activity));
+            auto activityBuilder = ActivityBuilder<T>();
+            StartActivityForResult(std::move(activityBuilder), requestCode);
+        }
+
+        template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
+        void StartActivity()
+        {
+            auto activityBuilder = ActivityBuilder<T>();
+            StartActivityForResult(std::move(activityBuilder), -1);
         }
 
         inline void AddElementId(const std::string& id, std::shared_ptr<GuiElement> element)
@@ -77,6 +91,8 @@ namespace Trema::View
         bool GetBoolExtra(const std::string& name);
         char8_t GetCharExtra(const std::string& name);
 
+        RawIntentValue GetExtra(const std::string& name);
+
         template<class T> std::shared_ptr<T> GetComponent()
         {
             return m_window->GetComponent<T>();
@@ -84,6 +100,8 @@ namespace Trema::View
 
         void LoadView(const std::string &path);
         void QuitApplication();
+        void QuitActivity(uint16_t requestCode, uint16_t resultCode = 0, Intent intent = Intent {});
+        void QuitActivity(uint16_t resultCode = 0, Intent intent = Intent {});
 
     private:
         std::unordered_map<std::string, std::shared_ptr<GuiElement>> m_elementsById;

@@ -50,7 +50,7 @@ namespace Trema::View
     {
         m_opened = true;
 
-        m_stateManager->Update();
+        m_stateManager->UpdateState();
         UploadFonts();
         while(IsOpened())
         {
@@ -131,7 +131,7 @@ namespace Trema::View
 
     void Window::Update()
     {
-        m_stateManager->Update();
+        m_stateManager->UpdateState();
         PollEvent();
         Render();
         ConsumePostRenderRoutines();
@@ -155,6 +155,12 @@ namespace Trema::View
 
     void Window::Render()
     {
+        if(m_stateManager->Empty())
+        {
+            Close();
+            return;
+        }
+
         auto* wd = m_renderer->GetWindowData();
 
         ImGui_ImplVulkan_NewFrame();
@@ -165,19 +171,18 @@ namespace Trema::View
             ImGui::PushFont(m_standardFont);
 
         //--- ImGui code
-        if(!m_stateManager->Empty())
-        {
-            auto menu = m_stateManager->GetTopMenu();
-            if(menu)
-            {
-                menu->Show();
-            }
 
-            if(auto layout = m_stateManager->GetLayout())
-            {
-                layout->SetActiveMenuBar(menu != nullptr);
-                layout->Show();
-            }
+        m_stateManager->UpdateCurrentActivity();
+        auto menu = m_stateManager->GetTopMenu();
+        if(menu)
+        {
+            menu->Show();
+        }
+
+        if(auto layout = m_stateManager->GetLayout())
+        {
+            layout->SetActiveMenuBar(menu != nullptr);
+            layout->Show();
         }
 
         for(const auto& [name, popup] : m_popupComponents)
@@ -212,5 +217,10 @@ namespace Trema::View
         m_renderImages[image] = renderImage;
 
         return renderImage;
+    }
+
+    void Window::QuitActivity(uint16_t requestCode, uint16_t resultCode, Intent intent)
+    {
+        m_stateManager->QuitPending(requestCode, resultCode, std::move(intent));
     }
 }

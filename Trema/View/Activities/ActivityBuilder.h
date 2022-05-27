@@ -16,11 +16,9 @@ namespace Trema::View
     template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
     struct ActivityBuilder
     {
-        static std::unique_ptr<T> CreateActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1)
+        std::unique_ptr<T> CreateActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1)
         {
-            throw NoActivityBuilderException("You must implement a specialized ActivityBuilder.");
-            /* static_assert(!std::is_same<T, Activity>::value);
-            return std::move(std::make_unique<T>(std::move(intent), std::move(window), requestCode)); */
+            return std::move(std::make_unique<T>(std::move(intent), std::move(window), requestCode));
         }
     };
 }

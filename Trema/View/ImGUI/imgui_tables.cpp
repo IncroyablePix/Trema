@@ -753,7 +753,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
             column->InitStretchWeightOrWidth = -1.0f;
         }
 
-        // Update Enabled state, mark settings and sort specs dirty
+        // UpdateState Enabled state, mark settings and sort specs dirty
         if (!(table->Flags & ImGuiTableFlags_Hideable) || (column->Flags & ImGuiTableColumnFlags_NoHide))
             column->IsUserEnabledNextFrame = true;
         if (column->IsUserEnabled != column->IsUserEnabledNextFrame)
@@ -1032,7 +1032,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
         if (column->IsSkipItems)
             IM_ASSERT(!is_visible);
 
-        // Update status flags
+        // UpdateState status flags
         column->Flags |= ImGuiTableColumnFlags_IsEnabled;
         if (is_visible)
             column->Flags |= ImGuiTableColumnFlags_IsVisible;
@@ -1284,7 +1284,7 @@ void    ImGui::EndTable()
         TableMergeDrawChannels(table);
     splitter->Merge(inner_window->DrawList);
 
-    // Update ColumnsAutoFitWidth to get us ahead for host using our size to auto-resize without waiting for next BeginTable()
+    // UpdateState ColumnsAutoFitWidth to get us ahead for host using our size to auto-resize without waiting for next BeginTable()
     float auto_fit_width_for_fixed = 0.0f;
     float auto_fit_width_for_stretched = 0.0f;
     float auto_fit_width_for_stretched_min = 0.0f;
@@ -1303,7 +1303,7 @@ void    ImGui::EndTable()
     const float width_spacings = (table->OuterPaddingX * 2.0f) + (table->CellSpacingX1 + table->CellSpacingX2) * (table->ColumnsEnabledCount - 1);
     table->ColumnsAutoFitWidth = width_spacings + (table->CellPaddingX * 2.0f) * table->ColumnsEnabledCount + auto_fit_width_for_fixed + ImMax(auto_fit_width_for_stretched, auto_fit_width_for_stretched_min);
 
-    // Update scroll
+    // UpdateState scroll
     if ((table->Flags & ImGuiTableFlags_ScrollX) == 0 && inner_window != outer_window)
     {
         inner_window->Scroll.x = 0.0f;
@@ -1863,7 +1863,7 @@ void ImGui::TableEndRow(ImGuiTable* table)
             column->ClipRect.Min.y = table->Bg2ClipRectForDrawCmd.Min.y;
         }
 
-        // Update cliprect ahead of TableBeginCell() so clipper can access to new ClipRect->Min.y
+        // UpdateState cliprect ahead of TableBeginCell() so clipper can access to new ClipRect->Min.y
         SetWindowClipRectBeforeSetChannel(window, table->Columns[0].ClipRect);
         table->DrawSplitter->SetCurrentChannel(window->DrawList, table->Columns[0].DrawChannelCurrent);
     }
