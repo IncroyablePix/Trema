@@ -6,38 +6,36 @@
 #include <algorithm>
 #include "StyleApplier.h"
 #include "../Utils/StringExtensions.h"
+#include "../Activities/Activity.h"
 
 namespace Trema::View
 {
 
     void StyleApplier::ApplyStylesToWindow(const std::unordered_map<std::string, std::shared_ptr<SymbolTable>> &vals,
-                                           const std::shared_ptr<Window>& window)
+                                           Activity *activity)
     {
         for(const auto& [elementName, symbolTable] : vals)
         {
             if(elementName == "*") // Global
             {
-                SetGlobalStyles(symbolTable, window);
+                SetGlobalStyles(symbolTable, activity);
             }
             else if(elementName[0] == '#') // Id
             {
                 auto id = elementName.substr(1);
-                auto element = window->GetElementById<GuiElement>(id);
+                auto element = activity->GetElementById<GuiElement>(id);
                 SetStyleForElement(element, symbolTable);
             }
         }
-
-        if(window)
-            window->ApplyStyle();
     }
 
-    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, const std::shared_ptr<Window> &window)
+    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, Activity* activity)
     {
-        if(!window)
+        if(!activity)
             return;
 
-        SetStyle(window->Style, symbolTable);
-        window->ApplyStyle();
+        SetStyle(activity->Style, symbolTable);
+        activity->ApplyStyle();
     }
 
     void StyleApplier::SetStyleForElement(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable)

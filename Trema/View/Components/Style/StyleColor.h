@@ -16,6 +16,8 @@ namespace Trema::View
         bool m_hasColor {false};
 
     public:
+        StyleColor();
+        StyleColor(ImVec4 color);
         void SetColor(int color);
         void SetColor(unsigned int color);
         void SetColor(const ImVec4 &color);

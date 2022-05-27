@@ -5,23 +5,26 @@
 #include "Window.h"
 
 #include <memory>
-#include "../ImGUI/imgui_impl_vulkan.h"
 #include "../Utils/FileSplits.h"
-
 #ifdef WIN32
-#include "windows.h"
+#include "Windows.h"
+#endif
 #include "Fonts/FontsRepository.h"
 #include "Vulkan/VulkanImage.h"
+#include "../ImGUI/Extensions/ImPlot/implot.h"
+#include "../Parser/ViewParser.h"
+#include "../Activities/ThreadSafeStateManager.h"
 
-#endif
 
 namespace Trema::View
 {
-    Window::Window(const WindowInfo &info) :
+    Window::Window(const WindowInfo &info, std::unique_ptr<ViewParser> viewParser) :
             m_height(info.Height),
             m_width(info.Width),
             m_standardFont(nullptr),
-            m_opened(false)
+            m_opened(false),
+            m_viewParser(std::move(viewParser)),
+            m_stateManager(std::make_unique<ThreadSafeStateManager>())
     {
 #ifdef WIN32
         SetConsoleOutputCP(65001); // UTF-8
@@ -29,23 +32,12 @@ namespace Trema::View
 #endif
     }
 
-    void Window::SetLayout(std::shared_ptr<Layout> layout)
-    {
-        m_layout = std::move(layout);
-    }
-
-    void Window::SetTopMenu(std::shared_ptr<TopMenu> topMenu)
-    {
-        m_menu = std::move(topMenu);
-    }
-
     void Window::SetDefaultFont(const std::string &name)
     {
-        ImGuiIO& io = ImGui::GetIO();
-
         if(!FontsRepository::GetInstance()->Exists(name))
             m_standardFont = nullptr;
 
+        m_standardFontName = name;
         m_standardFont = (*FontsRepository::GetInstance())[name].Font;
     }
 
@@ -57,7 +49,8 @@ namespace Trema::View
     int Window::Run()
     {
         m_opened = true;
-        Build();
+
+        m_stateManager->Update();
         UploadFonts();
         while(IsOpened())
         {
@@ -74,79 +67,43 @@ namespace Trema::View
 
     void Window::Build()
     {
-        ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->Build();
-        // io.Fonts->GetTexDataAsRGBA32();
+        BuildFontAtlas();
     }
 
-    void Window::ApplyStyle()
+    void Window::LoadView(const std::string &path)
     {
-        ImGuiStyle *style = &ImGui::GetStyle();
+        if(!m_stateManager->Empty())
+        {
+            m_viewParser->LoadView(path, this, m_stateManager->Top().get());
+            // m_stateManager->Top()->OnActivityStart();
+        }
+    }
 
-        style->WindowPadding = Style.GetWindowPadding();
-        style->FramePadding = Style.GetFramePadding();
-        style->WindowRounding = Style.GetWindowRounding();
-        style->FrameRounding = Style.GetFrameRounding();
+    void Window::StartActivityForResult(std::unique_ptr<Activity> activity)
+    {
+        m_stateManager->PushPending(std::move(activity));
+    }
 
-        //--- Colors
-        if(Style.TextColor().HasColor())
-            style->Colors[ImGuiCol_Text] = Style.TextColor().GetColor();
+    void Window::BuildFontAtlas()
+    {
+        ImGuiIO& io = ImGui::GetIO();
 
-        if(Style.TextDisabledColor().HasColor())
-            style->Colors[ImGuiCol_TextDisabled] = Style.TextDisabledColor().GetColor();
+        io.Fonts->Build();
 
-        if(Style.WindowColor().HasColor())
-            style->Colors[ImGuiCol_WindowBg] = Style.WindowColor().GetColor();
+        FontsRepository::GetInstance()->ReloadFonts();
+        if(!m_standardFontName.empty())
+        {
+            m_standardFont = (*FontsRepository::GetInstance())[m_standardFontName].Font;
+        }
 
-        if(Style.WidgetBackgroundColor().HasColor())
-            style->Colors[ImGuiCol_FrameBg] = Style.WidgetBackgroundColor().GetColor();
-
-        if(Style.WidgetBackgroundColorHover().HasColor())
-            style->Colors[ImGuiCol_FrameBgHovered] = Style.WidgetBackgroundColorHover().GetColor();
-
-        if(Style.WidgetBackgroundColorActive().HasColor())
-            style->Colors[ImGuiCol_FrameBgActive] = Style.WidgetBackgroundColorActive().GetColor();
-
-        if(Style.ButtonColor().HasColor())
-            style->Colors[ImGuiCol_Button] = Style.ButtonColor().GetColor();
-
-        if(Style.ButtonColorHover().HasColor())
-            style->Colors[ImGuiCol_ButtonHovered] = Style.ButtonColorHover().GetColor();
-
-        if(Style.ButtonColorActive().HasColor())
-            style->Colors[ImGuiCol_ButtonActive] = Style.ButtonColorActive().GetColor();
-
-        if(Style.MenuBackgroundColor().HasColor())
-            style->Colors[ImGuiCol_MenuBarBg] = Style.MenuBackgroundColor().GetColor();
-
-        if(Style.HeaderColor().HasColor())
-            style->Colors[ImGuiCol_TitleBg] = Style.HeaderColor().GetColor();
-
-        if(Style.HeaderActiveColor().HasColor())
-            style->Colors[ImGuiCol_TitleBgActive] = Style.HeaderActiveColor().GetColor();
-
-        if(Style.TableHeaderColor().HasColor())
-            style->Colors[ImGuiCol_TableHeaderBg] = Style.TableHeaderColor().GetColor();
-
-        if(Style.PopupBackgroundColor().HasColor())
-            style->Colors[ImGuiCol_PopupBg] = Style.PopupBackgroundColor().GetColor();
-
-        if(Style.SliderGrabColor().HasColor())
-            style->Colors[ImGuiCol_SliderGrab] = Style.SliderGrabColor().GetColor();
-
-        if(Style.SliderGrabActiveColor().HasColor())
-            style->Colors[ImGuiCol_SliderGrabActive] = Style.SliderGrabActiveColor().GetColor();
-
-        if(!Style.GetFont().empty())
-            SetDefaultFont(Style.GetFont());
-
-
+        UploadFonts();
     }
 
     void Window::InitializeDearImGUI() const
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
+        ImPlot::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void) io;
         io.Fonts->AddFontDefault();
 
@@ -163,10 +120,21 @@ namespace Trema::View
         m_height = height;
     }
 
+    void Window::ConsumePostRenderRoutines()
+    {
+        while(!m_postRenderRoutines.empty())
+        {
+            m_postRenderRoutines.front()();
+            m_postRenderRoutines.pop_front();
+        }
+    }
+
     void Window::Update()
     {
+        m_stateManager->Update();
         PollEvent();
         Render();
+        ConsumePostRenderRoutines();
     }
 
     void Window::InitializeVulkan(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy)
@@ -197,19 +165,24 @@ namespace Trema::View
             ImGui::PushFont(m_standardFont);
 
         //--- ImGui code
-        if(m_menu)
+        if(!m_stateManager->Empty())
         {
-            m_menu->Show();
-        }
+            auto menu = m_stateManager->GetTopMenu();
+            if(menu)
+            {
+                menu->Show();
+            }
 
-        if(m_layout)
-        {
-            m_layout->SetActiveMenuBar(m_menu != nullptr);
-            m_layout->Show();
+            if(auto layout = m_stateManager->GetLayout())
+            {
+                layout->SetActiveMenuBar(menu != nullptr);
+                layout->Show();
+            }
         }
 
         for(const auto& [name, popup] : m_popupComponents)
             popup->Show();
+
         //---
 
         if(m_standardFont)

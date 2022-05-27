@@ -14,16 +14,20 @@
 #include "WindowInfo.h"
 #include "Vulkan/VulkanRenderer.h"
 #include "IRenderImage.h"
+#include "../Style/Parser/IStyleParser.h"
+#include "../Activities/ActivityBuilder.h"
+#include "../Activities/IStateManager.h"
 #include <unordered_map>
 #include <vector>
 
 namespace Trema::View
 {
+    class Activity;
+    class ViewParser;
     class Window : public std::enable_shared_from_this<Window>
     {
     public:
-        Window(const WindowInfo &info);
-        Window operator=(const Window&) = delete;
+        Window(const WindowInfo &info, std::unique_ptr<ViewParser> viewParser);
         Window(const VulkanRenderer&) = delete;
 
         virtual void PollEvent() = 0;
@@ -43,36 +47,17 @@ namespace Trema::View
         void Build();
         void Update();
         void UploadFonts();
-        void ApplyStyle();
         void Resize(int width, int height);
         void Render();
         void Close();
         bool IsOpened() const;
         void InitializeVulkan(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy);
-
-        void SetLayout(std::shared_ptr<Layout> layout);
-        void SetTopMenu(std::shared_ptr<TopMenu> topMenu);
+        void LoadView(const std::string &path);
+        void StartActivityForResult(std::unique_ptr<Activity> activity);
 
         inline bool IsFullscreen() const { return m_fullscreen; }
+
         inline bool IsTitleBarEnabled() const { return m_titleBar; }
-
-        inline void AddElementId(const std::string& id, std::shared_ptr<GuiElement> element)
-        {
-            m_elementsById[id] = std::move(element);
-        }
-
-        template<class T> std::shared_ptr<T> GetElementById(const std::string& id)
-        {
-            if(m_elementsById.find(id) == m_elementsById.end())
-                return nullptr;
-
-            auto element = m_elementsById[id];
-
-            if(!dynamic_cast<T*>(element.get()))
-                return nullptr;
-
-            return std::dynamic_pointer_cast<T>(element);
-        }
 
         template<class T> void AddPopupComponent(std::shared_ptr<T> component)
         {
@@ -93,26 +78,30 @@ namespace Trema::View
             return std::dynamic_pointer_cast<T>(element);
         }
 
-        ElementStyle Style;
-
     protected:
-        std::unordered_map<std::string, std::shared_ptr<GuiElement>> m_elementsById;
-        std::shared_ptr<Layout> m_layout;
-        std::shared_ptr<TopMenu> m_menu;
         std::shared_ptr<IWindowBackendStrategy> m_windowBackendStrategy;
+        std::unique_ptr<ViewParser> m_viewParser;
 
         std::string m_title { "Trema" };
         int m_width;
         int m_height;
 
         ImFont* m_standardFont;
+        std::string m_standardFontName { "" };
         std::shared_ptr<VulkanRenderer> m_renderer;
         bool m_opened;
         bool m_fullscreen { false };
         bool m_titleBar { false };
 
+        std::unique_ptr<IStateManager> m_stateManager;
+
         std::unordered_map<std::string, std::shared_ptr<IPopupComponent>> m_popupComponents;
         std::unordered_map<std::string, std::shared_ptr<IRenderImage>> m_renderImages;
+        std::deque<std::function<void(void)>> m_postRenderRoutines;
+
+    private:
+        void BuildFontAtlas();
+        void ConsumePostRenderRoutines();
     };
 }
 

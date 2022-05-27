@@ -17,31 +17,25 @@ namespace Trema::View
 
     }
 
-    void TinyXMLViewParser::LoadView(const std::string &path, std::shared_ptr<Window> window)
+    void TinyXMLViewParser::LoadView(const std::string &path, Window* window, Activity* activity)
     {
         TiXmlDocument doc(path.c_str());
         auto error = doc.LoadFile();
         if(error != TIXML_SUCCESS)
         {
-            // TODO : Throw exception
+
         }
-        ParseDocument(doc, window);
-        ApplyStyles(window);
+
+        ParseDocument(doc, window, activity);
+        ApplyStyles(window, activity);
     }
 
-    void TinyXMLViewParser::SetupWindowFromFile(const std::wstring &path, std::shared_ptr<Window> window)
-    {
-        // TiXmlDocument doc(path.c_str());
-        // doc.LoadFile();
-        // ParseDocument(doc, window);
-    }
-
-    void TinyXMLViewParser::SetupWindowFromString(const std::string &code, std::shared_ptr<Window> window)
+    void TinyXMLViewParser::SetupWindowFromString(const std::string &code, Window* window, Activity* activity)
     {
 
     }
 
-    void TinyXMLViewParser::ParseDocument(TiXmlDocument &document, std::shared_ptr<Window> window)
+    void TinyXMLViewParser::ParseDocument(TiXmlDocument &document, Window* window, Activity* activity)
     {
         TiXmlHandle hDoc(&document);
         TiXmlElement* pElement;
@@ -56,10 +50,10 @@ namespace Trema::View
             throw ParsingException(ss.str().c_str());
         }
 
-        ParseRoots(pElement, window);
+        ParseRoots(pElement, window, activity);
     }
 
-    void TinyXMLViewParser::ParseRoots(TiXmlElement *element, const std::shared_ptr<Window> &window)
+    void TinyXMLViewParser::ParseRoots(TiXmlElement *element, Window* window, Activity* activity)
     {
         for (TiXmlElement *child = element->FirstChildElement();
              child != nullptr; child = child->NextSiblingElement())
@@ -71,12 +65,12 @@ namespace Trema::View
             }
             else if(val == std::string("Body"))
             {
-                ParseBody(child, window);
+                ParseBody(child, window, activity);
             }
         }
     }
 
-    void TinyXMLViewParser::ParseHead(TiXmlElement *head, const std::shared_ptr<Window> &window)
+    void TinyXMLViewParser::ParseHead(TiXmlElement *head, Window* window)
     {
         for (TiXmlElement *child = head->FirstChildElement();
              child != nullptr; child = child->NextSiblingElement())
@@ -92,13 +86,13 @@ namespace Trema::View
         }
     }
 
-    void TinyXMLViewParser::ParseBody(TiXmlElement *body, const std::shared_ptr<Window> &window)
+    void TinyXMLViewParser::ParseBody(TiXmlElement *body, Window* window, Activity* activity)
     {
         auto* child = body->FirstChildElement();
-        ParseElement(child, nullptr, window);
+        ParseElement(child, nullptr, window, activity);
     }
 
-    void TinyXMLViewParser::ParseElement(TiXmlElement *element, const std::shared_ptr<GuiElement>& container, const std::shared_ptr<Window>& window)
+    void TinyXMLViewParser::ParseElement(TiXmlElement *element, const std::shared_ptr<GuiElement>& container, Window* window, Activity* activity)
     {
         auto elementName = element->Value();
         auto elementContent = element->GetText();
@@ -108,27 +102,27 @@ namespace Trema::View
         for(TiXmlAttribute* attribute = element->FirstAttribute(); attribute != nullptr; attribute = attribute->Next())
             attributes[attribute->Name()] = attribute->Value();
 
-        newElement = CreateFromName(container, elementName, attributes, window, elementContent ? elementContent : std::string(""));
+        newElement = CreateFromName(container, elementName, attributes, window, activity, elementContent ? elementContent : std::string(""));
 
         //---
 
-        ParseChildren(element, newElement, window);
+        ParseChildren(element, newElement, window, activity);
         if(container == nullptr)
-            TryAddLayout(newElement, window); // Try add as layout
+            TryAddLayout(newElement, activity); // Try add as layout
         else if(IsType<Layout>(container))
-            TryAddToLayout(newElement, container, attributes, window); // Add container to layout
+            TryAddToLayout(newElement, container, attributes, activity); // Add container to layout
         else if(IsType<TopMenu>(newElement))
-            TryAddTopMenu(newElement, window);
+            TryAddTopMenu(newElement, activity);
         else
             TryAddAsChild(container, newElement, elementName); // Add to container
     }
 
-    void TinyXMLViewParser::ParseChildren(TiXmlElement *element, const std::shared_ptr<GuiElement> &container, const std::shared_ptr<Window> &window)
+    void TinyXMLViewParser::ParseChildren(TiXmlElement *element, const std::shared_ptr<GuiElement> &container, Window* window, Activity* activity)
     {
         for (TiXmlElement *child = element->FirstChildElement();
              child != nullptr; child = child->NextSiblingElement())
         {
-            ParseElement(child, container, window);
+            ParseElement(child, container, window, activity);
         }
     }
 }

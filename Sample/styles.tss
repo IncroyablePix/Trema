@@ -49,6 +49,10 @@ pink: 0xFF8BC4FF;
     frame-rounding: 4.0;
 }
 
+#horizontalStackSpace {
+    orientation: "horizontal";
+}
+
 #winForms {
     header: false;
     text-color: pink;

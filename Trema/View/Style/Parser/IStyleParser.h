@@ -8,11 +8,10 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
-#include "../../Windowing/Window.h"
 #include "../SymbolTable.h"
 #include "../CompilationMistake.h"
 #include <deque>
-
+#include <vector>
 
 namespace Trema::View
 {
@@ -22,6 +21,8 @@ namespace Trema::View
         virtual ~IStyleParser() = default;
         virtual void ParseFromFile(const std::string& path, std::vector<CompilationMistake>& mistakes) = 0;
         virtual void ParseFromCode(const std::string& code, std::vector<CompilationMistake>& mistakes) = 0;
+
+        inline void ClearVariables() { m_variables.clear(); }
         inline const std::unordered_map<std::string, std::shared_ptr<SymbolTable>>& GetVariables() { return m_variables; };
 
     protected:

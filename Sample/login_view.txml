@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<App>
+    <Head>
+        <Font src="./JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
+        <Style src="./styles.tss" />
+        <Title>Trema sample - Login</Title>
+        <WindowData fullscreen="true" />
+    </Head>
+    <Body>
+        <StackSpace id="horizontalStackSpace">
+            <WindowContainer>
+                <TextInput id="mailAddress">Mail address: </TextInput>
+                <TextInput id="password">Password: </TextInput>
+                <Button id="loginButton">Login</Button>
+            </WindowContainer>
+            <WindowContainer>
+                <Image src="./padlock.png"/>
+            </WindowContainer>
+        </StackSpace>
+    </Body>
+</App>

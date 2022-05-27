@@ -12,119 +12,194 @@
 #include <View/Style/Parser/StackedStyleParser.h>
 #include <View/Parser/TinyXML/TinyXMLViewParser.h>
 #include <View/Components/Windows/FileDialog.h>
-#include "View/Components/Widgets/Pure/Text.h"
+#include <View/Components/Widgets/Pure/Text.h>
 #include <View/Windowing/GLFW/GLFWWindow.h>
+#include <View/Activities/Activity.h>
 
 using namespace Trema::View;
 
-int main(int argc, char** argv)
+class MainActivity : public Activity
 {
-    auto info = WindowInfo { .Width = 1280, .Height = 720 };
-    auto window = GLFWWindow::CreateGLFWWindow(info);
+public:
+    MainActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) : Activity(std::move(intent), std::move(window), requestCode)
     {
-        auto stylesParser = std::make_unique<StackedStyleParser>();
-        auto parser = TinyXMLViewParser(std::move(stylesParser));
-        parser.LoadView("./people_view.txml", window);
+
     }
 
-    window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
+    void OnCreateView() override
+    {
+        LoadView("./people_view.txml");
+    }
 
-    // Fields
-    auto count = 0;
-    auto firstNameField = window->GetElementById<TextInput>("firstName");
-    auto lastNameField = window->GetElementById<TextInput>("lastName");
-    auto heightField = window->GetElementById<SliderInt>("height");
-    auto sexField = window->GetElementById<Radio>("sex");
-    auto favouriteColourField = window->GetElementById<ColorPicker>("favouriteColour");
-    auto diplomaField = window->GetElementById<Combo>("diploma");
+    void OnActivityStart() override
+    {
+        // Fields
+        m_firstNameField = GetElementById<TextInput>("firstName");
+        m_lastNameField = GetElementById<TextInput>("lastName");
+        m_heightField = GetElementById<SliderInt>("height");
+        m_sexField = GetElementById<Radio>("sex");
+        m_favouriteColourField = GetElementById<ColorPicker>("favouriteColour");
+        m_diplomaField = GetElementById<Combo>("diploma");
+
+        // Buttons & Table
+        m_peopleGrid = GetElementById<Table>("peopleGrid");
+        m_addPersonButton = GetElementById<Button>("addPerson");
+        m_clearButton = GetElementById<Button>("clear");
+
+        // Menu
+        m_quitOption = GetElementById<MenuOption>("quit");
+        m_saveOption = GetElementById<MenuOption>("save");
+
+        // Data
+        std::stringstream data;
+        data << "First name;Last name;Height;Sex;Favourite colour;Diploma\n";
+
+        m_clearButton->AddOnClickListener("Quit", [this](const Button& b)
+        {
+            Clear();
+        });
+
+        // Listener
+        m_addPersonButton->AddOnClickListener("Add", [this](const Trema::View::Button &)
+        {
+            auto newId = ++m_count;
+            std::stringstream ss;
+            ss << newId;
+
+            auto firstName = m_firstNameField->GetText();
+            auto lastName = m_lastNameField->GetText();
+            auto height = m_heightField->GetValue();
+            auto sex = m_sexField->GetOption();
+            auto favouriteColour = m_favouriteColourField->GetColorInt() | 0xFF; // Full blast alpha!
+            auto diploma = m_diplomaField->GetOption();
+
+            auto row = TableRow::CreateTableRow(m_peopleGrid, ss.str());
+            row->AddChild(Text::CreateText(row, firstName, true));
+            row->AddChild(Text::CreateText(row, lastName, true));
+
+            ss.str("");
+            ss << height << " cm";
+            row->AddChild(Text::CreateText(row, ss.str(), true));
+            row->AddChild(Text::CreateText(row, sex, true));
+
+            auto colorText = Text::CreateText(row, "=====", true);
+            colorText->Style.TextColor().SetColor(favouriteColour);
+            row->AddChild(colorText);
+
+            row->AddChild(Text::CreateText(row, diploma, true));
+
+            m_data << firstName << ";"
+                 << lastName << ";"
+                 << std::dec << height << " cm;"
+                 << sex << ";"
+                 << std::hex << favouriteColour << ";"
+                 << diploma << "\n";
+
+            m_peopleGrid->AddValue(row);
+            Clear();
+        });
+
+        m_quitOption->AddOnClickListener("Quit", [this](const Trema::View::MenuOption &)
+        {
+            QuitApplication();
+        });
+
+        m_saveOption->AddOnClickListener("Save", [this, &data](const Trema::View::MenuOption &)
+        {
+            GetComponent<FileDialog>()->ShowFileDialog("./", ".csv", [&data](const std::string &path)
+            {
+                std::stringstream filePath;
+                filePath << path;
+
+                if(path.find(".csv", path.length() - 5) == std::string::npos)
+                    filePath << ".csv";
+
+                std::ofstream output(filePath.str());
+                output << data.str();
+            }, Trema::View::SaveFile);
+        });
+    }
+
+private:
+    int m_count = 0;
+    std::shared_ptr<TextInput> m_firstNameField;
+    std::shared_ptr<TextInput> m_lastNameField;
+    std::shared_ptr<SliderInt> m_heightField;
+    std::shared_ptr<Radio> m_sexField;
+    std::shared_ptr<ColorPicker> m_favouriteColourField;
+    std::shared_ptr<Combo> m_diplomaField;
 
     // Buttons & Table
-    auto peopleGrid = window->GetElementById<Table>("peopleGrid");
-    auto addPersonButton = window->GetElementById<Button>("addPerson");
-    auto clearButton = window->GetElementById<Button>("clear");
+    std::shared_ptr<Table> m_peopleGrid;
+    std::shared_ptr<Button> m_addPersonButton;
+    std::shared_ptr<Button> m_clearButton;
 
     // Menu
-    auto quitOption = window->GetElementById<MenuOption>("quit");
-    auto saveOption = window->GetElementById<MenuOption>("save");
+    std::shared_ptr<MenuOption> m_quitOption;
+    std::shared_ptr<MenuOption> m_saveOption;
 
     // Data
-    std::stringstream data;
-    data << "First name;Last name;Height;Sex;Favourite colour;Diploma\n";
+    std::stringstream m_data;
 
-    auto clear = [&lastNameField, &firstNameField, &heightField, &sexField, &diplomaField]()
-            {
-                firstNameField->SetText("");
-                lastNameField->SetText("");
-                heightField->SetValue(50);
-                sexField->SetOption(0);
-                diplomaField->SetOption("");
-            };
-
-    clearButton->AddOnClickListener("Quit", [&clear](const Button& b)
+    void Clear()
     {
-        clear();
-    });
+        m_firstNameField->SetText("");
+        m_lastNameField->SetText("");
+        m_heightField->SetValue(50);
+        m_sexField->SetOption(0);
+        m_diplomaField->SetOption("");
+    }
+};
 
-    // Listener
-    addPersonButton->AddOnClickListener("Add", [&count, &lastNameField, &firstNameField, &heightField, &sexField, &favouriteColourField, &diplomaField, &peopleGrid, &data, &clear](const Trema::View::Button &)
+template<>
+struct Trema::View::ActivityBuilder<MainActivity>
+{
+    static std::unique_ptr<MainActivity> CreateActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1)
     {
-        auto newId = ++count;
-        std::stringstream ss;
-        ss << newId;
+        return std::move(std::make_unique<MainActivity>(std::move(intent), std::move(window), requestCode));
+    }
+};
 
-        auto firstName = firstNameField->GetText();
-        auto lastName = lastNameField->GetText();
-        auto height = heightField->GetValue();
-        auto sex = sexField->GetOption();
-        auto favouriteColour = favouriteColourField->GetColorInt() | 0xFF; // Full blast alpha!
-        auto diploma = diplomaField->GetOption();
-
-        auto row = TableRow::CreateTableRow(peopleGrid, ss.str());
-        row->AddChild(Text::CreateText(row, firstName, true));
-        row->AddChild(Text::CreateText(row, lastName, true));
-
-        ss.str("");
-        ss << height << " cm";
-        row->AddChild(Text::CreateText(row, ss.str(), true));
-        row->AddChild(Text::CreateText(row, sex, true));
-
-        auto colorText = Text::CreateText(row, "=====", true);
-        colorText->Style.TextColor().SetColor(favouriteColour);
-        row->AddChild(colorText);
-
-        row->AddChild(Text::CreateText(row, diploma, true));
-
-        data << firstName << ";"
-            << lastName << ";"
-            << std::dec << height << " cm;"
-            << sex << ";"
-            << std::hex << favouriteColour << ";"
-            << diploma << "\n";
-
-        peopleGrid->AddValue(row);
-        clear();
-    });
-
-    quitOption->AddOnClickListener("Quit", [&window](const Trema::View::MenuOption &)
+class LoginActivity : public Activity
+{
+public:
+    LoginActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) : Activity(std::move(intent), std::move(window), requestCode)
     {
-        window->Close();
-    });
 
-    saveOption->AddOnClickListener("Save", [&window, &data](const Trema::View::MenuOption &)
+    }
+
+    void OnCreateView() override
     {
-        window->GetComponent<FileDialog>()->ShowFileDialog("./", ".csv", [&data](const std::string &path)
+        LoadView("./login_view.txml");
+    }
+
+    void OnActivityStart() override
+    {
+        m_loginButton = GetElementById<Button>("loginButton");
+        m_loginButton->AddOnClickListener("Login", [this](const Button &)
         {
-            std::stringstream filePath;
-            filePath << path;
+            StartActivityForResult<MainActivity>(-1);
+        });
+    }
 
-            if(path.find(".csv", path.length() - 5) == std::string::npos)
-                filePath << ".csv";
+private:
+    std::shared_ptr<Button> m_loginButton;
+};
 
-            std::ofstream output(filePath.str());
-            output << data.str();
-        }, Trema::View::SaveFile);
-    });
+template<>
+struct Trema::View::ActivityBuilder<LoginActivity>
+{
+    static std::unique_ptr<LoginActivity> CreateActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1)
+    {
+        return std::move(std::make_unique<LoginActivity>(std::move(intent), std::move(window), requestCode));
+    }
+};
 
+int main(int argc, char** argv)
+{
+    auto window = GLFWWindow::CreateGLFWWindow();
+    window->StartActivityForResult(ActivityBuilder<LoginActivity>::CreateActivity(Intent{}, window));
+    window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
     window->Run();
 
     return EXIT_SUCCESS;

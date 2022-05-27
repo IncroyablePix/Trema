@@ -53,6 +53,7 @@ namespace Trema::View
                 ImGui::DockBuilderFinish(dockspaceId);
             }
         }
+
         End();
     }
 
@@ -120,8 +121,7 @@ namespace Trema::View
     }
 
     void DockSpace::AddContainer(std::shared_ptr<Container> container,
-                                 std::unordered_map<std::string, std::string> &attributes,
-                                 const std::shared_ptr<Window> &window)
+                                 std::unordered_map<std::string, std::string> &attributes)
     {
         if(attributes.find("dockSlot") == attributes.end())
             throw LayoutException("Missing attribute \"dockSlot\" for DockSpace child");

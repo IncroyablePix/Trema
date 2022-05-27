@@ -18,6 +18,7 @@ namespace Trema::View
         ImFontConfig *FontConfig;
         ImWchar *GlyphRanges;
         ImFont* Font;
+        unsigned int Counter;
 
         void Upload();
     };
@@ -35,7 +36,8 @@ namespace Trema::View
         explicit FontsRepository(const FontsRepository&) = delete;
         static FontsRepository* GetInstance();
 
-        void AddFont(std::string name, std::string path, float size, ImFontConfig* fontConfig);
+        bool AddFont(std::string name, std::string path, float size, ImFontConfig* fontConfig);
+        bool RemoveFont(const std::string& name);
 
         void ReloadFonts();
         FontData& operator[](const std::string& name);

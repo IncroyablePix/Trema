@@ -20,24 +20,43 @@ namespace Trema::View
         return Instance;
     }
 
-    void FontsRepository::AddFont(std::string name, std::string path, float size, ImFontConfig* fontConfig)
+    bool FontsRepository::AddFont(std::string name, std::string path, float size, ImFontConfig* fontConfig)
     {
-        if(m_fonts.find(name) == m_fonts.end())
+        auto fontId = name.empty() ? FileSplit(path).FileWithoutExtension : std::move(name);
+
+        if(m_fonts.find(fontId) == m_fonts.end())
         {
             FontData fontData = {.Path = std::move(
                     path), .Size = size, .FontConfig = fontConfig };
 
             fontData.Upload();
+            m_fonts[std::move(fontId)] = fontData;
 
-            if(name.empty())
-            {
-                m_fonts[FileSplit(fontData.Path).FileWithoutExtension] = fontData;
-            }
-            else
-            {
-                m_fonts[std::move(name)] = fontData;
-            }
+            return true;
         }
+        else
+        {
+            m_fonts[fontId].Counter ++;
+        }
+
+        return false;
+    }
+
+    bool FontsRepository::RemoveFont(const std::string& name)
+    {
+        if(m_fonts.find(name) != m_fonts.end())
+        {
+            auto& font = m_fonts.at(name);
+
+            if(--font.Counter == 0)
+            {
+                ImGuiIO& io = ImGui::GetIO();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     void FontsRepository::ReloadFonts()
@@ -50,7 +69,7 @@ namespace Trema::View
 
     FontData &FontsRepository::operator[](const std::string& name)
     {
-        return m_fonts[name];
+        return m_fonts.at(name);
     }
 
     bool FontsRepository::Exists(const std::string &name)

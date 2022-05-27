@@ -85,9 +85,8 @@ namespace Trema::View
         m_colors = 0;
 
         if(m_font)
-        {
             ImGui::PopFont();
-        }
+
 
         if(!m_isWindow)
         {

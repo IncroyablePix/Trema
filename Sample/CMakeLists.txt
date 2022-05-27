@@ -54,17 +54,12 @@ target_include_directories(${PROJECT_NAME}
 message("Linking Trema...")
 target_link_libraries(${PROJECT_NAME} PUBLIC Trema)
 
-
 ### Windows ###
 if(OS STREQUAL "NT")
     message("Linking Windows specifics...")
     target_link_libraries(${PROJECT_NAME} PUBLIC -lmingw32) # -mwindows
     add_definitions(-DSDL_MAIN_HANDLED)
 endif()
-
-### cURL ###
-message("Linking cURL")
-target_link_libraries(${PROJECT_NAME} PUBLIC )
 
 ### MinGW ###
 message("Linking MINGW stuff")

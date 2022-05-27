@@ -10,15 +10,13 @@
 
 namespace Trema::View
 {
-    class Window;
     class Layout : public GuiElement
     {
     public:
         Layout(std::string name);
         ~Layout() override = default;
         virtual void AddContainer(std::shared_ptr<Container> container,
-                          std::unordered_map<std::string, std::string>& attributes,
-                          const std::shared_ptr<Window>& window) = 0;
+                          std::unordered_map<std::string, std::string>& attributes) = 0;
         inline void SetActiveMenuBar(bool toggle) { m_hasMenuBar = toggle; }
 
     protected:

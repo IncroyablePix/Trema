@@ -6,6 +6,17 @@
 
 namespace Trema::View
 {
+    StyleColor::StyleColor() :
+            m_color({ 1.0f, 1.0f, 1.0f, 1.0f })
+    {
+
+    }
+
+    StyleColor::StyleColor(ImVec4 color) :
+            m_color(color)
+    {
+
+    }
     void StyleColor::SetColor(int color)
     {
         SetColor(*((unsigned int*) &color));

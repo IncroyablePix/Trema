@@ -18,9 +18,14 @@ namespace Trema::View
     {
         Begin();
 
+        ImGui::Columns((int)m_elements.size(), NameId());
         for(const auto& container : m_elements)
-            for(const auto& element : container->GetChildren())
+        {
+            for (const auto &element: container->GetChildren())
                 element->Show();
+
+            ImGui::NextColumn();
+        }
 
         End();
     }
@@ -57,8 +62,7 @@ namespace Trema::View
     }
 
     void StackSpace::AddContainer(std::shared_ptr<Container> container,
-                                  std::unordered_map<std::string, std::string> &attributes,
-                                  const std::shared_ptr<Window> &window)
+                                  std::unordered_map<std::string, std::string> &attributes)
     {
         if(container)
             m_elements.push_back(std::move(container));

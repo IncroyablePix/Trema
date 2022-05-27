@@ -7,11 +7,13 @@
 #include "GLFWBackendStrategy.h"
 #include "../WindowInitializationException.h"
 #include "../Fonts/FontsRepository.h"
+#include "../../Style/Parser/StackedStyleParser.h"
+#include "../../Parser/TinyXML/TinyXMLViewParser.h"
 
 namespace Trema::View
 {
     GLFWWindow::GLFWWindow(const WindowInfo &info) :
-        Window(info),
+        Window(info, std::move(std::make_unique<TinyXMLViewParser>(std::move(std::make_unique<StackedStyleParser>())))),
         m_window(nullptr)
     {
         CreateWindow();
@@ -29,7 +31,7 @@ namespace Trema::View
         InitializeVulkan(std::make_shared<GLFWBackendStrategy>(m_window));
         m_renderer->Init();
         FontsRepository::GetInstance()->ReloadFonts();
-        m_renderer->LoadFonts();
+        UploadFonts();
     }
 
     void GLFWWindow::PollEvent()

@@ -8,6 +8,7 @@
 #include "../WindowInitializationException.h"
 #include "IWindowBackendStrategy.h"
 #include "Vulkan.h"
+#include "../../ImGUI/Extensions/ImPlot/implot.h"
 
 #undef IMGUI_VULKAN_DEBUG_REPORT
 
@@ -71,6 +72,7 @@ namespace Trema::View
         m_resourceFreeQueue.clear();
 
         ImGui_ImplVulkan_Shutdown();
+        ImPlot::DestroyContext();
         ImGui::DestroyContext();
         CleanupVulkanWindow();
         CleanupVulkan();

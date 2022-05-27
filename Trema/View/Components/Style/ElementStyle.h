@@ -21,7 +21,7 @@ namespace Trema::View
     class ElementStyle
     {
     private:
-        float m_alpha = -1.f;            // Transparency
+        float m_alpha = 1.f;                // Transparency
         Orientation m_orientation = Column; // Orientation (radio buttons, ...)
 
         std::string m_width { "auto" };
@@ -32,25 +32,25 @@ namespace Trema::View
         std::string m_marginLeft { "0" };
         std::string m_marginRight { "0" };
 
-        StyleColor m_textColor;
-        StyleColor m_textColorDisabled;
-        StyleColor m_windowBackgroundColor;
-        StyleColor m_widgetBackgroundColor;
-        StyleColor m_widgetBackgroundColorHover;
-        StyleColor m_widgetBackgroundColorActive;
-        StyleColor m_buttonBackgroundColor;
-        StyleColor m_buttonBackgroundColorHover;
-        StyleColor m_buttonBackgroundColorActive;
-        StyleColor m_menuBackgroundColor;
-        StyleColor m_headerColor;
-        StyleColor m_headerColorActive;
-        StyleColor m_tableHeaderActive;
-        StyleColor m_popupBackgroundColor;
-        StyleColor m_sliderGrabColor;
-        StyleColor m_sliderGrabActiveColor;
+        StyleColor m_textColor { ImVec4(0.0f, 0.0f, 0.0f, 1.0f) };
+        StyleColor m_textColorDisabled { ImVec4(0.60f, 0.60f, 0.60f, 1.0f) };
+        StyleColor m_windowBackgroundColor { ImVec4(0.94f, 0.94f, 0.94f, 1.0f) };
+        StyleColor m_widgetBackgroundColor { ImVec4(1.0f, 1.0f, 1.0f, 1.0f) };
+        StyleColor m_widgetBackgroundColorHover { ImVec4(0.26f, 0.59f, 0.98f, 0.40f) };
+        StyleColor m_widgetBackgroundColorActive { ImVec4(0.26f, 0.59f, 0.98f, 0.67f) };
+        StyleColor m_buttonBackgroundColor { ImVec4(0.26f, 0.59f, 0.98f, 0.40f) };
+        StyleColor m_buttonBackgroundColorHover { ImVec4(0.26f, 0.59f, 0.98f, 1.00f) };
+        StyleColor m_buttonBackgroundColorActive { ImVec4(0.06f, 0.53f, 0.98f, 1.00f) };
+        StyleColor m_menuBackgroundColor { ImVec4(0.86f, 0.86f, 0.86f, 1.00f) };
+        StyleColor m_headerColor { ImVec4(0.26f, 0.59f, 0.98f, 0.31f) };
+        StyleColor m_headerColorActive { ImVec4(0.26f, 0.59f, 0.98f, 1.00f) };
+        StyleColor m_tableHeaderActive { ImVec4(0.78f, 0.87f, 0.98f, 1.00f) };
+        StyleColor m_popupBackgroundColor { ImVec4(1.00f, 1.00f, 1.00f, 0.98f) };
+        StyleColor m_sliderGrabColor { ImVec4(0.26f, 0.59f, 0.98f, 0.78f) };
+        StyleColor m_sliderGrabActiveColor { ImVec4(0.46f, 0.54f, 0.80f, 0.60f) };
 
-        ImVec2 m_windowPadding = {0.0f, 0.0f };
-        ImVec2 m_framePadding = { 0.0f, 0.0f };
+        ImVec2 m_windowPadding = {8.0f, 8.0f };
+        ImVec2 m_framePadding = { 4.0f, 3.0f };
 
         float m_frameRounding { 0.0f };
         float m_windowRounding { 0.0f };
