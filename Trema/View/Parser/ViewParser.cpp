@@ -50,7 +50,7 @@ namespace Trema::View
         applier.ApplyStylesToWindow(vals, activity);
     }
 
-    void ViewParser::HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, Window* window)
+    void ViewParser::HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, Window* window, Activity* activity)
     {
         auto name = attributes["name"];
 
@@ -111,6 +111,8 @@ namespace Trema::View
             if(attributes.find("titlebar") != attributes.end())
                 titleBar = StrToBool(attributes["titlebar"]);
 
+            activity->SetSize(width, height);
+            activity->ToggleFullscreen(fullscreen);
             window->SetWidth(width);
             window->SetHeight(height);
             window->ToggleWindowOptions(fullscreen, titleBar);

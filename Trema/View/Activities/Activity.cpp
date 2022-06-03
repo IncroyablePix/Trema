@@ -40,6 +40,11 @@ namespace Trema::View
 
     }
 
+    void Activity::OnActivityResume()
+    {
+
+    }
+
     std::string Activity::GetStringExtra(const std::string &name)
     {
         return m_intent.GetStringExtra(name);
@@ -175,4 +180,26 @@ namespace Trema::View
     {
         QuitActivity(m_requestCode, resultCode, std::move(intent));
     }
+
+    void Activity::ToggleFullscreen(bool fullscreen)
+    {
+        m_fullscreen = fullscreen;
+    }
+
+    void Activity::SetSize(int width, int height)
+    {
+        m_width = width;
+        m_height = height;
+    }
+
+    void Activity::Resume()
+    {
+        m_window->ToggleFullscreen(m_fullscreen);
+
+        if(m_width > 0 && m_height > 0)
+            m_window->SetSize(m_width, m_height);
+
+        OnActivityResume();
+    }
+
 }

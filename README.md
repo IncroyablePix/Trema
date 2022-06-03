@@ -1,4 +1,3 @@
-
 # Trema
 ImGUI Object Oriented wrapper with XML view descriptors, styling and async event processing.
 
@@ -454,19 +453,20 @@ Admits strings in two formats:
 ## Introduction
 Like Android, a view exists as an Activity. An activity has multiple methods that it can use and override.
 
-### OnCreateView
+### Overridables
+#### OnCreateView
 First method called when an activity is pushed. 
 This method lets you create your actual view either:
 - By calling LoadView, built-in method that takes a path to a .txml file.
 - By creating your widgets with plain C++ code. This method is good if you don't want any resource files.
 
-### OnActivityStart 
+#### OnActivityStart 
 Called right after the view was created and made accessible.
 
 ### OnActivityEnd
 Called when your activity quits.
 
-### OnActivityResult
+#### OnActivityResult
 You can call the StartActivityForResult method with a request code to load another Activity.
 While this activity quits, it sends:
 - The same request code which identifies the request.
@@ -475,8 +475,20 @@ While this activity quits, it sends:
 
 When this "top" activity ends, the OnActivityResult method is called with this data provided.
 
-### OnActivityUpdate
+#### OnActivityUpdate
 Called on every frame. Useful for immediate mode updates.
+
+### Other methods
+#### LoadView
+Loads a .txml file as view.
+
+#### QuitApplication
+Quits the application.
+
+#### QuitActivity
+Leaves the current activity and resumes last activity. Allows to provide return codes and intents.
+
+#### 
 
 ## Activity Builders
 A default ActivityBuilder exists for the default Activity constructor.
@@ -504,10 +516,9 @@ struct Trema::View::ActivityBuilder<SomeActivity>
 };
 ```
 
-Some compilers will require you 
+Some compilers will require you to put your specialization in the Trema::View namespace.
 
 # Installation/Build
-
 ## Dependencies
 This project has one dependency that you will need to install:
 - Vulkan

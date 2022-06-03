@@ -208,6 +208,7 @@ namespace Trema::View
             m_renderer->Clear();
             m_renderer->Render(wd, drawData);
             m_renderer->FramePresent(wd);
+            SwapBuffers();
         }
     }
 

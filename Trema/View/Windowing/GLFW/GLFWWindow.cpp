@@ -31,6 +31,11 @@ namespace Trema::View
         InitializeVulkan(std::make_shared<GLFWBackendStrategy>(m_window));
         m_renderer->Init();
         FontsRepository::GetInstance()->ReloadFonts();
+        for(const auto& [name, img] : m_renderImages)
+        {
+            img->Reupload();
+        }
+
         UploadFonts();
     }
 
@@ -97,8 +102,12 @@ namespace Trema::View
         }
         else
         {
+            auto monitor = glfwGetPrimaryMonitor();
+            const auto mode = glfwGetVideoMode(monitor);
             m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
         }
+        
+        glfwSwapInterval(true);
         InitializeGlfwVulkan();
     }
 
@@ -106,9 +115,9 @@ namespace Trema::View
     {
         if (fullscreen != m_fullscreen || titleBar != m_titleBar)
         {
-            m_fullscreen = fullscreen;
+            ToggleFullscreen(fullscreen);
             m_titleBar = titleBar;
-            CreateWindow();
+            // CreateWindow();
         }
     }
 
@@ -117,7 +126,12 @@ namespace Trema::View
         if (fullscreen != m_fullscreen)
         {
             m_fullscreen = fullscreen;
-            CreateWindow();
+            auto monitor = glfwGetPrimaryMonitor();
+            const auto mode = glfwGetVideoMode(monitor);
+            if(fullscreen)
+                glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+            else
+                glfwSetWindowMonitor(m_window, nullptr, (mode->width / 2) - (m_width / 2), (mode->height / 2) - (m_height / 2), m_width, m_height, mode->refreshRate);
         }
     }
 
@@ -126,7 +140,7 @@ namespace Trema::View
         if (titleBar != m_titleBar)
         {
             m_titleBar = titleBar;
-            CreateWindow();
+            // CreateWindow();
         }
     }
 
@@ -149,5 +163,10 @@ namespace Trema::View
         {
             glfwSetWindowSize(m_window, m_width, m_height = height);
         }
+    }
+
+    void GLFWWindow::SwapBuffers()
+    {
+        glfwSwapBuffers(m_window);
     }
 }

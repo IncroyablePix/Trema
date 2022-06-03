@@ -26,7 +26,7 @@ namespace Trema::View
         inline const std::vector<CompilationMistake>& GetMistakes() const { return m_mistakes; };
 
     protected:
-        void HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, Window* window);
+        void HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, Window* window, Activity* activity);
         std::shared_ptr<GuiElement> CreateFromName(std::shared_ptr<GuiElement> parent, const std::string& elementName, std::unordered_map<std::string, std::string>& attributes, Window* window, Activity* activity, std::string content);
         static void TryAddLayout(const std::shared_ptr<GuiElement>& element, Activity* activity);
         static void TryAddTopMenu(const std::shared_ptr<GuiElement>& element, Activity* activity);

@@ -108,7 +108,9 @@ public:
 
         m_disconnectOption->AddOnClickListener("Disconnect", [this](const MenuOption&)
         {
-            QuitActivity();
+            Intent intent;
+            intent.SetStringExtra("test", "SALUT LES BENZ");
+            QuitActivity(200, intent);
         });
 
         m_saveOption->AddOnClickListener("Save", [this, &data](const Trema::View::MenuOption &)
@@ -162,7 +164,8 @@ private:
 class LoginActivity : public Activity
 {
 public:
-    LoginActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) : Activity(std::move(intent), std::move(window), requestCode)
+    LoginActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) :
+        Activity(std::move(intent), std::move(window), requestCode)
     {
 
     }
@@ -174,6 +177,7 @@ public:
 
     void OnActivityStart() override
     {
+        m_mailAddress = GetElementById<TextInput>("mailAddress");
         m_loginButton = GetElementById<Button>("loginButton");
         m_loginButton->AddOnClickListener("Login", [this](const Button &)
         {
@@ -181,8 +185,14 @@ public:
         });
     }
 
+    void OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent) override
+    {
+        m_mailAddress->SetText(intent.GetStringExtra("test"));
+    }
+
 private:
     std::shared_ptr<Button> m_loginButton;
+    std::shared_ptr<TextInput> m_mailAddress;
 };
 
 int main(int argc, char** argv)

@@ -61,7 +61,7 @@ namespace Trema::View
             auto val = child->Value();
             if(val == std::string("Head"))
             {
-                ParseHead(child, window);
+                ParseHead(child, window, activity);
             }
             else if(val == std::string("Body"))
             {
@@ -70,7 +70,7 @@ namespace Trema::View
         }
     }
 
-    void TinyXMLViewParser::ParseHead(TiXmlElement *head, Window* window)
+    void TinyXMLViewParser::ParseHead(TiXmlElement *head, Window* window, Activity* activity)
     {
         for (TiXmlElement *child = head->FirstChildElement();
              child != nullptr; child = child->NextSiblingElement())
@@ -82,7 +82,7 @@ namespace Trema::View
 
             auto elementName = child->Value();
             auto innerText = child->GetText();
-            HeadElementFromName(elementName, std::string(innerText ? innerText : ""), attributes, window);
+            HeadElementFromName(elementName, std::string(innerText ? innerText : ""), attributes, window, activity);
         }
     }
 

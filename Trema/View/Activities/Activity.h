@@ -22,6 +22,7 @@ namespace Trema::View
         virtual void OnActivityStart();
         virtual void OnCreateView();
         virtual void OnActivityEnd();
+        virtual void OnActivityResume();
         virtual void OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent);
         virtual void OnActivityUpdate();
 
@@ -31,6 +32,7 @@ namespace Trema::View
         inline std::shared_ptr<Layout> GetLayout() const { return m_layout; }
         inline std::shared_ptr<TopMenu> GetTopMenu() const { return m_menu; }
         void SetDefaultFont(const std::string &name);
+        void Resume();
 
         template<class T> std::shared_ptr<T> GetElementById(const std::string& id)
         {
@@ -109,6 +111,17 @@ namespace Trema::View
         std::shared_ptr<Window> m_window;
         std::shared_ptr<Layout> m_layout;
         std::shared_ptr<TopMenu> m_menu;
+
+        bool m_fullscreen { false };
+        int m_width;
+        int m_height;
+
+    public:
+        void ToggleFullscreen(bool fullscreen);
+        void SetSize(int width, int height);
+
+    private:
+
         uint16_t m_requestCode;
     };
 }

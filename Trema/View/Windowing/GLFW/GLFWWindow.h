@@ -25,6 +25,7 @@ namespace Trema::View
         void SetSize(int width, int height) override;
         void SetWidth(int width) override;
         void SetHeight(int height) override;
+        void SwapBuffers() override;
 
         static std::shared_ptr<GLFWWindow> CreateGLFWWindow(const WindowInfo &info = { .Width = 1280, .Height = 720 });
 

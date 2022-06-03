@@ -23,6 +23,12 @@ namespace Trema::View
         std::scoped_lock lock(m_mutex);
         std::unique_ptr<Activity> t = std::move(m_activities.top());
         m_activities.pop();
+
+        if(!m_activities.empty())
+        {
+            m_activities.top()->Resume();
+        }
+
         return t;
     }
 
@@ -41,7 +47,6 @@ namespace Trema::View
             m_blocking.notify_one();
         }
 
-        //ImGui::GetIO().Fonts->ClearFonts();
         Top()->OnCreateView();
         Top()->OnActivityStart();
     }

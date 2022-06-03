@@ -38,6 +38,7 @@ namespace Trema::View
         virtual void SetSize(int width, int height) = 0;
         virtual void SetWidth(int width) = 0;
         virtual void SetHeight(int height) = 0;
+        virtual void SwapBuffers() = 0;
 
         int Run();
         void InitializeDearImGUI() const;

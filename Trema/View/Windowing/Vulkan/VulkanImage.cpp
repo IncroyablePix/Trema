@@ -194,6 +194,19 @@ namespace Trema::View
         CopyDataToImage();
     }
 
+    void VulkanImage::Reupload()
+    {
+        size_t uploadSize = m_width * m_height * BytesPerPixel(m_format);
+
+        if (!m_stagingBuffer)
+        {
+            CreateUploadBuffer(uploadSize);
+        }
+
+        // UploadToBuffer(data, uploadSize);
+        CopyDataToImage();
+    }
+
     void VulkanImage::CreateImage(VkFormat vulkanFormat)
     {
         VkResult err;

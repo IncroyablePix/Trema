@@ -35,7 +35,7 @@ namespace Trema::View
         void PushPending(std::unique_ptr<Activity> item) override;
         bool Empty() override;
         size_t Count() override;
-        void Clear() override;
+        void Clear() final;
         void Wait() override;
         void UpdateState() override;
         void UpdateCurrentActivity() override;

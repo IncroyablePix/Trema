@@ -16,6 +16,8 @@ namespace Trema::View
         virtual float GetWidth() const = 0;
         virtual float GetHeight() const = 0;
         virtual ImTextureID GetTextureID() const = 0;
+        virtual void SetData(const void* data) = 0;
+        virtual void Reupload() = 0;
     };
 }
 

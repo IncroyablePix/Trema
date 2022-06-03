@@ -37,6 +37,7 @@ namespace Trema::View
     void VulkanRenderer::Init()
     {
         ImGui_ImplVulkanH_Window* wd = GetWindowData();
+
         m_windowBackendStrategy->InitWindowBackend();
         ImGui_ImplVulkan_InitInfo initInfo =
                 {

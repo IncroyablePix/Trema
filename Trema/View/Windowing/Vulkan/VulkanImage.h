@@ -22,7 +22,8 @@ namespace Trema::View
         VulkanImage(const VulkanImage&) = delete;
         ~VulkanImage();
 
-        void SetData(const void* data);
+        void SetData(const void* data) override;
+        void Reupload() override;
 
         inline VkDescriptorSet GetDescriptorSet() const { return m_descriptorSet; }
         inline float GetWidth() const override { return (float) m_width; }
