@@ -21,8 +21,6 @@ namespace Trema::View
         void Show() override;
         void AddChild(std::shared_ptr<GuiElement> child) override;
         static std::shared_ptr<TopMenu> CreateTopMenu(std::string name);
-
-    private:
     };
 }
 

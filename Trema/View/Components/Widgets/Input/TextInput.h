@@ -18,7 +18,7 @@ namespace Trema::View
         TextInput(const TextInput&) = delete;
         TextInput& operator=(const TextInput&) = delete;
         virtual ~TextInput();
-        std::string GetText();
+        std::string GetText() const;
         void SetText(const std::string& text);
         void Show() override;
         void AddOnChangeListener(std::string name, std::function<void(std::string text)> listener);
@@ -28,11 +28,11 @@ namespace Trema::View
     protected:
         static const size_t defaultBufferSize = 256;
         size_t m_bufferSize;
-        char* m_text;
+        std::unique_ptr<char> m_text;
 
         std::unordered_map<std::string, std::function<void(std::string text)>> m_listeners;
 
-        void Notify();
+        void Notify() const;
     };
 }
 

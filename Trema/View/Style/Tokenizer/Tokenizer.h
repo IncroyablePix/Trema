@@ -28,13 +28,13 @@ namespace Trema::View
         inline size_t Size() const override { return m_tokens.size(); }
     private:
 
-        TokenType m_lastType;
+        TokenType m_lastType { T_LPAR };
         std::deque<std::unique_ptr<Token>> m_tokens;
         const char* m_code;
-        unsigned int m_cursor;
+        unsigned int m_cursor { 0 };
 
-        unsigned int m_line;
-        unsigned int m_linePos;
+        unsigned int m_line { 1 };
+        unsigned int m_linePos { 1 };
 
         std::unique_ptr<Token> ParseToken(std::vector<CompilationMistake> &mistakes);
     };

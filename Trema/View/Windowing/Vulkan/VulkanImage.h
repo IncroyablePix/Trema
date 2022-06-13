@@ -20,10 +20,10 @@ namespace Trema::View
         VulkanImage(uint32_t width, uint32_t height, ImageFormat format, std::shared_ptr<VulkanRenderer> renderer, const void* data = nullptr);
         VulkanImage operator=(const VulkanImage&) = delete;
         VulkanImage(const VulkanImage&) = delete;
-        ~VulkanImage();
+        ~VulkanImage() override;
 
-        void SetData(const void* data) override;
-        void Reupload() override;
+        void SetData(const void* data) final;
+        void Reupload() final;
 
         inline VkDescriptorSet GetDescriptorSet() const { return m_descriptorSet; }
         inline float GetWidth() const override { return (float) m_width; }

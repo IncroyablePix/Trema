@@ -25,7 +25,7 @@ namespace Trema::View
     public:
         ThreadSafeStateManager() = default;
         ThreadSafeStateManager(const ThreadSafeStateManager&) = delete;
-        ~ThreadSafeStateManager();
+        ~ThreadSafeStateManager() override;
 
         inline std::shared_ptr<Layout> GetLayout() override { return Top()->GetLayout(); }
         inline std::shared_ptr<TopMenu> GetTopMenu() override { return Top()->GetTopMenu(); }

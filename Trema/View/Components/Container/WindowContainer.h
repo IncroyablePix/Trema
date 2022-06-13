@@ -24,7 +24,7 @@ namespace Trema::View
     private:
         int GetWindowFlags();
         void ShowPureWindow();
-        void ShowSubContainer();
+        void ShowSubContainer() const;
         bool m_isOpened { true };
         bool m_closable { false };
     };

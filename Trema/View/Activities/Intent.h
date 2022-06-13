@@ -15,7 +15,7 @@ namespace Trema::View
     {
         void* Value;
         std::function<void(void)> Free;
-        
+
         ~RawIntentValue()
         {
             if(Value)
@@ -42,7 +42,7 @@ namespace Trema::View
          bool GetBoolExtra(const std::string& name);
          char8_t GetCharExtra(const std::string& name);
         
-         RawIntentValue GetExtra(const std::string& name);
+         RawIntentValue GetExtra(const std::string &name);
 
          void SetStringExtra(const std::string& name, std::string value);
          void SetUint64Extra(const std::string& name, uint64_t value);

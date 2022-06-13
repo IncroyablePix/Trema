@@ -29,7 +29,6 @@ namespace Trema::View
         static std::shared_ptr<Combo> CreateCombo(std::shared_ptr<GuiElement> parent, std::string name);
 
     private:
-        std::string m_name;
         const char* m_selected {};
         std::vector<std::string> m_options;
         std::unordered_map<std::string, std::function<void(const std::string& option)>> m_listeners;

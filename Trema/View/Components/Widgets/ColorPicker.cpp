@@ -68,7 +68,6 @@ namespace Trema::View
             ((int)(m_crossHairColor[2] * 255) << 8) |
             ((int)(m_crossHairColor[3] * 255));
 
-            // ImGui::ColorConvertFloat4ToU32({ m_crossHairColor[0], m_crossHairColor[1], m_crossHairColor[2], m_crossHairColor[3] });
         return color;
     }
 

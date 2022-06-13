@@ -20,12 +20,9 @@ namespace Trema::View
 
     }
 
-    FileDialog::~FileDialog()
-    {
+    FileDialog::~FileDialog() = default;
 
-    }
-
-    void FileDialog::ShowFileDialog(const std::string &base, std::string extensions, std::function<void(const std::string &)> listener, FileDialogMode mode)
+    void FileDialog::ShowFileDialog(const std::string_view &base, std::string extensions, std::function<void(const std::string &)> listener, FileDialogMode mode)
     {
         m_listener = std::move(listener);
         m_extension = std::move(extensions);
@@ -46,6 +43,7 @@ namespace Trema::View
             case Files:
                 type = imgui_addons::ImGuiFileBrowser::DialogMode::OPEN;
                 break;
+            default:
             case SaveFile:
                 type = imgui_addons::ImGuiFileBrowser::DialogMode::SAVE;
                 break;

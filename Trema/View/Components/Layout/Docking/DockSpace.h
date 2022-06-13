@@ -26,15 +26,14 @@ namespace Trema::View
         DOCK_RIGHT = ImGuiDir_Right
     };
 
-    DockSlot DockSlotFromString(const std::string& name);
+    DockSlot DockSlotFromString(const std::string_view &name);
 
     class DockSpace : public Layout
     {
     public:
-        explicit DockSpace(std::string title, ImGuiID dockspaceId, bool allowSave = true);
+        explicit DockSpace(std::string title, bool allowSave);
         DockSpace(const DockSpace&) = delete;
         DockSpace& operator=(const DockSpace&) = delete;
-        ~DockSpace() override = default;
 
         virtual void Begin();
         virtual void End();
@@ -45,13 +44,12 @@ namespace Trema::View
         static std::shared_ptr<DockSpace> CreateDockSpace(std::string title, ImGuiID dockspaceId);
 
     protected:
+        void ShowElements(ImGuiID dockspaceId) const;
+        bool IsSavedDock() const;
+
+        std::unordered_map<DockSlot, std::shared_ptr<Container>> m_elements;
         bool m_firstTime { true };
         bool m_allowSave { true };
-        ImGuiID m_dockspaceId;
-        std::unordered_map<DockSlot, std::shared_ptr<Container>> m_elements;
-
-        void ShowElements(ImGuiID dockspaceId);
-        bool IsSavedDock() const;
     };
 }
 

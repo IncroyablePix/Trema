@@ -181,7 +181,7 @@ public:
         m_loginButton = GetElementById<Button>("loginButton");
         m_loginButton->AddOnClickListener("Login", [this](const Button &)
         {
-            StartActivityForResult<PeopleActivity>(0);
+            StartActivity<PeopleActivity>();
         });
     }
 

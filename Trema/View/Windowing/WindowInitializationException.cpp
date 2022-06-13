@@ -12,8 +12,3 @@ namespace Trema::View
 
     }
 }
-/*char const *Trema::View::WindowInitializationException::what() const noexcept
-{
-    return runtime_error::what();
-}
-*/

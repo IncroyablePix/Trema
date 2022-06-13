@@ -69,7 +69,7 @@ namespace Trema::View
         template<class T> std::shared_ptr<T> GetComponent()
         {
             auto typeName = typeid(T).name();
-            if(m_popupComponents.find(typeName) == m_popupComponents.end())
+            if(!m_popupComponents.contains(typeName))
                 return nullptr;
 
             auto element = m_popupComponents[typeName];

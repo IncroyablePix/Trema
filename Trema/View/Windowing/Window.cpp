@@ -75,7 +75,6 @@ namespace Trema::View
         if(!m_stateManager->Empty())
         {
             m_viewParser->LoadView(path, this, m_stateManager->Top().get());
-            // m_stateManager->Top()->OnActivityStart();
         }
     }
 
@@ -104,7 +103,7 @@ namespace Trema::View
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImPlot::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void) io;
+        auto& io = ImGui::GetIO(); (void) io;
         io.Fonts->AddFontDefault();
 
         io.DisplaySize.x = static_cast<float>(m_width);

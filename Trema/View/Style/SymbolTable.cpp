@@ -7,10 +7,7 @@
 
 namespace Trema::View
 {
-    SymbolTable::SymbolTable()
-    {
-
-    }
+    SymbolTable::SymbolTable() = default;
 
     std::ostream &operator<<(std::ostream &os, const SymbolTable &st)
     {

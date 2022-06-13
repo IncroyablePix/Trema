@@ -12,9 +12,7 @@ namespace Trema::View
 {
     GuiElement::GuiElement(std::shared_ptr<GuiElement> parent, std::string name) :
         m_parent(std::move(parent)),
-        m_name(std::move(name)),
-        m_styles(0),
-        m_colors(0)
+        m_name(std::move(name))
     {
 
     }
@@ -91,8 +89,7 @@ namespace Trema::View
         if(!m_isWindow)
         {
             auto margin = Style.GetMargin();
-            /*ImVec2 cursorPos = ImGui::GetCursorPos();
-            ImGui::SetCursorPos({ cursorPos.x + margin.x, cursorPos.y + margin.w });*/
+
             if(margin.y != 0.0 || margin.z != 0.0)
             {
                 ImGui::SameLine();

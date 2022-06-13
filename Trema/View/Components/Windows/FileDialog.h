@@ -28,7 +28,7 @@ namespace Trema::View
         FileDialog& operator=(const FileDialog&) = delete;
         ~FileDialog() override;
         void Show() override;
-        void ShowFileDialog(const std::string& base, std::string extensions, std::function<void(const std::string&)> listener, FileDialogMode mode = File);
+        void ShowFileDialog(const std::string_view &base, std::string extensions, std::function<void(const std::string&)> listener, FileDialogMode mode = File);
         static std::shared_ptr<FileDialog> CreateFileDialog(std::string name);
 
     private:

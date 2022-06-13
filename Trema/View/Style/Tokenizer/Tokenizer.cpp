@@ -63,7 +63,7 @@ namespace Trema::View
            std::isdigit(string[2]))
             return true;
 
-        if((string[0] && (string[1] == 'x' || string[1] =='X')))
+        if(string[0] && (string[1] == 'x' || string[1] =='X'))
             return true;
 
         return false;
@@ -167,15 +167,15 @@ namespace Trema::View
     }
 
     Tokenizer::Tokenizer(const std::string& code, std::vector<CompilationMistake> &mistakes) :
-        m_code(code.c_str()),
-        m_cursor(0),
-        m_line(1),
-        m_linePos(1),
-        m_lastType(T_LPAR)
+            m_lastType(T_LPAR),
+            m_code(code.c_str()),
+            m_cursor(0),
+            m_line(1),
+            m_linePos(1)
     {
         while(m_lastType != T_STOP)
         {
-            m_tokens.push_back(std::move(ParseToken(mistakes)));
+            m_tokens.push_back(ParseToken(mistakes));
         }
     }
 
@@ -199,7 +199,8 @@ namespace Trema::View
 
         m_cursor = pos;
 
-        char c, *symbolPtr;
+        char c;
+        char *symbolPtr;
         unsigned int l;
         double *fValuePtr;
         int64_t *valuePtr;
@@ -211,7 +212,7 @@ namespace Trema::View
                 m_lastType = T_ENDINS;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_ENDINS, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_ENDINS, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -220,7 +221,7 @@ namespace Trema::View
                 m_lastType = T_LPAR;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_LPAR, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_LPAR, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -229,7 +230,7 @@ namespace Trema::View
                 m_lastType = T_RPAR;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_RPAR, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_RPAR, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -238,7 +239,7 @@ namespace Trema::View
                 m_lastType = T_LCURLY;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_LCURLY, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_LCURLY, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -247,7 +248,7 @@ namespace Trema::View
                 m_lastType = T_RCURLY;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_RCURLY, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_RCURLY, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -256,7 +257,7 @@ namespace Trema::View
                 m_lastType = T_PROPASSIGN;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_PROPASSIGN, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_PROPASSIGN, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -265,7 +266,7 @@ namespace Trema::View
                 m_lastType = T_VARASSIGN;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_VARASSIGN, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_VARASSIGN, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -274,7 +275,7 @@ namespace Trema::View
                 m_lastType = T_IDENTITY;
                 m_cursor = pos + 1;
                 m_linePos ++;
-                auto t = std::move(std::make_unique<Token>(T_IDENTITY, m_linePos, m_line, TokenValue { }));
+                auto t = std::make_unique<Token>(T_IDENTITY, m_linePos, m_line, TokenValue { });
                 return t;
             }
 
@@ -288,7 +289,7 @@ namespace Trema::View
                 symbolPtr = new char[2];
                 strcpy(symbolPtr, "*");
 
-                auto t = std::move(std::make_unique<Token>(T_IDENTIFIER, m_linePos, m_line, TokenValue { .String = symbolPtr }));
+                auto t = std::make_unique<Token>(T_IDENTIFIER, m_linePos, m_line, TokenValue { .String = symbolPtr });
                 return t;
             }
 
@@ -312,7 +313,7 @@ namespace Trema::View
                 strncpy(symbolPtr, m_code + pos + 1, l - 1);
                 symbolPtr[l - 1] = '\0';
 
-                auto t = std::move(std::make_unique<Token>(T_LSTRING, m_linePos, m_line, TokenValue { .String = symbolPtr }));
+                auto t = std::make_unique<Token>(T_LSTRING, m_linePos, m_line, TokenValue { .String = symbolPtr });
                 m_cursor = pos + l + 1;
                 m_linePos += l + 1;
                 m_lastType = T_LSTRING;
@@ -341,25 +342,25 @@ namespace Trema::View
                     else
                         *valuePtr = (int)*fValuePtr;
 
-                    auto t = std::move(std::make_unique<Token>(T_LNUMBER, m_linePos, m_line, TokenValue { .Integer = valuePtr }));
+                    auto t = std::make_unique<Token>(T_LNUMBER, m_linePos, m_line, TokenValue { .Integer = valuePtr });
                     m_cursor = pos;
                     m_lastType = T_LNUMBER;
                     return t;
                 }
                 else
                 {
-                    auto t = std::move(std::make_unique<Token>(T_LFNUMBER, m_linePos, m_line, TokenValue { .Float = fValuePtr }));
+                    auto t = std::make_unique<Token>(T_LFNUMBER, m_linePos, m_line, TokenValue { .Float = fValuePtr });
                     m_cursor = pos;
                     m_lastType = T_LFNUMBER;
                     return t;
                 }
             }
 
-            else if (IsAllowedIdentifierStartChar(c))//(std::isalpha(c))
+            else if (IsAllowedIdentifierStartChar(c))
             {
                 l = pos + 1;
 
-                while(IsAllowedIdentifierChar(m_code[l]))//m_code[l] != '\0' && (std::isalpha(m_code[l]) || std::isdigit(m_code[l]) || m_code[l] == '_' || m_code[l] == '-'))
+                while(IsAllowedIdentifierChar(m_code[l]))
                 {
                     l ++;
                 }
@@ -372,7 +373,7 @@ namespace Trema::View
                 if(IsBoolValue(symbolPtr))
                 {
                     auto* val = new bool(std::string(symbolPtr) == "true");
-                    auto t = std::move(std::make_unique<Token>(T_LBOOL, m_linePos, m_line, TokenValue { .Boolean = val }));
+                    auto t = std::make_unique<Token>(T_LBOOL, m_linePos, m_line, TokenValue { .Boolean = val });
                     delete[] symbolPtr;
                     m_cursor = pos + l;
                     m_linePos += l;
@@ -381,7 +382,7 @@ namespace Trema::View
                     return t;
                 }
 
-                auto t = std::move(std::make_unique<Token>(T_IDENTIFIER, m_linePos, m_line, TokenValue { .String = symbolPtr }));
+                auto t = std::make_unique<Token>(T_IDENTIFIER, m_linePos, m_line, TokenValue { .String = symbolPtr });
                 m_cursor = pos + l;
                 m_linePos += l;
                 m_lastType = T_IDENTIFIER;
@@ -409,7 +410,7 @@ namespace Trema::View
                 strncpy(symbolPtr, m_code + pos + 2, l - 2);
                 symbolPtr[l - 2] = '\0';
 
-                auto t = std::move(std::make_unique<Token>(T_COMMENT, m_linePos, m_line, TokenValue { .String = symbolPtr }));
+                auto t = std::make_unique<Token>(T_COMMENT, m_linePos, m_line, TokenValue { .String = symbolPtr });
                 m_cursor = pos + l + 2;
                 m_linePos += l + 2;
                 m_lastType = T_COMMENT;
@@ -419,7 +420,7 @@ namespace Trema::View
 
             else
             {
-                // mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnknownToken, .Extra = &""[c] });
+                mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnknownToken, .Extra = &""[c] });
                 pos ++;
                 m_cursor++;
                 m_linePos ++;
@@ -428,7 +429,7 @@ namespace Trema::View
 
         m_cursor = pos + 1;
         m_lastType = T_STOP;
-        auto t = std::move(std::make_unique<Token>(T_STOP, m_linePos, m_line, TokenValue { }));
+        auto t = std::make_unique<Token>(T_STOP, m_linePos, m_line, TokenValue { });
         return t;
     }
 

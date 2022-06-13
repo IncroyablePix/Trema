@@ -16,10 +16,7 @@ namespace Trema::View
 
     }
 
-    WindowContainer::~WindowContainer()
-    {
-
-    }
+    WindowContainer::~WindowContainer() = default;
 
     void WindowContainer::Show()
     {
@@ -65,7 +62,7 @@ namespace Trema::View
         ImGui::End();
     }
 
-    void WindowContainer::ShowSubContainer()
+    void WindowContainer::ShowSubContainer() const
     {
         bool horizontal = (Style.GetOrientation() == Row);
         bool notFirst = false;

@@ -130,7 +130,6 @@ namespace Trema::View
     bool StackedStyleParser::AssignVar(std::stack<std::unique_ptr<Token>>& tokens, const std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes)
     {
         if (tokens.size() < 3)
-//            throw ParsingException(R"(Unexpected symbol ";")");
             return false;
 
         auto val = std::move(tokens.top());
@@ -201,7 +200,7 @@ namespace Trema::View
     void StackedStyleParser::SaveTopSymbolTable(std::string name)
     {
         auto topSymbolTable = m_symbolTables.back();
-        if(m_variables.find(name) != m_variables.end())
+        if(m_variables.contains(name))
         {
             m_variables[std::move(name)]->Append(*topSymbolTable);
         }

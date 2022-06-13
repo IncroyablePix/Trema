@@ -14,10 +14,9 @@
 
 namespace Trema::View
 {
-    DockSpace::DockSpace(std::string title, ImGuiID dockspaceId, bool allowSave) :
+    DockSpace::DockSpace(std::string title, bool allowSave) :
             Layout(std::move(title)),
-            m_allowSave(allowSave),
-            m_dockspaceId(dockspaceId)
+            m_allowSave(allowSave)
     {
 
     }
@@ -29,7 +28,7 @@ namespace Trema::View
 
     void DockSpace::Show()
     {
-        ImGuiIO& io = ImGui::GetIO();
+        auto const& io = ImGui::GetIO();
         static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_PassthruCentralNode;
 
         Begin();
@@ -57,16 +56,8 @@ namespace Trema::View
         End();
     }
 
-    void DockSpace::ShowElements(ImGuiID dockspaceId)
+    void DockSpace::ShowElements(ImGuiID dockspaceId) const
     {
-        /*if(m_elements.find(DOCK_CENTER) != m_elements.end())
-        {
-            auto element = m_elements[DOCK_CENTER];
-            auto dock = ImGui::GetID(element->GetName().c_str());
-            //ImGui::DockBuilderDockWindow(element->GetName().c_str(), dock);
-            ImGui::DockBuilderAddNode(dock, ImGuiDockNodeFlags_PassthruCentralNode);
-        }*/
-
         for(const auto& [slot, element] : m_elements)
         {
             if(slot != DOCK_CENTER)
@@ -114,7 +105,7 @@ namespace Trema::View
 
     bool DockSpace::IsSavedDock() const
     {
-        auto io = ImGui::GetIO();
+        auto const& io = ImGui::GetIO();
         std::ifstream file(io.IniFilename);
 
         return file.is_open() && m_allowSave;
@@ -123,8 +114,8 @@ namespace Trema::View
     void DockSpace::AddContainer(std::shared_ptr<Container> container,
                                  std::unordered_map<std::string, std::string> &attributes)
     {
-        if(attributes.find("dockSlot") == attributes.end())
-            throw LayoutException("Missing attribute \"dockSlot\" for DockSpace child");
+        if(!attributes.contains("dockSlot"))
+            throw LayoutException(R"(Missing attribute "dockSlot" for DockSpace child)");
 
         auto dockSlotName = attributes["dockSlot"];
         auto dockSlot = DockSlotFromString(dockSlotName);
@@ -134,7 +125,7 @@ namespace Trema::View
 
     //---
 
-    DockSlot DockSlotFromString(const std::string& name)
+    DockSlot DockSlotFromString(const std::string_view &name)
     {
         if(name == "top")
             return DOCK_TOP;

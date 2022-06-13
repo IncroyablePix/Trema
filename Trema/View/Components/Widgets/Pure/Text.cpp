@@ -17,10 +17,7 @@ namespace Trema::View
 
     }
 
-    Text::~Text()
-    {
-
-    }
+    Text::~Text() = default;
 
     void Text::Show()
     {

@@ -8,7 +8,7 @@ namespace Trema::View
 {
     std::string Intent::GetStringExtra(const std::string &name)
     {
-        if(m_strings.find(name) != m_strings.end())
+        if(m_strings.contains(name))
             return std::move(m_strings.at(name));
 
         return "";
@@ -16,7 +16,7 @@ namespace Trema::View
 
     uint64_t Intent::GetUint64Extra(const std::string &name)
     {
-        if(m_uint64s.find(name) != m_uint64s.end())
+        if(m_uint64s.contains(name))
             return m_uint64s.at(name);
 
         return 0;
@@ -24,7 +24,7 @@ namespace Trema::View
 
     uint32_t Intent::GetUint32Extra(const std::string &name)
     {
-        if(m_uint32s.find(name) != m_uint32s.end())
+        if(m_uint32s.contains(name))
             return m_uint32s.at(name);
 
         return 0;
@@ -32,7 +32,7 @@ namespace Trema::View
 
     uint16_t Intent::GetUint16Extra(const std::string &name)
     {
-        if(m_uint16s.find(name) != m_uint16s.end())
+        if(m_uint16s.contains(name))
             return m_uint16s.at(name);
 
         return 0;
@@ -40,7 +40,7 @@ namespace Trema::View
 
     uint8_t Intent::GetUint8Extra(const std::string &name)
     {
-        if(m_uint8s.find(name) != m_uint8s.end())
+        if(m_uint8s.contains(name))
             return m_uint8s.at(name);
 
         return 0;
@@ -48,7 +48,7 @@ namespace Trema::View
 
     int64_t Intent::GetInt64Extra(const std::string &name)
     {
-        if(m_int64s.find(name) != m_int64s.end())
+        if(m_int64s.contains(name))
             return m_int64s.at(name);
 
         return 0;
@@ -56,7 +56,7 @@ namespace Trema::View
 
     int32_t Intent::GetInt32Extra(const std::string &name)
     {
-        if(m_int32s.find(name) != m_int32s.end())
+        if(m_int32s.contains(name))
             return m_int32s.at(name);
 
         return 0;
@@ -64,7 +64,7 @@ namespace Trema::View
 
     int16_t Intent::GetInt16Extra(const std::string &name)
     {
-        if(m_int16s.find(name) != m_int16s.end())
+        if(m_int16s.contains(name))
             return m_int16s.at(name);
 
         return 0;
@@ -72,7 +72,7 @@ namespace Trema::View
 
     int8_t Intent::GetInt8Extra(const std::string &name)
     {
-        if(m_int8s.find(name) != m_int8s.end())
+        if(m_int8s.contains(name))
             return m_int8s.at(name);
 
         return 0;
@@ -80,7 +80,7 @@ namespace Trema::View
 
     float Intent::GetFloatExtra(const std::string &name)
     {
-        if(m_floats.find(name) != m_floats.end())
+        if(m_floats.contains(name))
             return m_floats.at(name);
 
         return 0;
@@ -88,7 +88,7 @@ namespace Trema::View
 
     double Intent::GetDoubleExtra(const std::string &name)
     {
-        if(m_doubles.find(name) != m_doubles.end())
+        if(m_doubles.contains(name))
             return m_doubles.at(name);
 
         return 0;
@@ -96,7 +96,7 @@ namespace Trema::View
 
     bool Intent::GetBoolExtra(const std::string &name)
     {
-        if(m_bools.find(name) != m_bools.end())
+        if(m_bools.contains(name))
             return m_bools.at(name);
 
         return false;
@@ -104,7 +104,7 @@ namespace Trema::View
 
     char8_t Intent::GetCharExtra(const std::string &name)
     {
-        if(m_chars.find(name) != m_chars.end())
+        if(m_chars.contains(name))
             return m_chars.at(name);
 
         return '\0';
@@ -112,10 +112,10 @@ namespace Trema::View
 
     RawIntentValue Intent::GetExtra(const std::string &name)
     {
-        if(m_rawValues.find(name) != m_rawValues.end())
+        if(m_rawValues.contains(name))
             return m_rawValues.at(name);
 
-        return { nullptr, [](){} };
+        return { nullptr, [](){ /* Should free the pointer */} };
     }
 
     void Intent::SetStringExtra(const std::string &name, std::string value)

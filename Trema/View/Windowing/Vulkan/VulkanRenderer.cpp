@@ -26,7 +26,8 @@ namespace Trema::View
         VkSurfaceKHR surface = m_windowBackendStrategy->CreateSurface(m_instance, m_allocator, err);
 
         //---
-        int w, h;
+        int w;
+        int h;
         m_windowBackendStrategy->GetWindowDimensions(w, h);
         SetupVulkanWindow(GetWindowData(), surface, w, h);
 
@@ -63,9 +64,9 @@ namespace Trema::View
         error = vkDeviceWaitIdle(m_device);
         CheckVkResult(error);
 
-        for(auto &queue : m_resourceFreeQueue)
+        for(const auto &queue : m_resourceFreeQueue)
         {
-            for(auto &f : queue)
+            for(const auto &f : queue)
             {
                 f();
             }
@@ -193,7 +194,7 @@ namespace Trema::View
         CheckVkResult(error);
         IM_ASSERT(gpuCount > 0);
 
-        auto* gpus = (VkPhysicalDevice*)malloc(sizeof(VkPhysicalDevice) * gpuCount);
+        auto* gpus = new VkPhysicalDevice[gpuCount];
         error = vkEnumeratePhysicalDevices(m_instance, &gpuCount, gpus);
         CheckVkResult(error);
 
@@ -210,7 +211,7 @@ namespace Trema::View
         }
 
         m_physicalDevice = gpus[useGPU];
-        free(gpus);
+        delete[] gpus;
     }
 
     void VulkanRenderer::SelectGraphicsQueueFamily()
@@ -227,7 +228,7 @@ namespace Trema::View
                 break;
             }
         }
-        delete []queues;
+        delete[] queues;
         IM_ASSERT(m_queueFamily != (uint32_t)-1);
     }
 
@@ -237,7 +238,7 @@ namespace Trema::View
         int deviceExtensionCount = 1;
         const char* deviceExtensions[] = {"VK_KHR_swapchain" };
         const float queuePriority[] = {1.0f };
-        VkDeviceQueueCreateInfo queueInfo[1] = {};
+        std::array<VkDeviceQueueCreateInfo, 1> queueInfo = {};
         queueInfo[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
         queueInfo[0].queueFamilyIndex = m_queueFamily;
         queueInfo[0].queueCount = 1;
@@ -246,7 +247,7 @@ namespace Trema::View
                 {
                         .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
                         .queueCreateInfoCount = sizeof(queueInfo) / sizeof(queueInfo[0]),
-                        .pQueueCreateInfos = queueInfo,
+                        .pQueueCreateInfos = queueInfo.data(),
                         .enabledExtensionCount = static_cast<uint32_t>(deviceExtensionCount),
                         .ppEnabledExtensionNames = deviceExtensions,
                 };
@@ -258,7 +259,7 @@ namespace Trema::View
     void VulkanRenderer::CreateDescriptorPool()
     {
         VkResult error;
-        VkDescriptorPoolSize pool_sizes[] =
+        VkDescriptorPoolSize poolSizes[] =
                 {
                         { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
                         { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
@@ -276,9 +277,9 @@ namespace Trema::View
                 {
                         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
                         .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
-                        .maxSets = 1000 * IM_ARRAYSIZE(pool_sizes),
-                        .poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes),
-                        .pPoolSizes = pool_sizes,
+                        .maxSets = 1000 * IM_ARRAYSIZE(poolSizes),
+                        .poolSizeCount = (uint32_t)IM_ARRAYSIZE(poolSizes),
+                        .pPoolSizes = poolSizes,
                 };
 
         error = vkCreateDescriptorPool(m_device, &poolInfo, m_allocator, &m_descriptorPool);
@@ -452,7 +453,8 @@ namespace Trema::View
 
     void VulkanRenderer::ResizeSwapChain()
     {
-        int w, h;
+        int w;
+        int h;
         m_windowBackendStrategy->GetWindowDimensions(w, h);
 
         if(w > 0 && h > 0)
@@ -520,6 +522,7 @@ namespace Trema::View
             case ImageFormat::RGBA32F:
                 return VK_FORMAT_R32G32B32A32_SFLOAT;
             case ImageFormat::None:
+            default:
                 break;
         }
         return (VkFormat)0;

@@ -16,9 +16,11 @@ namespace Trema::View
         m_renderer(std::move(renderer)),
         m_filePath(std::move(path))
     {
-        int width, height, channels;
+        int width;
+        int height;
+        int channels;
 
-        uint8_t* data;
+        uint8_t const* data;
 
         if(stbi_is_hdr(m_filePath.c_str()))
         {
@@ -108,11 +110,11 @@ namespace Trema::View
         err = vkMapMemory(device, m_stagingBufferMemory, 0, m_alignedSize, 0, (void**)(&map));
         CheckVkResult(err);
         memcpy(map, data, uploadSize);
-        VkMappedMemoryRange range[1] = {};
+        std::array<VkMappedMemoryRange, 1> range = {};
         range[0].sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
         range[0].memory = m_stagingBufferMemory;
         range[0].size = m_alignedSize;
-        err = vkFlushMappedMemoryRanges(device, 1, range);
+        err = vkFlushMappedMemoryRanges(device, 1, range.data());
         CheckVkResult(err);
         vkUnmapMemory(device, m_stagingBufferMemory);
     }
@@ -138,7 +140,7 @@ namespace Trema::View
                                 },
                 };
 
-        vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, NULL, 0, NULL, 1, &copyBarrier);
+        vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &copyBarrier);
 
         VkBufferImageCopy region =
                 {
@@ -176,7 +178,8 @@ namespace Trema::View
                 };
 
 
-        vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, NULL, 0, NULL, 1, &useBarrier);
+        vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0,
+                             nullptr, 0, nullptr, 1, &useBarrier);
 
         m_renderer->FlushCommandBuffer(commandBuffer);
     }
@@ -203,7 +206,6 @@ namespace Trema::View
             CreateUploadBuffer(uploadSize);
         }
 
-        // UploadToBuffer(data, uploadSize);
         CopyDataToImage();
     }
 
@@ -295,7 +297,7 @@ namespace Trema::View
 
     void VulkanImage::CreateDescriptorSet()
     {
-        m_descriptorSet = (VkDescriptorSet)ImGui_ImplVulkan_AddTexture(m_sampler, m_imageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        m_descriptorSet = ImGui_ImplVulkan_AddTexture(m_sampler, m_imageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
 
     void VulkanImage::AllocateMemory()

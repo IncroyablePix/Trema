@@ -8,12 +8,13 @@
 #include <memory>
 #include "Intent.h"
 #include "NoActivityBuilderException.h"
+#include "ActivityAsBase.h"
 
 namespace Trema::View
 {
     class Window;
     class Activity;
-    template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
+    template<class T> requires ActivityAsBase<T>
     struct ActivityBuilder
     {
         std::unique_ptr<T> CreateActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1)

@@ -11,18 +11,18 @@
 
 namespace Trema::View
 {
-    MainDockSpace::MainDockSpace(std::string title, ImGuiID dockspaceId, bool allowSave) :
-    DockSpace(std::move(title), dockspaceId, allowSave)
+    MainDockSpace::MainDockSpace(std::string title, bool allowSave) :
+            DockSpace(std::move(title), allowSave)
     {
 
     }
 
     void MainDockSpace::Show()
     {
-        ImGuiIO& io = ImGui::GetIO();
+        const auto& io = ImGui::GetIO();
         static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_PassthruCentralNode;
 
-        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        const auto* viewport = ImGui::GetMainViewport();
 
         Begin();
 
@@ -52,7 +52,7 @@ namespace Trema::View
     void MainDockSpace::Begin()
     {
         BeginStyle();
-        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        const auto* viewport = ImGui::GetMainViewport();
         // Central dockspace should take up all space
         ImGui::SetNextWindowPos(viewport->Pos);
         ImGui::SetNextWindowSize(viewport->Size);
@@ -80,19 +80,11 @@ namespace Trema::View
         {
             element->Show();
         }
-
-        /*if(m_elements.find(DOCK_CENTER) != m_elements.end())
-        {
-            auto element = m_elements[DOCK_CENTER];
-            element->Show();
-            //ImGui::DockBuilderDockWindow(element->GetName().c_str(), dock);
-            //ImGui::DockBuilderAddNode(dock, ImGuiDockNodeFlags_PassthruCentralNode);
-        }*/
         EndStyle();
     }
 
-    std::shared_ptr<MainDockSpace> MainDockSpace::CreateMainDockSpace(std::string title, ImGuiID dockspaceId, bool saveLayout)
+    std::shared_ptr <MainDockSpace> MainDockSpace::CreateMainDockSpace(std::string title, bool saveLayout)
     {
-        return std::make_shared<MainDockSpace>(std::move(title), dockspaceId, saveLayout);
+        return std::make_shared<MainDockSpace>(std::move(title), saveLayout);
     }
 }

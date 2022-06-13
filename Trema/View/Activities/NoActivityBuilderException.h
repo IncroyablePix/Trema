@@ -9,7 +9,7 @@
 
 namespace Trema::View
 {
-class NoActivityBuilderException : public std::runtime_error
+    class NoActivityBuilderException : public std::runtime_error
     {
     public:
         NoActivityBuilderException(char const* message);

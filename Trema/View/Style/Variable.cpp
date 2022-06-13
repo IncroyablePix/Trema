@@ -10,7 +10,9 @@
 
 namespace Trema::View
 {
-    Variable::Variable(TokenValue value, VariableType type) : m_type(type), m_value(value)
+    Variable::Variable(TokenValue value, VariableType type) :
+    m_value(value),
+    m_type(type)
     {
     }
 

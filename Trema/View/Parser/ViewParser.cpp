@@ -150,7 +150,7 @@ namespace Trema::View
             if(attributes.find("saveLayout") != attributes.end())
                 saveLayout = StrToBool(attributes["saveLayout"]);
 
-            element = MainDockSpace::CreateMainDockSpace(std::move(name), dockspaceId, saveLayout);
+            element = MainDockSpace::CreateMainDockSpace(std::move(name), saveLayout);
         }
 
         else if(elementName == "StackSpace")
@@ -260,7 +260,7 @@ namespace Trema::View
         {
             std::string shortcut;
 
-            if(attributes.find("shortcut") != attributes.end())
+            if(attributes.contains("shortcut"))
                 shortcut = attributes["shortcut"];
 
             element = MenuOption::CreateMenuOption(std::move(parent), std::move(name), shortcut);
@@ -275,10 +275,10 @@ namespace Trema::View
         {
             element = SliderFloat::CreateSliderFloat(std::move(parent), std::move(name));
 
-            if(attributes.find("min") != attributes.end())
+            if(attributes.contains("min"))
                 ((SliderFloat*)element.get())->SetMin(StrToFloat(attributes["min"]));
 
-            if(attributes.find("max") != attributes.end())
+            if(attributes.contains("max"))
                 ((SliderFloat*)element.get())->SetMax(StrToFloat(attributes["max"]));
         }
 
@@ -286,10 +286,10 @@ namespace Trema::View
         {
             element = SliderInt::CreateSliderInt(std::move(parent), std::move(name));
 
-            if(attributes.find("min") != attributes.end())
+            if(attributes.contains("min"))
                 ((SliderInt*)element.get())->SetMin(StrToInt(attributes["min"]));
 
-            if(attributes.find("max") != attributes.end())
+            if(attributes.contains("max"))
                 ((SliderInt*)element.get())->SetMax(StrToInt(attributes["max"]));
         }
 
@@ -297,10 +297,10 @@ namespace Trema::View
         {
             element = ColorPicker::CreateColorPicker(std::move(parent), std::move(name));
 
-            if(attributes.find("preview") != attributes.end())
+            if(attributes.contains("preview"))
                 ((ColorPicker*)element.get())->TogglePreview(StrToBool(attributes["preview"]));
 
-            if(attributes.find("input") != attributes.end())
+            if(attributes.contains("input"))
                 ((ColorPicker*)element.get())->ToggleInput(StrToBool(attributes["input"]));
         }
 
@@ -308,7 +308,7 @@ namespace Trema::View
         {
             std::string src;
 
-            if(attributes.find("src") != attributes.end())
+            if(attributes.contains("src"))
                 src = attributes["src"];
 
             std::shared_ptr<IRenderImage> imageRender = window->AddImage(name, src);
@@ -353,7 +353,7 @@ namespace Trema::View
         return integer;
     }
 
-    bool ViewParser::StrToBool(const std::string &str)
+    bool ViewParser::StrToBool(const std::string_view &str)
     {
         return str == "true";
     }

@@ -15,10 +15,7 @@ namespace Trema::View
 
     }
 
-    SubMenu::~SubMenu()
-    {
-
-    }
+    SubMenu::~SubMenu() = default;
 
     void SubMenu::Show()
     {

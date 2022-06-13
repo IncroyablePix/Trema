@@ -13,6 +13,7 @@ namespace Trema::View
     class IRenderImage
     {
     public:
+        virtual ~IRenderImage() = default;
         virtual float GetWidth() const = 0;
         virtual float GetHeight() const = 0;
         virtual ImTextureID GetTextureID() const = 0;

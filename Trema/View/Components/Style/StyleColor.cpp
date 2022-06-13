@@ -28,7 +28,7 @@ namespace Trema::View
                              (float) ((color >> 24) & 0xFF) / 255.0f,
                              (float) ((color >> 16) & 0xFF) / 255.0f,
                              (float) ((color >> 8) & 0xFF) / 255.0f,
-                             (float) ((color) & 0xFF) / 255.0f
+                             (float) (color & 0xFF) / 255.0f
                      });
     }
 

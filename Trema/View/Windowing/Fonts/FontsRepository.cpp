@@ -24,7 +24,7 @@ namespace Trema::View
     {
         auto fontId = name.empty() ? FileSplit(path).FileWithoutExtension : std::move(name);
 
-        if(m_fonts.find(fontId) == m_fonts.end())
+        if(!m_fonts.contains(fontId))
         {
             FontData fontData = {.Path = std::move(
                     path), .Size = size, .FontConfig = fontConfig };
@@ -44,13 +44,13 @@ namespace Trema::View
 
     bool FontsRepository::RemoveFont(const std::string& name)
     {
-        if(m_fonts.find(name) != m_fonts.end())
+        if(m_fonts.contains(name))
         {
             auto& font = m_fonts.at(name);
 
             if(--font.Counter == 0)
             {
-                ImGuiIO& io = ImGui::GetIO();
+                // TODO: Remove font from GPU
             }
 
             return true;
@@ -74,12 +74,12 @@ namespace Trema::View
 
     bool FontsRepository::Exists(const std::string &name)
     {
-        return m_fonts.find(name) != m_fonts.end();
+        return m_fonts.contains(name);
     }
 
     void FontData::Upload()
     {
-        static const ImWchar ranges[] =
+        static const std::array<ImWchar, 27> ranges =
         {
                 0x0020, 0x00FF, // Basic Latin + Latin Supplement
                 0x0400, 0x052F, // Cyrillic + Cyrillic Supplement
@@ -97,8 +97,8 @@ namespace Trema::View
                 0,
         };
 
-        ImGuiIO& io = ImGui::GetIO();
-        auto font = io.Fonts->AddFontFromFileTTF(Path.c_str(), Size, FontConfig, ranges);
+        const auto& io = ImGui::GetIO();
+        auto font = io.Fonts->AddFontFromFileTTF(Path.c_str(), Size, FontConfig, ranges.data());
         Font = font;
     }
 }

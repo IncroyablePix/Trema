@@ -15,7 +15,7 @@ namespace Trema::View
         SliderInt(std::shared_ptr<GuiElement> parent, std::string name, int min, int max);
         SliderInt(const SliderInt&) = delete;
         SliderInt& operator=(const SliderInt&) = delete;
-        ~SliderInt() = default;
+        ~SliderInt() override = default;
         void AddOnCheckListener(std::string name, std::function<void(const SliderInt& slider, int value)> listener);
         void Show() override;
 

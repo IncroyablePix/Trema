@@ -32,12 +32,16 @@ namespace Trema::View
 
     void TinyXMLViewParser::SetupWindowFromString(const std::string &code, Window* window, Activity* activity)
     {
+        std::stringstream stream(code);
+        TiXmlDocument doc;
+        doc.Parse(stream.str().c_str());
 
+        ParseDocument(doc, window, activity);
+        ApplyStyles(window, activity);
     }
 
     void TinyXMLViewParser::ParseDocument(TiXmlDocument &document, Window* window, Activity* activity)
     {
-        TiXmlHandle hDoc(&document);
         TiXmlElement* pElement;
         //---
 

@@ -15,6 +15,7 @@ namespace Trema::View
             case ImageFormat::RGBA32F:
                 return 16;
             case ImageFormat::None:
+            default:
                 break;
         }
         return 0;

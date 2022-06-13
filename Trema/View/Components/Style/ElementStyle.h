@@ -85,7 +85,7 @@ namespace Trema::View
         bool GetWindowHeaderVisibility() const;
 
         void SetOrientation(enum Orientation orientation);
-        void SetOrientation(const std::string &orientation);
+        void SetOrientation(const std::string_view &orientation);
         enum Orientation GetOrientation() const;
 
         void SetAlpha(float alpha);

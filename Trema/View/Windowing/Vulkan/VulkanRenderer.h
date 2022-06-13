@@ -89,8 +89,8 @@ namespace Trema::View
 
         void FreeResourcesInQueue();
         void FreeCommandBuffers(ImGui_ImplVulkanH_Window *window, ImGui_ImplVulkanH_Frame* fd);
-        void SendRenderPass(ImGui_ImplVulkanH_Window *window, ImGui_ImplVulkanH_Frame* fd);
-        void RenderData(ImDrawData* drawData, ImGui_ImplVulkanH_Frame* fd);
+        static void SendRenderPass(ImGui_ImplVulkanH_Window *window, ImGui_ImplVulkanH_Frame* fd);
+        static void RenderData(ImDrawData* drawData, ImGui_ImplVulkanH_Frame* fd);
         void SubmitCommandBuffer(VkSemaphore imageAcquiredSemaphore, VkSemaphore renderCompleteSemaphore, ImGui_ImplVulkanH_Frame* fd);
     };
 }

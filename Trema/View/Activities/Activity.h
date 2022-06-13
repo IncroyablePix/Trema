@@ -6,6 +6,7 @@
 #define TREMA_PROJECT_ACTIVITY_H
 
 #include "Intent.h"
+#include "ActivityAsBase.h"
 #include <string>
 #include <memory>
 #include "../Windowing/Window.h"
@@ -36,7 +37,7 @@ namespace Trema::View
 
         template<class T> std::shared_ptr<T> GetElementById(const std::string& id)
         {
-            if(m_elementsById.find(id) == m_elementsById.end())
+            if(!m_elementsById.contains(id))
                 return nullptr;
 
             auto element = m_elementsById.at(id);
@@ -47,21 +48,35 @@ namespace Trema::View
             return std::dynamic_pointer_cast<T>(element);
         }
 
-        template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
+        template<class T> requires ActivityAsBase<T>
+        void StartActivityForResult(ActivityBuilder<T> activityBuilder, uint16_t requestCode, Intent intent)
+        {
+            auto activity = activityBuilder.CreateActivity(std::move(intent), m_window, requestCode);
+            m_window->StartActivityForResult(std::move(activity));
+        }
+
+        template<class T> requires ActivityAsBase<T>
         void StartActivityForResult(ActivityBuilder<T> activityBuilder, uint16_t requestCode)
         {
             auto activity = activityBuilder.CreateActivity(Intent {}, m_window, requestCode);
             m_window->StartActivityForResult(std::move(activity));
         }
 
-        template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
+        template<class T> requires ActivityAsBase<T>
+        void StartActivityForResult(uint16_t requestCode, Intent intent)
+        {
+            auto activityBuilder = ActivityBuilder<T>();
+            StartActivityForResult(std::move(activityBuilder), requestCode, std::move(intent));
+        }
+
+        template<class T> requires ActivityAsBase<T>
         void StartActivityForResult(uint16_t requestCode)
         {
             auto activityBuilder = ActivityBuilder<T>();
             StartActivityForResult(std::move(activityBuilder), requestCode);
         }
 
-        template<class T, class = std::enable_if_t<std::is_base_of_v<Activity, T>>>
+        template<class T> requires ActivityAsBase<T>
         void StartActivity()
         {
             auto activityBuilder = ActivityBuilder<T>();
@@ -101,9 +116,9 @@ namespace Trema::View
         }
 
         void LoadView(const std::string &path);
-        void QuitApplication();
-        void QuitActivity(uint16_t requestCode, uint16_t resultCode = 0, Intent intent = Intent {});
-        void QuitActivity(uint16_t resultCode = 0, Intent intent = Intent {});
+        void QuitApplication() const;
+        void QuitActivity(uint16_t requestCode, uint16_t resultCode = 0, Intent intent = Intent {}) const;
+        void QuitActivity(uint16_t resultCode = 0, Intent intent = Intent {}) const;
 
     private:
         std::unordered_map<std::string, std::shared_ptr<GuiElement>> m_elementsById;

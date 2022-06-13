@@ -46,8 +46,8 @@ namespace Trema::View
         float m_dockSize { 0.2f };
         std::string m_name;
         std::string m_id;
-        unsigned int m_styles;
-        unsigned int m_colors;
+        unsigned int m_styles { 0 };
+        unsigned int m_colors { 0 };
 
         std::string m_fontName;
         ImFont* m_font { nullptr };

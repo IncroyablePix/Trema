@@ -39,7 +39,7 @@ namespace Trema::View
     {
         BeginStyle();
 
-        auto* viewport = ImGui::GetMainViewport();
+        const auto* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->Pos);
         ImGui::SetNextWindowSize(viewport->Size);
         ImGui::SetNextWindowViewport(viewport->ID);

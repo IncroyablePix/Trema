@@ -226,14 +226,7 @@ namespace Trema::View
                 if(type == TYPE_STR)
                     style.SetMarginLeft(value->GetValue().String);
             }
-
-            /*std::cout << "\t[" << propName << ":" << *value;
-            if(type == TYPE_NUM)
-                std::cout << "(" << ToHex(*((int64_t*)value->GetValue())) << ")";
-
-            std::cout << "]\n";*/
         }
-        //std::cout << std::endl;
     }
 
     char *StyleApplier::CopyStr(const char* str)

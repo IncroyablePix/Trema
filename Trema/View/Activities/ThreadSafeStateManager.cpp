@@ -21,7 +21,7 @@ namespace Trema::View
     std::unique_ptr<Activity> ThreadSafeStateManager::Pop()
     {
         std::scoped_lock lock(m_mutex);
-        std::unique_ptr<Activity> t = std::move(m_activities.top());
+        auto t = std::move(m_activities.top());
         m_activities.pop();
 
         if(!m_activities.empty())
@@ -43,7 +43,7 @@ namespace Trema::View
             std::scoped_lock lock(m_mutex);
             m_activities.push(std::move(item));
 
-            std::unique_lock<std::mutex> ul(m_mutexBlocking);
+            std::unique_lock ul(m_mutexBlocking);
             m_blocking.notify_one();
         }
 
@@ -67,7 +67,7 @@ namespace Trema::View
     {
         while(Empty())
         {
-            std::unique_lock<std::mutex> ul(m_mutexBlocking);
+            std::unique_lock ul(m_mutexBlocking);
             m_blocking.wait(ul);
         }
     }
@@ -102,7 +102,7 @@ namespace Trema::View
 
             if(!Empty())
             {
-                auto& toResume = Top();
+                const auto& toResume = Top();
                 toResume->OnActivityResult(m_toQuit->RequestCode, m_toQuit->ResultCode, std::move(m_toQuit->Intent));
                 m_toQuit.reset();
             }

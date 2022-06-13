@@ -15,10 +15,7 @@ namespace Trema::View
 
     }
 
-    TopMenu::~TopMenu()
-    {
-
-    }
+    TopMenu::~TopMenu() = default;
 
     void TopMenu::Show()
     {

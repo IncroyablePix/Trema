@@ -12,33 +12,29 @@ namespace Trema::View
 
     TextInput::TextInput(std::shared_ptr<GuiElement> parent, std::string name, std::string defaultText, size_t bufferSize) :
             GuiElement(std::move(parent), std::move(name)),
-//            m_text(defaultText.c_str()),
             m_bufferSize(bufferSize)
     {
-        m_text = new char[m_bufferSize];
+        m_text.reset(new char[m_bufferSize]);
         for(int i = 0; i < m_bufferSize; i ++)
         {
             if (i == defaultText.size())
             {
-                m_text[i] = '\0';
+                m_text.get()[i] = '\0';
                 break;
             }
             else
             {
-                m_text[i] = defaultText[i];
+                m_text.get()[i] = defaultText[i];
             }
         }
     }
 
-    TextInput::~TextInput()
-    {
-        delete[] m_text;
-    }
+    TextInput::~TextInput() = default;
 
     void TextInput::Show()
     {
         BeginStyle();
-        if(ImGui::InputText(NameId(), m_text, m_bufferSize))
+        if(ImGui::InputText(NameId(), m_text.get(), m_bufferSize))
         {
             Notify();
         }
@@ -52,13 +48,13 @@ namespace Trema::View
         return std::make_shared<TextInput>(std::move(parent), std::move(name), std::move(defaultText), bufferSize);
     }
 
-    void TextInput::Notify()
+    void TextInput::Notify() const
     {
         auto future = std::async(std::launch::async, [this]()
         {
             for(const auto& [name, function] : m_listeners)
             {
-                std::string text { m_text };
+                std::string text { m_text.get() };
                 function(std::move(text));
             }
         });
@@ -69,13 +65,13 @@ namespace Trema::View
         m_listeners[std::move(name)] = std::move(listener);
     }
 
-    std::string TextInput::GetText()
+    std::string TextInput::GetText() const
     {
-        return { m_text };
+        return { m_text.get() };
     }
 
     void TextInput::SetText(const std::string &text)
     {
-        strcpy(m_text, text.c_str());
+        strcpy(m_text.get(), text.c_str());
     }
 }

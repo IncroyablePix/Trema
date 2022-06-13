@@ -103,7 +103,6 @@ namespace Trema::View
         else
         {
             auto monitor = glfwGetPrimaryMonitor();
-            const auto mode = glfwGetVideoMode(monitor);
             m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
         }
         
@@ -117,7 +116,6 @@ namespace Trema::View
         {
             ToggleFullscreen(fullscreen);
             m_titleBar = titleBar;
-            // CreateWindow();
         }
     }
 
@@ -140,7 +138,6 @@ namespace Trema::View
         if (titleBar != m_titleBar)
         {
             m_titleBar = titleBar;
-            // CreateWindow();
         }
     }
 

@@ -13,7 +13,6 @@ namespace Trema::View
     {
     public:
         explicit ParsingException(char const* message) noexcept;
-        //virtual char const* what() const noexcept;
     };
 }
 

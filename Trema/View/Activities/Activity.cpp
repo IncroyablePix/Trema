@@ -18,31 +18,32 @@ namespace Trema::View
 
     void Activity::OnActivityStart()
     {
+        // To be overriden
     }
 
     void Activity::OnCreateView()
     {
-
+        // To be overriden
     }
 
     void Activity::OnActivityEnd()
     {
-
+        // To be overriden
     }
 
     void Activity::OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent)
     {
-
+        // To be overriden
     }
 
     void Activity::OnActivityUpdate()
     {
-
+        // To be overriden
     }
 
     void Activity::OnActivityResume()
     {
-
+        // To be overriden
     }
 
     std::string Activity::GetStringExtra(const std::string &name)
@@ -115,7 +116,7 @@ namespace Trema::View
         return m_intent.GetExtra(name);
     }
 
-    void Activity::QuitApplication()
+    void Activity::QuitApplication() const
     {
         m_window->Close();
     }
@@ -171,12 +172,12 @@ namespace Trema::View
         m_window->SetDefaultFont(Style.GetFont());
     }
 
-    void Activity::QuitActivity(uint16_t requestCode, uint16_t resultCode, Intent intent)
+    void Activity::QuitActivity(uint16_t requestCode, uint16_t resultCode, Intent intent) const
     {
-        m_window->QuitActivity(m_requestCode, resultCode, std::move(intent));
+        m_window->QuitActivity(requestCode, resultCode, std::move(intent));
     }
 
-    void Activity::QuitActivity(uint16_t resultCode, Intent intent)
+    void Activity::QuitActivity(uint16_t resultCode, Intent intent) const
     {
         QuitActivity(m_requestCode, resultCode, std::move(intent));
     }

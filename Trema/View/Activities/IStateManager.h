@@ -16,6 +16,7 @@ namespace Trema::View
     class IStateManager
     {
     public:
+        virtual ~IStateManager() = default;
         virtual std::shared_ptr<Layout> GetLayout() = 0;
         virtual std::shared_ptr<TopMenu> GetTopMenu() = 0;
         virtual std::unique_ptr<Activity>& Top() = 0;

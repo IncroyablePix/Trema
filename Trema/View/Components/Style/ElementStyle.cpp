@@ -14,7 +14,7 @@ namespace Trema::View
         m_orientation = orientation;
     }
 
-    void ElementStyle::SetOrientation(const std::string &orientation)
+    void ElementStyle::SetOrientation(const std::string_view &orientation)
     {
         SetOrientation(orientation == "column" ? Column : Row);
     }

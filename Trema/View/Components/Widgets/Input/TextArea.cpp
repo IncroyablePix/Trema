@@ -16,15 +16,12 @@ namespace Trema::View
 
     }
 
-    TextArea::~TextArea()
-    {
-
-    }
+    TextArea::~TextArea() = default;
 
     void TextArea::Show()
     {
         BeginStyle();
-        ImGui::InputTextMultiline(NameId(), m_text, m_bufferSize);
+        ImGui::InputTextMultiline(NameId(), m_text.get(), m_bufferSize);
         EndStyle();
     }
 
