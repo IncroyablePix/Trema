@@ -29,7 +29,7 @@ namespace Trema::View
         virtual void Clear() = 0;
         virtual void Wait() = 0;
         virtual void UpdateState() = 0;
-        virtual void UpdateCurrentActivity() = 0;
+        virtual void UpdateCurrentActivity(double deltaTime) = 0;
     };
 }
 

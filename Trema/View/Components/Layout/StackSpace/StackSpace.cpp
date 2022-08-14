@@ -21,8 +21,9 @@ namespace Trema::View
         ImGui::Columns((int)m_elements.size(), NameId());
         for(const auto& container : m_elements)
         {
-            for (const auto &element: container->GetChildren())
-                element->Show();
+            Container::ToggleSubContainerization(true);
+            container->Show();
+            Container::ToggleSubContainerization(false);
 
             ImGui::NextColumn();
         }

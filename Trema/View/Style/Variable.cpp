@@ -86,7 +86,7 @@ namespace Trema::View
             {
                 auto len = strlen(toCopy.String);
                 auto *v = new char[len];
-                strcpy_s((char *) v, len, toCopy.String);
+                strncpy((char *) v, toCopy.String, len);
                 value.String = v;
                 break;
             }

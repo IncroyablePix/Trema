@@ -4,6 +4,7 @@
 // Shamelessly stolen and customized from Walnut (https://github.com/TheCherno/Walnut/)
 //
 
+#include <array>
 #include "VulkanImage.h"
 #include "VulkanRenderer.h"
 #include "../../ImGUI/imgui_impl_vulkan.h"

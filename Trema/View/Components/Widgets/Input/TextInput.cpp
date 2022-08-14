@@ -4,6 +4,7 @@
 
 #include <future>
 #include <sstream>
+#include <iostream>
 #include "TextInput.h"
 #include "../../../ImGUI/imgui.h"
 
@@ -38,6 +39,8 @@ namespace Trema::View
         {
             Notify();
         }
+
+        UpdateSize();
         EndStyle();
     }
 
@@ -73,5 +76,12 @@ namespace Trema::View
     void TextInput::SetText(const std::string &text)
     {
         strcpy(m_text.get(), text.c_str());
+    }
+
+    void TextInput::UpdateSize()
+    {
+        const auto height = ImGui::GetFrameHeightWithSpacing();
+        const auto width = ImGui::CalcItemWidth() + ImGui::CalcTextSize(NameId()).x;
+        m_layoutSize = { width, height };
     }
 }

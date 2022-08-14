@@ -32,9 +32,9 @@ namespace Trema::View
         return t;
     }
 
-    void ThreadSafeStateManager::UpdateCurrentActivity()
+    void ThreadSafeStateManager::UpdateCurrentActivity(double deltaTime)
     {
-        Top()->OnActivityUpdate();
+        Top()->OnActivityUpdate(deltaTime);
     }
 
     void ThreadSafeStateManager::Push(std::unique_ptr<Activity> item)

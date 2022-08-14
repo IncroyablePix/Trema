@@ -7,6 +7,7 @@
 #include "Image.h"
 
 #include <utility>
+#include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../../STB/stb_image.h"
@@ -37,12 +38,13 @@ namespace Trema::View
                 };
 
         if(x == 0 && y != 0)
-           imageSize.x = m_renderImage->GetWidth() * (y / m_renderImage->GetHeight());
+            imageSize.x = m_renderImage->GetWidth() * (y / m_renderImage->GetHeight());
         else if(x != 0 && y == 0)
             imageSize.y = m_renderImage->GetHeight() * (x / m_renderImage->GetWidth());
 
         ImGui::Image(m_renderImage->GetTextureID(), imageSize);
 
+        m_layoutSize = imageSize;
         EndStyle();
     }
 

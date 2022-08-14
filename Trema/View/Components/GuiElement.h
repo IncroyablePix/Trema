@@ -22,15 +22,19 @@ namespace Trema::View
         virtual const std::string& GetName();
         inline const std::string& GetId() { return m_id; }
         inline void SetId(std::string id) { m_id = std::move(id); }
-        virtual const char* NameId();
+        virtual const char* NameId() const;
         virtual void SetName(std::string name);
         virtual void BeginStyle();
         virtual void EndStyle();
+        void PollEvents();
 
         virtual ImVec2 GetItemSize() const;
+        inline ImVec2 GetLayoutSize() const { return m_layoutSize; }
 
         inline void SetDockSize(float dockSize) { m_dockSize = dockSize; }
         inline float GetDockSize() const { return m_dockSize; }
+
+        void ShowContextMenu();
 
         ElementStyle Style;
 
@@ -46,11 +50,13 @@ namespace Trema::View
         float m_dockSize { 0.2f };
         std::string m_name;
         std::string m_id;
+        std::string m_contextMenu;
         unsigned int m_styles { 0 };
         unsigned int m_colors { 0 };
 
         std::string m_fontName;
         ImFont* m_font { nullptr };
+        ImVec2 m_layoutSize { 0, 0 };
 
     private:
         static bool IsInWindow();

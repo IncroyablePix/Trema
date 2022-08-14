@@ -5,7 +5,7 @@
         <Font src="./Roboto-SemiMedium.ttf" size="16.0" name="Roboto" />
         <Style src="./styles.tss" />
         <Title>Trema sample window</Title>
-        <WindowData fullscreen="true" />
+        <WindowData fullscreen="false" />
     </Head>
     <Body>
         <MainDockSpace name="layout" saveLayout="true">

@@ -3,6 +3,7 @@
 //
 
 #include <future>
+#include <iostream>
 #include "Button.h"
 
 namespace Trema::View
@@ -30,6 +31,7 @@ namespace Trema::View
 
         if(ImGui::Button(NameId(), GetItemSize()))
         {
+
             auto future = std::async(std::launch::async, [this]()
             {
                 for(const auto& [name, function] : m_listeners)
@@ -38,7 +40,16 @@ namespace Trema::View
                 }
             });
         }
+
+        UpdateSize();
         EndStyle();
+    }
+
+    void Button::UpdateSize()
+    {
+        const auto height = ImGui::CalcTextSize(NameId()).y + ImGui::GetStyle().FramePadding.y * 2.0f;
+        const auto width = ImGui::CalcTextSize(NameId()).x + ImGui::GetStyle().FramePadding.x * 2.0f;
+        m_layoutSize = { width, height };
     }
 
     std::shared_ptr<Button> Button::CreateButton(std::shared_ptr<GuiElement> parent, std::string name)

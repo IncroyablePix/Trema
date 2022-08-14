@@ -16,6 +16,7 @@
 #include <View/Components/Widgets/Pure/Text.h>
 #include <View/Windowing/GLFW/GLFWWindow.h>
 #include <View/Activities/Activity.h>
+#include <format>
 
 using namespace Trema::View;
 
@@ -188,6 +189,12 @@ public:
     void OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent) override
     {
         m_mailAddress->SetText(intent.GetStringExtra("test"));
+    }
+
+    void OnActivityUpdate(double deltaTime) override
+    {
+        /*const auto fmt = u8"DeltaTime: {}";
+        std::cout << std::format(fmt, deltaTime) << std::endl;*/
     }
 
 private:

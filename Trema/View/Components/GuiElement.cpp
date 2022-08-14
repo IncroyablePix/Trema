@@ -27,7 +27,7 @@ namespace Trema::View
         m_name = std::move(name);
     }
 
-    const char *GuiElement::NameId()
+    const char *GuiElement::NameId() const
     {
         return m_name.c_str();
     }
@@ -101,5 +101,21 @@ namespace Trema::View
     ImVec2 GuiElement::GetItemSize() const
     {
         return Style.GetSize();
+    }
+
+    /*void GuiElement::ShowContextMenu()
+    {
+        if(m_contextMenu)
+        {
+            ImGui::OpenPopup(m_contextMenu->NameId());
+        }
+    }*/
+
+    void GuiElement::PollEvents()
+    {
+        if(ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+        {
+            ImGui::OpenPopup(m_contextMenu.c_str());
+        }
     }
 }

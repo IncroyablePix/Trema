@@ -25,7 +25,7 @@ namespace Trema::View
         virtual void OnActivityEnd();
         virtual void OnActivityResume();
         virtual void OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent);
-        virtual void OnActivityUpdate();
+        virtual void OnActivityUpdate(double deltaTime);
 
         void ApplyStyle();
         void SetLayout(std::shared_ptr<Layout> layout);

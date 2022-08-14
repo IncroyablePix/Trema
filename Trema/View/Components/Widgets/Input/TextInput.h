@@ -33,6 +33,8 @@ namespace Trema::View
         std::unordered_map<std::string, std::function<void(std::string text)>> m_listeners;
 
         void Notify() const;
+
+        void UpdateSize();
     };
 }
 

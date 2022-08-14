@@ -79,7 +79,7 @@ namespace Trema::View
 
     void FontData::Upload()
     {
-        static const std::array<ImWchar, 27> ranges =
+        static const ImWchar ranges[] =
         {
                 0x0020, 0x00FF, // Basic Latin + Latin Supplement
                 0x0400, 0x052F, // Cyrillic + Cyrillic Supplement
@@ -98,7 +98,7 @@ namespace Trema::View
         };
 
         const auto& io = ImGui::GetIO();
-        auto font = io.Fonts->AddFontFromFileTTF(Path.c_str(), Size, FontConfig, ranges.data());
+        auto font = io.Fonts->AddFontFromFileTTF(Path.c_str(), Size, FontConfig, ranges);
         Font = font;
     }
 }

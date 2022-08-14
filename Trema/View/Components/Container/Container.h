@@ -24,6 +24,8 @@ namespace Trema::View
         virtual void AddChild(std::shared_ptr<GuiElement> child);
         inline std::vector<std::shared_ptr<GuiElement>>& GetChildren() { return m_children; }
 
+        inline static void ToggleSubContainerization(bool toggle) { SubContainer = toggle; }
+
     protected:
         std::vector<std::shared_ptr<GuiElement>> m_children;
         static bool SubContainer;

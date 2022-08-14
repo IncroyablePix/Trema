@@ -36,7 +36,7 @@ namespace Trema::View
         // To be overriden
     }
 
-    void Activity::OnActivityUpdate()
+    void Activity::OnActivityUpdate(double deltaTime)
     {
         // To be overriden
     }

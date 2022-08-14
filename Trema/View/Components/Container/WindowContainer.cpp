@@ -33,6 +33,7 @@ namespace Trema::View
         {
             ShowSubContainer();
         }
+
         EndStyle();
     }
 
@@ -46,6 +47,7 @@ namespace Trema::View
     {
         ImGui::Begin(NameId(), m_closable ? &m_isOpened : nullptr, GetWindowFlags());
 
+        ImVec2 size = { 0, 0 };
         bool horizontal = (Style.GetOrientation() == Row);
         bool notFirst = false;
 
@@ -57,15 +59,19 @@ namespace Trema::View
                 ImGui::SameLine();
 
             element->Show();
+            UpdateSize(size, horizontal, element);
         }
 
+        m_layoutSize = size;
+        std::cout << m_layoutSize.x << ", " << m_layoutSize.y << std::endl;
         ImGui::End();
     }
 
-    void WindowContainer::ShowSubContainer() const
+    void WindowContainer::ShowSubContainer()
     {
         bool horizontal = (Style.GetOrientation() == Row);
         bool notFirst = false;
+        ImVec2 size = { 0, 0 };
 
         for(const auto& element : m_children)
         {
@@ -75,6 +81,24 @@ namespace Trema::View
                 ImGui::SameLine();
 
             element->Show();
+            UpdateSize(size, horizontal, element);
+        }
+
+        m_layoutSize = size;
+        std::cout << m_layoutSize.x << ", " << m_layoutSize.y << std::endl;
+    }
+
+    void WindowContainer::UpdateSize(ImVec2& size, bool horizontal, const std::shared_ptr<GuiElement>& element) const
+    {
+        if(horizontal)
+        {
+            size.x += element->GetLayoutSize().x;
+            size.y = std::max(size.y, element->GetLayoutSize().y);
+        }
+        else
+        {
+            size.x = std::max(size.x, element->GetLayoutSize().x);
+            size.y += element->GetLayoutSize().y;
         }
     }
 

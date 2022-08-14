@@ -3,6 +3,7 @@
 //
 
 #include <future>
+#include <iostream>
 #include "Checkbox.h"
 #include "../../ImGUI/imgui.h"
 
@@ -37,11 +38,20 @@ namespace Trema::View
                 }
             });
         }
+
+        UpdateSize();
         EndStyle();
     }
 
     std::shared_ptr<Checkbox> Checkbox::CreateCheckbox(std::shared_ptr<GuiElement> parent, std::string name)
     {
         return std::make_shared<Checkbox>(std::move(parent), std::move(name));
+    }
+
+    void Checkbox::UpdateSize()
+    {
+        const auto height = ImGui::GetFrameHeightWithSpacing();
+        const auto width = ImGui::GetFrameHeightWithSpacing() + ImGui::CalcTextSize(NameId()).x;
+        m_layoutSize = { width, height };
     }
 }

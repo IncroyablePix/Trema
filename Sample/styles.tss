@@ -51,6 +51,14 @@ pink: 0xFF8BC4FF;
 
 #horizontalStackSpace {
     orientation: "horizontal";
+    #credentials {
+        #padlock {
+            width: "150px";
+            height: "auto";
+        }
+        vertical-align: "center";
+        horizontal-align: "center";
+    }
 }
 
 #winForms {

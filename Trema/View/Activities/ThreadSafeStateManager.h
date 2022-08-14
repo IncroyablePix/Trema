@@ -38,7 +38,7 @@ namespace Trema::View
         void Clear() final;
         void Wait() override;
         void UpdateState() override;
-        void UpdateCurrentActivity() override;
+        void UpdateCurrentActivity(double deltaTime) override;
         void QuitPending(uint16_t requestCode, uint16_t resultCode, Intent intent) override;
 
     private:

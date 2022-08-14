@@ -27,6 +27,8 @@ namespace Trema::View
     private:
         bool m_checked { false };
         std::unordered_map<std::string, std::function<void(const Checkbox& checkbox, bool checked)>> m_listeners;
+
+        void UpdateSize();
     };
 }
 

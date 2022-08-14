@@ -39,6 +39,7 @@ namespace Trema::View
         virtual void SetWidth(int width) = 0;
         virtual void SetHeight(int height) = 0;
         virtual void SwapBuffers() = 0;
+        virtual void UpdateTime() = 0;
 
         int Run();
         void InitializeDearImGUI() const;
@@ -94,6 +95,7 @@ namespace Trema::View
         bool m_opened;
         bool m_fullscreen { false };
         bool m_titleBar { false };
+        double m_deltaTime { 0.0 };
 
         std::unique_ptr<IStateManager> m_stateManager;
 

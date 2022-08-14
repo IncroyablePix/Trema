@@ -4,17 +4,16 @@
         <Font src="./JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
         <Style src="./styles.tss" />
         <Title>Trema sample - Login</Title>
-        <WindowData fullscreen="true" />
+        <WindowData fullscreen="false" />
     </Head>
     <Body>
         <StackSpace id="horizontalStackSpace">
-            <WindowContainer>
+            <WindowContainer id="credentials">
+                <Image id="padlock" src="./padlock.png"/>
                 <TextInput id="mailAddress">Mail address: </TextInput>
                 <TextInput id="password">Password: </TextInput>
+                <Checkbox id="rememberMe">Remember me</Checkbox>
                 <Button id="loginButton">Login</Button>
-            </WindowContainer>
-            <WindowContainer>
-                <Image src="./padlock.png"/>
             </WindowContainer>
         </StackSpace>
     </Body>

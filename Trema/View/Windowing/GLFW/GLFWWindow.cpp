@@ -86,6 +86,7 @@ namespace Trema::View
     void GLFWWindow::CreateWindow()
     {
         InitializeGlfw();
+        m_previousTime = glfwGetTime();
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
         if(m_window)
@@ -102,7 +103,6 @@ namespace Trema::View
         }
         else
         {
-            auto monitor = glfwGetPrimaryMonitor();
             m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
         }
         
@@ -165,5 +165,12 @@ namespace Trema::View
     void GLFWWindow::SwapBuffers()
     {
         glfwSwapBuffers(m_window);
+    }
+
+    void GLFWWindow::UpdateTime()
+    {
+        double currentTime = glfwGetTime();
+        m_deltaTime = currentTime - m_previousTime;
+        m_previousTime = currentTime;
     }
 }

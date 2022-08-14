@@ -2,14 +2,11 @@
 // Created by Benjam on 10/20/2021.
 //
 
-#include <iostream>
 #include <utility>
 #include <fstream>
 #include "DockSpace.h"
-#include "../../../ImGUI/imgui_internal.h"
 #include "../../../Exceptions/ParsingException.h"
 #include "../LayoutException.h"
-#include "../../TopMenu/TopMenu.h"
 #include "../../../Windowing/Window.h"
 
 namespace Trema::View

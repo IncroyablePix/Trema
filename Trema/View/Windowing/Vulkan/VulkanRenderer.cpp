@@ -4,6 +4,7 @@
 // Shamelessly sucked out of Dear ImGUI examples ; abstracted by myself
 //
 
+#include <array>
 #include "VulkanRenderer.h"
 #include "../WindowInitializationException.h"
 #include "IWindowBackendStrategy.h"
@@ -85,34 +86,32 @@ namespace Trema::View
         ImGui_ImplVulkanH_Window* wd = &m_mainWindowData;
         VkResult error;
 
-        {
-            VkCommandPool commandPool = wd->Frames[wd->FrameIndex].CommandPool;
-            VkCommandBuffer commandBuffer = wd->Frames[wd->FrameIndex].CommandBuffer;
+        VkCommandPool commandPool = wd->Frames[wd->FrameIndex].CommandPool;
+        VkCommandBuffer commandBuffer = wd->Frames[wd->FrameIndex].CommandBuffer;
 
-            error = vkResetCommandPool(m_device, commandPool, 0);
-            CheckVkResult(error);
-            VkCommandBufferBeginInfo beginInfo = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-            beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-            error = vkBeginCommandBuffer(commandBuffer, &beginInfo);
-            CheckVkResult(error);
+        error = vkResetCommandPool(m_device, commandPool, 0);
+        CheckVkResult(error);
+        VkCommandBufferBeginInfo beginInfo = { .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+        beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        error = vkBeginCommandBuffer(commandBuffer, &beginInfo);
+        CheckVkResult(error);
 
-            ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
+        ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
 
-            VkSubmitInfo endInfo =
-                    {
-                            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-                            .commandBufferCount = 1,
-                            .pCommandBuffers = &commandBuffer
-                    };
-            error = vkEndCommandBuffer(commandBuffer);
-            CheckVkResult(error);
-            error = vkQueueSubmit(m_queue, 1, &endInfo, VK_NULL_HANDLE);
-            CheckVkResult(error);
+        VkSubmitInfo endInfo =
+                {
+                        .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                        .commandBufferCount = 1,
+                        .pCommandBuffers = &commandBuffer
+                };
+        error = vkEndCommandBuffer(commandBuffer);
+        CheckVkResult(error);
+        error = vkQueueSubmit(m_queue, 1, &endInfo, VK_NULL_HANDLE);
+        CheckVkResult(error);
 
-            error = vkDeviceWaitIdle(m_device);
-            CheckVkResult(error);
-            ImGui_ImplVulkan_DestroyFontUploadObjects();
-        }
+        error = vkDeviceWaitIdle(m_device);
+        CheckVkResult(error);
+        ImGui_ImplVulkan_DestroyFontUploadObjects();
     }
 
     void VulkanRenderer::SetupVulkanWindow(ImGui_ImplVulkanH_Window *window, VkSurfaceKHR surface, int width, int height)

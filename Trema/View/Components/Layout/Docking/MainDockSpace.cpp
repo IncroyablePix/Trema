@@ -45,7 +45,7 @@ namespace Trema::View
             }
         }
 
-        ImPlot::ShowDemoWindow();
+        // ImPlot::ShowDemoWindow();
         End();
     }
 

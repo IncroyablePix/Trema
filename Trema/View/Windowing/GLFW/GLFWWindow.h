@@ -26,11 +26,13 @@ namespace Trema::View
         void SetWidth(int width) override;
         void SetHeight(int height) override;
         void SwapBuffers() override;
+        void UpdateTime() override;
 
         static std::shared_ptr<GLFWWindow> CreateGLFWWindow(const WindowInfo &info = { .Width = 1280, .Height = 720 });
 
     private:
         GLFWwindow* m_window { nullptr };
+        double m_previousTime {0.0 };
         static void InitializeGlfw();
         void CreateWindow();
         void InitializeGlfwVulkan();

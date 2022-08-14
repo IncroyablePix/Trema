@@ -24,6 +24,8 @@ namespace Trema::View
         static std::shared_ptr<Button> CreateButton(std::shared_ptr<GuiElement> parent, std::string name);
     private:
         std::unordered_map<std::string, std::function<void(const Button& button)>> m_listeners;
+
+        void UpdateSize();
     };
 }
 

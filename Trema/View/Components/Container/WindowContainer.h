@@ -24,9 +24,11 @@ namespace Trema::View
     private:
         int GetWindowFlags();
         void ShowPureWindow();
-        void ShowSubContainer() const;
+        void ShowSubContainer();
         bool m_isOpened { true };
         bool m_closable { false };
+
+        void UpdateSize(ImVec2 &size, bool horizontal, const std::shared_ptr<GuiElement> &element) const;
     };
 }
 

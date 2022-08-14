@@ -130,6 +130,7 @@ namespace Trema::View
 
     void Window::Update()
     {
+        UpdateTime();
         m_stateManager->UpdateState();
         PollEvent();
         Render();
@@ -171,7 +172,7 @@ namespace Trema::View
 
         //--- ImGui code
 
-        m_stateManager->UpdateCurrentActivity();
+        m_stateManager->UpdateCurrentActivity(m_deltaTime);
         auto menu = m_stateManager->GetTopMenu();
         if(menu)
         {
