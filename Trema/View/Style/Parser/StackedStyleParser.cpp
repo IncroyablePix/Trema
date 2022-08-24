@@ -55,7 +55,14 @@ namespace Trema::View
                 case T_ENDINS:
                     if(!AssignVar(tokens, currentSt, mistakes))
                     {
-                        mistakes.emplace_back(CompilationMistake { .Line = currentToken->GetLine(), .Position = currentToken->GetPosition(), .Code = ErrorCode::UnexpectedToken, .Extra = ";" });
+                        mistakes.emplace_back(
+                                CompilationMistake
+                                {
+                                    .Line = currentToken->GetLine(),
+                                    .Position = currentToken->GetPosition(),
+                                    .Code = ErrorCode::UnexpectedToken,
+                                    .Extra = ";"
+                                });
                     }
                     break;
 

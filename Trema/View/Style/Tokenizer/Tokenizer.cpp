@@ -166,6 +166,21 @@ namespace Trema::View
         }
     }
 
+    bool IsOperator(const char c)
+    {
+        switch(c)
+        {
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '%':
+                return true;
+        }
+
+        return false;
+    }
+
     Tokenizer::Tokenizer(const std::string& code, std::vector<CompilationMistake> &mistakes) :
             m_lastType(T_LPAR),
             m_code(code.c_str()),

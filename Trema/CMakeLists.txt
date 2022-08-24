@@ -17,6 +17,13 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY RULE_LAUNCH_COMPILE "\"${CMAKE_COMMAND}\" -E time")
 set_property(TARGET ${PROJECT_NAME} PROPERTY RULE_LAUNCH_LINK "\"${CMAKE_COMMAND}\" -E time")
 
+############ COPYING HEADERFILES ############
+file(COPY .
+        DESTINATION ${CMAKE_BINARY_DIR}/include
+        FILES_MATCHING
+        PATTERN *.h
+        )
+
 ############ LINK ############
 message("Linking...")
 
