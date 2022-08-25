@@ -118,4 +118,55 @@ namespace Trema::View
             ImGui::OpenPopup(m_contextMenu.c_str());
         }
     }
+
+    ImVec2 GuiElement::GetSize() const
+    {
+        auto size = Style.GetSize();
+
+        auto width = std::min(m_layoutSize.x, size.x);
+        if(width == 0)
+            width = std::max(m_layoutSize.x, size.x);
+
+        auto height = std::min(m_layoutSize.y, size.y);
+        if(height == 0)
+            height = std::max(m_layoutSize.y, size.y);
+
+        if(m_parent)
+        {
+            auto parentSize = m_parent->GetSize();
+            if(parentSize.x != 0)
+                width = width == 0 ? std::max(width, parentSize.x) : std::min(width, parentSize.x);
+            if(parentSize.y != 0)
+                height = height == 0 ? std::max(height, parentSize.y) : std::min(height, parentSize.y);
+        }
+
+        return { width, height };
+    }
+
+    void GuiElement::PreShow()
+    {
+        auto size = GetSize();
+        if(size.x != 0.0f)
+            ImGui::SetNextItemWidth(size.x);
+    }
+
+    void GuiElement::AlignX()
+    {
+        ImVec2 containerSize = m_parent ? m_parent->GetSize() : ImGui::GetContentRegionAvail();
+        auto size = GetSize();
+
+        if(Style.GetHorizontalAlignment() == Center)
+        {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (containerSize.x / 2) - (size.x / 2));
+        }
+        else if(Style.GetHorizontalAlignment() == End)
+        {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + containerSize.x - size.x);
+        }
+    }
+
+    void GuiElement::AlignY()
+    {
+        // TODO : Tomorrow
+    }
 }

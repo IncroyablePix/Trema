@@ -10,8 +10,11 @@
         <StackSpace id="horizontalStackSpace">
             <WindowContainer id="credentials">
                 <Image id="padlock" src="./padlock.png"/>
-                <TextInput id="mailAddress">Mail address: </TextInput>
-                <TextInput id="password">Password: </TextInput>
+                <Text id="credentialsText">Credentials</Text>
+                <Text>Mail address:</Text>
+                <TextInput id="mailAddress">##Mail address</TextInput>
+                <Text>Password:</Text>
+                <TextInput id="password">##Password</TextInput>
                 <Checkbox id="rememberMe">Remember me</Checkbox>
                 <Button id="loginButton">Login</Button>
             </WindowContainer>

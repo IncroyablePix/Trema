@@ -42,6 +42,7 @@ namespace Trema::View
         else if(x != 0 && y == 0)
             imageSize.y = m_renderImage->GetHeight() * (x / m_renderImage->GetWidth());
 
+        AlignX();
         ImGui::Image(m_renderImage->GetTextureID(), imageSize);
 
         m_layoutSize = imageSize;

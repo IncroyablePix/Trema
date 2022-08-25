@@ -25,6 +25,8 @@ namespace Trema::View
 
     private:
         bool m_wrapped { true };
+
+        void UpdateSize();
     };
 }
 

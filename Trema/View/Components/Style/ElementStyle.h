@@ -18,11 +18,20 @@ namespace Trema::View
         Row
     };
 
+    enum Alignment
+    {
+        Start,
+        Center,
+        End
+    };
+
     class ElementStyle
     {
     private:
         float m_alpha = 1.f;                // Transparency
         Orientation m_orientation = Column; // Orientation (radio buttons, ...)
+        Alignment m_verticalAlignment = Start;
+        Alignment m_horizontalAlignment = Start;
 
         std::string m_width { "auto" };
         std::string m_height { "auto" };
@@ -87,6 +96,14 @@ namespace Trema::View
         void SetOrientation(enum Orientation orientation);
         void SetOrientation(const std::string_view &orientation);
         enum Orientation GetOrientation() const;
+
+        void SetHorizontalAlignment(enum Alignment alignment);
+        void SetHorizontalAlignment(const std::string_view &alignment);
+        enum Alignment GetHorizontalAlignment() const;
+
+        void SetVerticalAlignment(enum Alignment alignment);
+        void SetVerticalAlignment(const std::string_view &alignment);
+        enum Alignment GetVerticalAlignment() const;
 
         void SetAlpha(float alpha);
         void SetAlpha(const std::string &alpha);

@@ -23,12 +23,22 @@ namespace Trema::View
     {
         BeginStyle();
 
+        AlignX();
+
         if(m_wrapped)
             ImGui::TextWrapped("%s", NameId());
         else
             ImGui::Text("%s", NameId());
 
+        UpdateSize();
         EndStyle();
+    }
+
+    void Text::UpdateSize()
+    {
+        const auto width = ImGui::CalcTextSize(NameId()).x;
+        const auto height = ImGui::CalcTextSize(NameId()).y;
+        m_layoutSize = { width, height };
     }
 
     const std::string &Text::GetName()

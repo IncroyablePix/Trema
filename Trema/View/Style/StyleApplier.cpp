@@ -226,6 +226,16 @@ namespace Trema::View
                 if(type == TYPE_STR)
                     style.SetMarginLeft(value->GetValue().String);
             }
+            else if(propName == "horizontal-alignment")
+            {
+                if(type == TYPE_STR)
+                    style.SetHorizontalAlignment(value->GetValue().String);
+            }
+            else if(propName == "vertical-alignment")
+            {
+                if(type == TYPE_STR)
+                    style.SetVerticalAlignment(value->GetValue().String);
+            }
         }
     }
 

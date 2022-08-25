@@ -26,6 +26,7 @@ namespace Trema::View
         virtual void SetName(std::string name);
         virtual void BeginStyle();
         virtual void EndStyle();
+        virtual void PreShow();
         void PollEvents();
 
         virtual ImVec2 GetItemSize() const;
@@ -44,6 +45,10 @@ namespace Trema::View
         template<class T>
         inline static std::shared_ptr<T> CastTo(const std::shared_ptr<GuiElement> &element) { return std::dynamic_pointer_cast<T>(element); }
         inline void SetIsWindow(bool toggle) { m_isWindow = toggle; }
+        inline ImVec2 GetParentSize() const { return m_parent ? m_parent->Style.GetSize() : ImVec2(0, 0); }
+        ImVec2 GetSize() const;
+        virtual void AlignX();
+        virtual void AlignY();
 
         bool m_isWindow { false };
         std::shared_ptr<GuiElement> m_parent;

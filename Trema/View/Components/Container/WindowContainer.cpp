@@ -43,6 +43,36 @@ namespace Trema::View
         return std::make_shared<WindowContainer>(std::move(parent), std::move(name));
     }
 
+    void WindowContainer::AlignX()
+    {
+        auto size = GetSize();
+        auto windowSize = ImGui::GetWindowSize();
+
+        if(Style.GetHorizontalAlignment() == Center)
+        {
+            ImGui::SetCursorPosX((windowSize.x / 2) - (size.x / 2));
+        }
+        else if(Style.GetHorizontalAlignment() == End)
+        {
+            ImGui::SetCursorPosX(windowSize.x - size.x);
+        }
+    }
+
+    void WindowContainer::AlignY()
+    {
+        auto size = GetSize();
+        auto windowSize = ImGui::GetWindowSize();
+
+        if(Style.GetVerticalAlignment() == Center)
+        {
+            ImGui::SetCursorPosY((windowSize.y / 2) - (size.y / 2));
+        }
+        else if(Style.GetVerticalAlignment() == End)
+        {
+            ImGui::SetCursorPosY(windowSize.y - size.y);
+        }
+    }
+
     void WindowContainer::ShowPureWindow()
     {
         ImGui::Begin(NameId(), m_closable ? &m_isOpened : nullptr, GetWindowFlags());
@@ -51,8 +81,12 @@ namespace Trema::View
         bool horizontal = (Style.GetOrientation() == Row);
         bool notFirst = false;
 
+        AlignY();
+
         for(const auto& element : m_children)
         {
+            AlignX();
+            element->PreShow();
             if(!notFirst)
                 notFirst = true;
             else if(horizontal)
@@ -63,7 +97,6 @@ namespace Trema::View
         }
 
         m_layoutSize = size;
-        std::cout << m_layoutSize.x << ", " << m_layoutSize.y << std::endl;
         ImGui::End();
     }
 
@@ -73,8 +106,12 @@ namespace Trema::View
         bool notFirst = false;
         ImVec2 size = { 0, 0 };
 
+        AlignY();
+
         for(const auto& element : m_children)
         {
+            AlignX();
+            element->PreShow();
             if(!notFirst)
                 notFirst = true;
             else if(horizontal)
@@ -85,7 +122,6 @@ namespace Trema::View
         }
 
         m_layoutSize = size;
-        std::cout << m_layoutSize.x << ", " << m_layoutSize.y << std::endl;
     }
 
     void WindowContainer::UpdateSize(ImVec2& size, bool horizontal, const std::shared_ptr<GuiElement>& element) const

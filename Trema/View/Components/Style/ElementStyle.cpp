@@ -241,4 +241,56 @@ namespace Trema::View
     {
         return m_windowHeader;
     }
+
+    void ElementStyle::SetHorizontalAlignment(enum Alignment alignment)
+    {
+        m_horizontalAlignment = alignment;
+    }
+
+    void ElementStyle::SetHorizontalAlignment(const std::string_view &alignment)
+    {
+        if(alignment == "end")
+        {
+            m_horizontalAlignment = Alignment::End;
+        }
+        else if(alignment == "center")
+        {
+            m_horizontalAlignment = Alignment::Center;
+        }
+        else if(alignment == "start")
+        {
+            m_horizontalAlignment = Alignment::Start;
+        }
+    }
+
+    enum Alignment ElementStyle::GetHorizontalAlignment() const
+    {
+        return m_horizontalAlignment;
+    }
+
+    void ElementStyle::SetVerticalAlignment(enum Alignment alignment)
+    {
+        m_verticalAlignment = alignment;
+    }
+
+    void ElementStyle::SetVerticalAlignment(const std::string_view &alignment)
+    {
+        if(alignment == "end")
+        {
+            m_verticalAlignment = Alignment::End;
+        }
+        else if(alignment == "center")
+        {
+            m_verticalAlignment = Alignment::Center;
+        }
+        else if(alignment == "start")
+        {
+            m_verticalAlignment = Alignment::Start;
+        }
+    }
+
+    enum Alignment ElementStyle::GetVerticalAlignment() const
+    {
+        return m_verticalAlignment;
+    }
 }

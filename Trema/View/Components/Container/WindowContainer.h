@@ -29,6 +29,10 @@ namespace Trema::View
         bool m_closable { false };
 
         void UpdateSize(ImVec2 &size, bool horizontal, const std::shared_ptr<GuiElement> &element) const;
+
+        void AlignX();
+
+        void AlignY();
     };
 }
 
