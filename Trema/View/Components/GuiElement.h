@@ -46,6 +46,7 @@ namespace Trema::View
         inline static std::shared_ptr<T> CastTo(const std::shared_ptr<GuiElement> &element) { return std::dynamic_pointer_cast<T>(element); }
         inline void SetIsWindow(bool toggle) { m_isWindow = toggle; }
         inline ImVec2 GetParentSize() const { return m_parent ? m_parent->Style.GetSize() : ImVec2(0, 0); }
+        inline bool IsTextHidden() const { return m_name.length() > 2 && m_name[0] == '#' && m_name[1] == '#'; }
         ImVec2 GetSize() const;
         virtual void AlignX();
         virtual void AlignY();

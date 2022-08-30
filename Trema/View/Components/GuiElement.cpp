@@ -135,10 +135,21 @@ namespace Trema::View
         {
             auto parentSize = m_parent->GetSize();
             if(parentSize.x != 0)
-                width = width == 0 ? std::max(width, parentSize.x) : std::min(width, parentSize.x);
+                width = width == 0 ?
+                        std::max(width, parentSize.x) :
+                        std::min(width, parentSize.x);
+
             if(parentSize.y != 0)
-                height = height == 0 ? std::max(height, parentSize.y) : std::min(height, parentSize.y);
+                height = height == 0 ?
+                        std::max(height, parentSize.y) :
+                        std::min(height, parentSize.y);
         }
+
+        if(size.x != 0)
+            width = std::min(width, size.x);
+
+        if(size.y != 0)
+            height = std::min(height, size.y);
 
         return { width, height };
     }
@@ -147,7 +158,7 @@ namespace Trema::View
     {
         auto size = GetSize();
         if(size.x != 0.0f)
-            ImGui::SetNextItemWidth(size.x);
+            ImGui::PushItemWidth(size.x);
     }
 
     void GuiElement::AlignX()

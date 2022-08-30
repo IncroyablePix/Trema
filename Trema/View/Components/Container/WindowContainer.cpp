@@ -128,12 +128,14 @@ namespace Trema::View
     {
         if(horizontal)
         {
+            auto elementSize = element->GetLayoutSize().y;
             size.x += element->GetLayoutSize().x;
-            size.y = std::max(size.y, element->GetLayoutSize().y);
+            size.y = std::max(size.y, elementSize);
         }
         else
         {
-            size.x = std::max(size.x, element->GetLayoutSize().x);
+            auto elementSize = element->GetLayoutSize().x;
+            size.x = std::max(size.x, elementSize);
             size.y += element->GetLayoutSize().y;
         }
     }
