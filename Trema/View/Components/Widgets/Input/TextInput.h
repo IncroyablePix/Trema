@@ -19,6 +19,7 @@ namespace Trema::View
         TextInput& operator=(const TextInput&) = delete;
         virtual ~TextInput();
         std::string GetText() const;
+        inline void SetPassword(bool isPassword) { m_password = isPassword; }
         void SetText(const std::string& text);
         void Show() override;
         void AddOnChangeListener(std::string name, std::function<void(std::string text)> listener);
@@ -28,6 +29,7 @@ namespace Trema::View
     protected:
         static const size_t defaultBufferSize = 256;
         size_t m_bufferSize;
+        bool m_password { false };
         std::unique_ptr<char> m_text;
 
         std::unordered_map<std::string, std::function<void(std::string text)>> m_listeners;

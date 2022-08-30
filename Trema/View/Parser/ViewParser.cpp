@@ -228,7 +228,9 @@ namespace Trema::View
 
         else if(elementName == "TextInput")
         {
+            auto password = attributes.contains("type") && attributes["type"] == "password";
             element = TextInput::CreateTextInput(std::move(parent), std::move(name));
+            ((TextInput*)element.get())->SetPassword(password);
         }
 
         else if(elementName == "TextArea")

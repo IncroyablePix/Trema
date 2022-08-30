@@ -35,7 +35,12 @@ namespace Trema::View
     void TextInput::Show()
     {
         BeginStyle();
-        if(ImGui::InputText(NameId(), m_text.get(), m_bufferSize))
+        int flags = ImGuiInputTextFlags_None;
+        if(m_password)
+            flags |= ImGuiInputTextFlags_Password;
+
+
+        if(ImGui::InputText(NameId(), m_text.get(), m_bufferSize, flags))
         {
             Notify();
         }
