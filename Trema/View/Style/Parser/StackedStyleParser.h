@@ -9,6 +9,7 @@
 #include "IStyleParser.h"
 #include "../SymbolTable.h"
 #include "../Tokenizer/Tokenizer.h"
+#include "OperationsTable.h"
 #include <stack>
 
 namespace Trema::View
@@ -24,14 +25,17 @@ namespace Trema::View
         void ParseFromFile(const std::string &path, std::vector<CompilationMistake>& mistakes) override;
 
     private:
-
         unsigned int m_pos;
+        OperationsTable m_operationsTable;
 
         void SetFromSymbolTables(const std::shared_ptr<SymbolTable>& st, const char *propName, const char* varName, std::vector<CompilationMistake>& mistakes);
-        bool AssignVar(std::stack<std::unique_ptr<Token>>& tokens, const std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes);
+        bool ProcessOperators(std::stack<std::unique_ptr<Token>>& operators, std::unique_ptr<Token>& currentOperator, std::stack<std::unique_ptr<Token>>& tokens, std::vector<CompilationMistake>& mistakes);
+        bool AssignVar(std::stack<std::unique_ptr<Token>>& tokens, std::stack<std::unique_ptr<Token>>& operators, const std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes);
         void AssignProps(std::stack<std::unique_ptr<Token>>& tokens, std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes);
         void SaveTopSymbolTable(std::string name);
         static char* CopyStr(const char* str);
+
+        std::any GetNextTokenValue(std::stack<std::unique_ptr<Token>> &tokens, std::vector<CompilationMistake> &mistakes) const;
     };
 }
 

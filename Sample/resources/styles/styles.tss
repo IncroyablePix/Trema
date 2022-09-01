@@ -1,0 +1,92 @@
+mainTextColor: 0xCCCCD3FF;
+disabledTextColor: 0x3D3A49FF;
+windowBg: 0x0F0C11FF;
+topColor: 0x19161EFF;
+activeColor: 0x111116FF;
+sliderGrabColor: 0xCCCCD34F;
+widgetColor: 0x19161EFF;
+activeWidgetColor: 0x8E8E93FF;
+
+azure: 0x007FFFFF;
+black: 0x000000FF;
+lightGreen: 0x0f670fff;
+blue: 0x0000FFFF;
+grey: 0x202021FF;
+red: 0xCC0000FF;
+redText: 0x660000FF;
+pink: 0xFF8BC4FF;
+
+
+/* Applies globally to the whole window */
+# {
+    header: false;
+    background-color: windowBg;
+    slidergrab-color: topColor;
+    slidergrab-color-active: windowBg;
+
+    button-color: topColor;
+    button-color-hover: disabledTextColor;
+    button-color-active: activeWidgetColor;
+
+    widget-background-color: widgetColor;
+    widget-background-color-hover: disabledTextColor;
+    widget-background-color-active: activeWidgetColor;
+
+    menu-background-color: topColor;
+    popup-background-color: activeColor;
+    header-color: topColor;
+    header-color-active: activeColor;
+    table-header-color: topColor;
+
+    text-color: mainTextColor;
+    text-color-disabled: disabledTextColor;
+    font: "JetbrainsMono";
+    window-padding-x: 15.0;
+    window-padding-y: 15.0;
+    window-rounding: 5.0;
+    frame-padding-x: 5.0;
+    frame-padding-y: 5.0;
+    frame-rounding: 4.0;
+}
+
+#horizontalStackSpace {
+    orientation: "horizontal";
+    #credentials {
+        width: "50%";
+        vertical-alignment: "center";
+        horizontal-alignment: "center";
+
+        #credentialsText {
+            horizontal-alignment: "center";
+        }
+
+        #padlock {
+            width: "150px";
+            height: "auto";
+            horizontal-alignment: "center";
+        }
+    }
+}
+
+#winForms {
+    header: false;
+    text-color: pink;
+    font: "Roboto";
+
+    #peopleImg {
+        width: "100%";
+        height: "auto";
+    }
+
+    #favouriteColour {
+        width: "250px";
+    }
+
+    #formButtons {
+        orientation: "horizontal";
+
+        #clear {
+            text-color: red;
+        }
+    }
+}

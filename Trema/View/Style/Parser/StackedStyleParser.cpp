@@ -24,6 +24,7 @@ namespace Trema::View
             return;
 
         std::stack<std::unique_ptr<Token>> tokens;
+        std::stack<std::unique_ptr<Token>> operators;
 
         auto currentSt = std::make_shared<SymbolTable>();
         m_symbolTables.push_back(currentSt);
@@ -36,12 +37,15 @@ namespace Trema::View
                 case T_IDENTITY:
                 case T_IDENTIFIER:
                 case T_LBOOL:
-                case T_LNUMBER:
-                case T_LFNUMBER:
                 case T_LSTRING:
                 case T_PROPASSIGN:
                 case T_VARASSIGN:
+                case T_LNUMBER:
+                case T_LFNUMBER:
                     tokens.push(std::move(currentToken));
+                    break;
+                case T_OPERATOR:
+                    ProcessOperators(operators, currentToken, tokens, mistakes);
                     break;
                 case T_LCURLY:
                     currentSt = std::make_shared<SymbolTable>();
@@ -53,7 +57,7 @@ namespace Trema::View
                     break;
 
                 case T_ENDINS:
-                    if(!AssignVar(tokens, currentSt, mistakes))
+                    if(!AssignVar(tokens, operators, currentSt, mistakes))
                     {
                         mistakes.emplace_back(
                                 CompilationMistake
@@ -76,7 +80,7 @@ namespace Trema::View
             currentToken = tokenizer.GetNextToken();
         }
 
-        SaveTopSymbolTable("*");
+        SaveTopSymbolTable("#");
     }
 
     void StackedStyleParser::ParseFromFile(const std::string &path, std::vector<CompilationMistake>& mistakes)
@@ -134,11 +138,134 @@ namespace Trema::View
         mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::UndefinedSymbol, .Extra = std::string(varName) });
     }
 
-    bool StackedStyleParser::AssignVar(std::stack<std::unique_ptr<Token>>& tokens, const std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes)
+    std::any StackedStyleParser::GetNextTokenValue(std::stack<std::unique_ptr<Token>>& tokens, std::vector<CompilationMistake> &mistakes) const
     {
+        auto token = std::move(tokens.top());
+        tokens.pop();
+
+        if(token->GetTokenType() == T_IDENTIFIER)
+        {
+            for(const auto& st : m_symbolTables)
+            {
+                if(st->HasVariable(token->GetValue().String))
+                {
+                    auto v = st->GetVariable(token->GetValue().String);
+                    if(v->GetType() == TYPE_NUM)
+                    {
+                        return *v->GetValue().Integer;
+                    }
+                    else if(v->GetType() == TYPE_FLOAT)
+                    {
+                        return *v->GetValue().Float;
+                    }
+                    else
+                    {
+                        mistakes.emplace_back(CompilationMistake { .Line = token->GetLine(), .Position = token->GetPosition(), .Code = ErrorCode::TypeMismatch, .Extra = std::string(token->GetValue().String) });
+                        return {};
+                    }
+                }
+            }
+        }
+        else if(token->GetTokenType() == T_LNUMBER)
+        {
+            return *token->GetValue().Integer;
+        }
+        else if(token->GetTokenType() == T_LFNUMBER)
+        {
+            return *token->GetValue().Float;
+        }
+        else
+        {
+            // TODO: process error
+            mistakes.emplace_back(CompilationMistake { .Line = token->GetLine(), .Position = token->GetPosition(), .Code = ErrorCode::UnexpectedToken, .Extra = token->GetIdentity() });
+        }
+
+        return {};
+    }
+
+    bool StackedStyleParser::ProcessOperators(std::stack<std::unique_ptr<Token>> &operators,
+                                              std::unique_ptr<Token> &currentOperator,
+                                              std::stack<std::unique_ptr<Token>> &tokens,
+                                              std::vector<CompilationMistake> &mistakes)
+    {
+        while(!operators.empty())
+        {
+            const auto& operator2Token = operators.top();
+            const auto& op1 = m_operationsTable.GetOperator(currentOperator->GetValue().String);
+            const auto& op2 = m_operationsTable.GetOperator(operator2Token->GetValue().String);
+
+            if(op2.Priority > op1.Priority || (op2.Priority == op1.Priority && op2.IsLeftAssociative))
+            {
+                operators.pop();
+
+                const auto value1 = GetNextTokenValue(tokens, mistakes);
+                const auto value2 = GetNextTokenValue(tokens, mistakes);
+
+                const auto result = op2.Operation(value2, value1);
+
+                if(result.type() == typeid(double))
+                {
+                    const auto doublePtr = new double(std::any_cast<double>(result));
+                    auto t = std::make_unique<Token>(T_LFNUMBER, currentOperator->GetPosition(),
+                                                     currentOperator->GetLine(), TokenValue{ .Float = doublePtr });
+                    tokens.push(std::move(t));
+                }
+                else if(result.type() == typeid(int64_t))
+                {
+                    const auto intPtr = new int64_t(std::any_cast<int64_t>(result));
+                    auto t = std::make_unique<Token>(T_LNUMBER, currentOperator->GetPosition(),
+                                                     currentOperator->GetLine(), TokenValue{ .Integer = intPtr});
+                    tokens.push(std::move(t));
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        operators.push(std::move(currentOperator));
+        return true;
+    }
+
+    bool StackedStyleParser::AssignVar(std::stack<std::unique_ptr<Token>>& tokens,
+                                       std::stack<std::unique_ptr<Token>>& operators,
+                                       const std::shared_ptr<SymbolTable>& currentSt,
+                                       std::vector<CompilationMistake>& mistakes)
+    {
+        // Shunting Yard
+        while(!operators.empty())
+        {
+            const auto operatorToken = std::move(operators.top());
+            operators.pop();
+
+            const auto value1 = GetNextTokenValue(tokens, mistakes);
+            const auto value2 = GetNextTokenValue(tokens, mistakes);
+
+            const auto& op2 = m_operationsTable.GetOperator(operatorToken->GetValue().String);
+            const auto result = op2.Operation(value2, value1);
+
+            if(result.type() == typeid(double))
+            {
+                const auto doublePtr = new double(std::any_cast<double>(result));
+                auto t = std::make_unique<Token>(T_LFNUMBER, operatorToken->GetPosition(),
+                                                 operatorToken->GetLine(), TokenValue{ .Float = doublePtr });
+                tokens.push(std::move(t));
+            }
+            else if(result.type() == typeid(int64_t))
+            {
+                const auto intPtr = new int64_t(std::any_cast<int64_t>(result));
+                auto t = std::make_unique<Token>(T_LNUMBER, operatorToken->GetPosition(),
+                                                 operatorToken->GetLine(), TokenValue{ .Integer = intPtr});
+                tokens.push(std::move(t));
+            }
+        }
+
+        //
         if (tokens.size() < 3)
             return false;
 
+        // Assign to variable
         auto val = std::move(tokens.top());
         tokens.pop();
         auto assigner = std::move(tokens.top());
@@ -187,17 +314,24 @@ namespace Trema::View
 
         tokens.pop(); // remove '{'
 
-        auto objName = std::move(tokens.top());
+        // Getting identifier
+        auto topToken = std::move(tokens.top());
         tokens.pop();
 
         std::stringstream ss;
-        if(!tokens.empty() && tokens.top()->GetTokenType() == T_IDENTITY)
+        if(topToken->GetTokenType() == T_IDENTITY)
         {
             ss << "#";
-            tokens.pop();
         }
-
-        ss << objName->GetValue().String;
+        else if(topToken->GetTokenType() == T_IDENTIFIER)
+        {
+            if(!tokens.empty() && tokens.top()->GetTokenType() == T_IDENTITY)
+            {
+                ss << "#";
+                tokens.pop();
+            }
+            ss << topToken->GetValue().String;
+        }
 
         SaveTopSymbolTable(ss.str());
 

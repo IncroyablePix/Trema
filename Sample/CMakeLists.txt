@@ -31,21 +31,12 @@ endif()
 file(GLOB_RECURSE SAMPLE_SOURCES LIST_DIRECTORIES true *.cpp)
 set(SOURCES ${SAMPLE_SOURCES})
 
-file(GLOB RESOURCE_FILES
-        ${CMAKE_SOURCE_DIR}/Sample/*.png
-        ${CMAKE_SOURCE_DIR}/Sample/*.ttf
-        ${CMAKE_SOURCE_DIR}/Sample/*.txml
-        ${CMAKE_SOURCE_DIR}/Sample/*.tss)
-
 ### Testing
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 ### Resource files ###
-foreach(RSC ${RESOURCE_FILES})
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E
-            copy_if_different ${RSC} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-endforeach()
+file(GLOB RESOURCES ${CMAKE_SOURCE_DIR}/Sample/resources)
+file(COPY ${RESOURCES} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 ### Trema ###
 target_include_directories(${PROJECT_NAME}

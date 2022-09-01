@@ -30,7 +30,7 @@ public:
 
     void OnCreateView() override
     {
-        LoadView("./people_view.txml");
+        LoadView("./resources/views/people_view.txml");
     }
 
     void OnActivityStart() override
@@ -173,7 +173,7 @@ public:
 
     void OnCreateView() override
     {
-        LoadView("./login_view.txml");
+        LoadView("./resources/views/login_view.txml");
     }
 
     void OnActivityStart() override

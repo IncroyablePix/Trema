@@ -260,6 +260,14 @@ To apply a variable to a specific component, you will need to define them inside
   }
 ```
 
+If you want to explicitly set properties for the whole window, you may just use the global selector "#"
+
+```css
+  # {
+    text-color: 0xCC0000FF;
+  }
+```
+
 This code will apply a reddish text colour for the element with the "element" id. 
 You can also nest scopes to copy their variables.
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <App>
     <Head>
-        <Font src="./JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
-        <Font src="./Roboto-SemiMedium.ttf" size="16.0" name="Roboto" />
-        <Style src="./styles.tss" />
+        <Font src="./resources/fonts/JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
+        <Font src="./resources/fonts/Roboto-SemiMedium.ttf" size="16.0" name="Roboto" />
+        <Style src="./resources/styles/styles.tss" />
         <Title>Trema sample window</Title>
         <WindowData fullscreen="false" />
     </Head>
@@ -18,7 +18,7 @@
                 </SubMenu>
             </TopMenu>
             <WindowContainer id="winForms" name="Form" dockSlot="right">
-                <Image id="peopleImg" name="people" src="./people.png" />
+                <Image id="peopleImg" name="people" src="./resources/images/people.png" />
                 <Text>Please enter people's data:</Text>
                 <Separator />
                 <TextInput id="firstName">First name</TextInput>

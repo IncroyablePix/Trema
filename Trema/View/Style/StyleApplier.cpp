@@ -16,7 +16,7 @@ namespace Trema::View
     {
         for(const auto& [elementName, symbolTable] : vals)
         {
-            if(elementName == "*") // Global
+            if(elementName.length() == 1 && elementName == "#") // Global
             {
                 SetGlobalStyles(symbolTable, activity);
             }

@@ -68,6 +68,9 @@ namespace Trema::View
             case T_STOP:
                 ss << "STOP:";
                 break;
+            case T_OPERATOR:
+                ss << "OPERATOR ('" << m_value.String << "'):";
+                break;
         }
         ss << GetPosition() << ">\n";
         auto str = ss.str();

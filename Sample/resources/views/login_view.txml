@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <App>
     <Head>
-        <Font src="./JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
-        <Style src="./styles.tss" />
+        <Font src="./resources/fonts/JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
+        <Style src="./resources/styles/styles.tss" />
         <Title>Trema sample - Login</Title>
         <WindowData fullscreen="false" />
     </Head>
     <Body>
         <StackSpace id="horizontalStackSpace">
             <WindowContainer id="credentials">
-                <Image id="padlock" src="./padlock.png"/>
+                <Image id="padlock" src="./resources/images/padlock.png"/>
                 <Text id="credentialsText">Credentials</Text>
                 <Text>Mail address:</Text>
-                <TextInput id="mailAddress">##Mail address</TextInput>
+                <TextInput id="mailAddress"/>
                 <Text>Password:</Text>
-                <TextInput id="password">##Password</TextInput>
+                <TextInput id="password" type="password"/>
                 <Checkbox id="rememberMe">Remember me</Checkbox>
                 <Button id="loginButton">Login</Button>
             </WindowContainer>

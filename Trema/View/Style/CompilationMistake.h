@@ -21,7 +21,8 @@ namespace Trema::View
 
         // Parsing
         UndefinedSymbol = 2001,
-        UnexpectedToken = 2002
+        UnexpectedToken = 2002,
+        TypeMismatch = 2003
     };
 
     struct CompilationMistake
