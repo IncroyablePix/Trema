@@ -1,7 +1,6 @@
-#include <string>
 #include <regex>
+#include <string>
 #include <fstream>
-#include <iostream>
 #include <View/Components/Widgets/Input/TextInput.h>
 #include <View/Components/Widgets/Sliders/SliderInt.h>
 #include <View/Components/Widgets/Options/Radio.h>
@@ -16,7 +15,6 @@
 #include <View/Components/Widgets/Pure/Text.h>
 #include <View/Windowing/GLFW/GLFWWindow.h>
 #include <View/Activities/Activity.h>
-#include <format>
 
 using namespace Trema::View;
 

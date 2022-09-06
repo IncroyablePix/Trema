@@ -6,7 +6,6 @@
 
 #include <utility>
 #include <future>
-#include <iostream>
 
 namespace Trema::View
 {
@@ -92,7 +91,6 @@ namespace Trema::View
     {
         const auto height = ImGui::GetItemRectSize().y;
         const auto width = ImGui::GetItemRectSize().x;
-        std::cout << "Height: " << height << " Width: " << width << std::endl;
         m_layoutSize = { width, height };
     }
 }
