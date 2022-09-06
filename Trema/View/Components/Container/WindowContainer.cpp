@@ -126,6 +126,8 @@ namespace Trema::View
 
     void WindowContainer::UpdateSize(ImVec2& size, bool horizontal, const std::shared_ptr<GuiElement>& element) const
     {
+        auto windowSize = ImGui::GetWindowSize();
+        auto padding = Style.GetWindowPadding();
         if(horizontal)
         {
             auto elementSize = element->GetLayoutSize().y;
@@ -138,6 +140,9 @@ namespace Trema::View
             size.x = std::max(size.x, elementSize);
             size.y += element->GetLayoutSize().y;
         }
+
+        size.x = std::min(size.x, windowSize.x - padding.x * 2);
+        size.y = std::min(size.y, windowSize.y - padding.y * 2);
     }
 
     int WindowContainer::GetWindowFlags()

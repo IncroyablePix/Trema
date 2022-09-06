@@ -40,6 +40,8 @@ namespace Trema::View
 
         bool m_preview { false };
         bool m_hasInput { false };
+
+        void UpdateSize();
     };
 }
 

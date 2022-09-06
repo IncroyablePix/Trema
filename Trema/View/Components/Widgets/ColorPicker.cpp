@@ -6,6 +6,7 @@
 
 #include <utility>
 #include <future>
+#include <iostream>
 
 namespace Trema::View
 {
@@ -19,6 +20,7 @@ namespace Trema::View
     void ColorPicker::Show()
     {
         BeginStyle();
+        AlignX();
         if(ImGui::ColorPicker4(NameId(), m_crossHairColor.data(), GetFlags()))
         {
             auto future = std::async(std::launch::async, [this]()
@@ -29,6 +31,8 @@ namespace Trema::View
                 }
             });
         }
+
+        UpdateSize();
         EndStyle();
     }
 
@@ -82,5 +86,13 @@ namespace Trema::View
             flags |= ImGuiColorEditFlags_NoInputs;
 
         return flags;
+    }
+
+    void ColorPicker::UpdateSize()
+    {
+        const auto height = ImGui::GetItemRectSize().y;
+        const auto width = ImGui::GetItemRectSize().x;
+        std::cout << "Height: " << height << " Width: " << width << std::endl;
+        m_layoutSize = { width, height };
     }
 }

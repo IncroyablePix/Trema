@@ -39,7 +39,7 @@ namespace Trema::View
         if(m_password)
             flags |= ImGuiInputTextFlags_Password;
 
-
+        AlignX();
         if(ImGui::InputText(NameId(), m_text.get(), m_bufferSize, flags))
         {
             Notify();
@@ -87,7 +87,8 @@ namespace Trema::View
     {
         const auto height = ImGui::GetFrameHeightWithSpacing();
         const auto itemWidth = ImGui::CalcItemWidth();
-        const auto width = itemWidth + (IsTextHidden() ? 0 : ImGui::CalcTextSize(NameId()).x);
+        const auto textSize = ImGui::CalcTextSize(NameId()).x;
+        const auto width = itemWidth + (IsTextHidden() ? 0 : textSize);
         m_layoutSize = { width, height };
     }
 }

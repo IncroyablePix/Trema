@@ -72,6 +72,9 @@ namespace Trema::View
 
         if(m_font)
             ImGui::PushFont(m_font);
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, Style.GetWindowPadding());
+        m_styles ++;
     }
 
     void GuiElement::EndStyle()

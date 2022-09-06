@@ -65,6 +65,10 @@ pink: 0xFF8BC4FF;
             height: "auto";
             horizontal-alignment: "center";
         }
+
+        #loginButton {
+            horizontal-alignment: "center";
+        }
     }
 }
 

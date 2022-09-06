@@ -29,6 +29,7 @@ namespace Trema::View
     {
         BeginStyle();
 
+        AlignX();
         if(ImGui::Button(NameId(), GetItemSize()))
         {
 
