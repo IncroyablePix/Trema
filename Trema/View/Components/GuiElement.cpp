@@ -136,7 +136,7 @@ namespace Trema::View
 
         if(m_parent)
         {
-            auto parentSize = m_parent->GetSize();
+            auto parentSize = m_parent->GetLayoutSize();
             if(parentSize.x != 0)
                 width = width == 0 ?
                         std::max(width, parentSize.x) :
@@ -166,7 +166,7 @@ namespace Trema::View
 
     void GuiElement::AlignX()
     {
-        ImVec2 containerSize = m_parent ? m_parent->GetSize() : ImGui::GetContentRegionAvail();
+        ImVec2 containerSize = m_parent ? m_parent->GetLayoutSize() : ImGui::GetContentRegionAvail();
         auto size = GetSize();
 
         if(Style.GetHorizontalAlignment() == Center)

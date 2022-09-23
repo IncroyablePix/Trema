@@ -86,9 +86,14 @@ namespace Trema::View
     void TextInput::UpdateSize()
     {
         const auto height = ImGui::GetFrameHeightWithSpacing();
-        const auto itemWidth = ImGui::CalcItemWidth();
+        const auto w = Style.GetSize().x;
         const auto textSize = ImGui::CalcTextSize(NameId()).x;
-        const auto width = itemWidth + (IsTextHidden() ? 0 : textSize);
+        const auto parentWidth = m_parent->Style.GetSize().x;
+        auto width = (w == 0.0f && parentWidth != 0.0f) ? parentWidth : ImGui::CalcItemWidth();
+
+        if(!IsTextHidden())
+            width += textSize;
+
         m_layoutSize = { width, height };
     }
 }
