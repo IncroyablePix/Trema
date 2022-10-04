@@ -11,7 +11,7 @@
 
 namespace Trema::View
 {
-    using TokenType = enum
+    enum TokenType
     {
         T_LFNUMBER = 1, // number
         T_IDENTIFIER = 2, // property name, applier, variable
