@@ -3,7 +3,7 @@ project(Trema)
 
 set(CMAKE_CXX_STANDARD 20)
 file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
-set(SOURCES ${SOURCES})
+set(SOURCES ${SOURCES} View/Components/Widgets/CollectionView/VectorView.cpp View/Components/Widgets/CollectionView/VectorView.h)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 ############ DEPENDENCIES ############

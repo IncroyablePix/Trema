@@ -16,8 +16,8 @@ namespace Trema::Observable
         typename T::const_iterator;
         { t.begin() } -> std::same_as<typename T::iterator>;
         { t.end() } -> std::same_as<typename T::iterator>;
-        { t.begin() } -> std::same_as<typename T::const_iterator>;
-        { t.end() } -> std::same_as<typename T::const_iterator>;
+        /* { t.begin() } -> std::same_as<typename T::const_iterator>;
+        { t.end() } -> std::same_as<typename T::const_iterator>; */
     };
 }
 

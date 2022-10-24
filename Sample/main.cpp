@@ -1,6 +1,7 @@
 #include <regex>
 #include <string>
 #include <fstream>
+#include <View/Components/Widgets/CollectionView/VectorView.h>
 #include <View/Components/Widgets/Input/TextInput.h>
 #include <View/Components/Widgets/Sliders/SliderInt.h>
 #include <View/Components/Widgets/Options/Radio.h>
@@ -15,8 +16,11 @@
 #include <View/Components/Widgets/Pure/Text.h>
 #include <View/Windowing/GLFW/GLFWWindow.h>
 #include <View/Activities/Activity.h>
+#include "View/Components/Container/WindowContainer.h"
+#include "Observable/Collections/ObservableCollection.h"
 
 using namespace Trema::View;
+using namespace Trema::Observable;
 
 class PeopleActivity : public Activity
 {
@@ -181,7 +185,14 @@ public:
         m_loginButton->AddOnClickListener("Login", [this](const Button &)
         {
             StartActivity<PeopleActivity>();
+            // m_collection->GetContainer().emplace_back("test");
         });
+
+        auto container = GetElementById<WindowContainer>("credentials");
+        std::vector<std::string> credentials = {"test", "test2", "test3"};
+        m_collection = std::make_shared<ObservableCollection<std::vector<std::string>>>(credentials);
+        auto vectorView = VectorView::CreateVectorView(container, "credentials", m_collection);
+        container->AddChild(vectorView);
     }
 
     void OnActivityResult(uint16_t requestCode, uint16_t resultCode, Intent intent) override
@@ -198,6 +209,7 @@ public:
 private:
     std::shared_ptr<Button> m_loginButton;
     std::shared_ptr<TextInput> m_mailAddress;
+    std::shared_ptr<ObservableCollection<std::vector<std::string>>> m_collection;
 };
 
 int main(int argc, char** argv)

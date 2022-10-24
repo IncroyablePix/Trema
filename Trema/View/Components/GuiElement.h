@@ -48,7 +48,10 @@ namespace Trema::View
         inline ImVec2 GetParentSize() const { return m_parent ? m_parent->Style.GetSize() : ImVec2(0, 0); }
         inline bool IsTextHidden() const { return m_name.length() > 2 && m_name[0] == '#' && m_name[1] == '#'; }
         ImVec2 GetSize() const;
+
+    public:
         virtual void AlignX();
+    protected:
         virtual void AlignY();
 
         bool m_isWindow { false };
