@@ -67,6 +67,12 @@ namespace Trema::View
             m_colors++;
         }
 
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, Style.GetWindowPadding());
+        m_styles++;
+
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, Style.GetFramePadding());
+        m_styles++;
+
         if(!Style.GetFont().empty() && m_fontName != Style.GetFont())
             m_font = (*FontsRepository::GetInstance())[m_fontName = Style.GetFont()].Font;
 

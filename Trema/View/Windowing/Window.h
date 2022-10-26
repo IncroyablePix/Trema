@@ -40,6 +40,7 @@ namespace Trema::View
         virtual void SetHeight(int height) = 0;
         virtual void SwapBuffers() = 0;
         virtual void UpdateTime() = 0;
+        virtual void SetWindowIcon(const std::string &path) = 0;
 
         int Run();
         void InitializeDearImGUI() const;

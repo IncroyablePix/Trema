@@ -1,0 +1,23 @@
+add_requires("catch2", "glfw", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader")
+set_languages("c++20")
+set_policy("build.ccache", false)
+
+add_rules("mode.debug", "mode.release")
+
+target("trema_lib", function()
+    set_kind("static")
+    add_packages("glfw", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
+    add_headerfiles("Trema/**.h")
+    add_files("Trema/**.cpp")
+end)
+
+target("trema_sample", function()
+    set_kind("binary")
+    set_optimize("fastest")
+    add_deps("trema_lib")
+    add_includedirs("./Trema")
+    add_files("Sample/**.cpp")
+    after_build(function (target)
+        os.cp("Sample/resources", path.join(target:targetdir(), "/resources"))
+    end)
+end)

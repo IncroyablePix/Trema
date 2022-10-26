@@ -9,6 +9,8 @@
 #include "../Fonts/FontsRepository.h"
 #include "../../Style/Parser/StackedStyleParser.h"
 #include "../../Parser/TinyXML/TinyXMLViewParser.h"
+#include "../../STB/stb_image.h"
+#include <filesystem>
 
 namespace Trema::View
 {
@@ -172,5 +174,16 @@ namespace Trema::View
         double currentTime = glfwGetTime();
         m_deltaTime = currentTime - m_previousTime;
         m_previousTime = currentTime;
+    }
+
+    void GLFWWindow::SetWindowIcon(const std::string &path)
+    {
+        if(std::filesystem::exists(path))
+        {
+            GLFWimage images[1];
+            images[0].pixels = stbi_load(path.c_str(), &images[0].width, &images[0].height, 0, 4);
+            glfwSetWindowIcon(m_window, 1, images);
+            stbi_image_free(images[0].pixels);
+        }
     }
 }

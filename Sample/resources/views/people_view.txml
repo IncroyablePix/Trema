@@ -18,30 +18,32 @@
                 </SubMenu>
             </TopMenu>
             <WindowContainer id="winForms" name="Form" dockSlot="right">
-                <Image id="peopleImg" name="people" src="./resources/images/people.png" />
-                <Text>Please enter people's data:</Text>
-                <Separator />
-                <TextInput id="firstName">First name</TextInput>
-                <TextInput id="lastName">Last name</TextInput>
-                <Separator />
-                <SliderInt id="height" min="30" max="250">Height</SliderInt>
-                <Text>Sex</Text>
-                <Radio id="sex">
-                    <Option name="F" />
-                    <Option name="M" />
-                </Radio>
-                <ColorPicker id="favouriteColour" preview="true">Favourite colour</ColorPicker>
+                <Image id="peopleImg" name="people" src="./resources/images/trema.png" />
+                <WindowContainer id="options">
+                    <Text>Please enter people's data:</Text>
+                    <Separator />
+                    <TextInput id="firstName">First name</TextInput>
+                    <TextInput id="lastName">Last name</TextInput>
+                    <Separator />
+                    <SliderInt id="height" min="30" max="250">Height</SliderInt>
+                    <Text>Sex</Text>
+                    <Radio id="sex">
+                        <Option name="F" />
+                        <Option name="M" />
+                    </Radio>
+                    <ColorPicker id="favouriteColour" preview="true">Favourite colour</ColorPicker>
 
-                <Combo id="diploma" name="Graduation">
-                    <Option>Not graduated</Option>
-                    <Option>Bachelor's degree</Option>
-                    <Option>Master's degree</Option>
-                    <Option>PhD</Option>
-                </Combo>
+                    <Combo id="diploma" name="Graduation">
+                        <Option>Not graduated</Option>
+                        <Option>Bachelor's degree</Option>
+                        <Option>Master's degree</Option>
+                        <Option>PhD</Option>
+                    </Combo>
 
-                <WindowContainer id="formButtons">
-                    <Button id="addPerson">Add</Button>
-                    <Button id="clear">Clear</Button>
+                    <WindowContainer id="formButtons">
+                        <Button id="addPerson">Add</Button>
+                        <Button id="clear">Clear</Button>
+                    </WindowContainer>
                 </WindowContainer>
             </WindowContainer>
             <WindowContainer id="winTable" name="People" dockSlot="center">
