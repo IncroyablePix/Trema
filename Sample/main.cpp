@@ -1,6 +1,7 @@
 #include <regex>
 #include <string>
 #include <fstream>
+#include <TremaProgram.h>
 #include <View/Components/Widgets/CollectionView/VectorView.h>
 #include <View/Components/Widgets/Input/TextInput.h>
 #include <View/Components/Widgets/Sliders/SliderInt.h>
@@ -16,8 +17,9 @@
 #include <View/Components/Widgets/Pure/Text.h>
 #include <View/Windowing/GLFW/GLFWWindow.h>
 #include <View/Activities/Activity.h>
-#include "View/Components/Container/WindowContainer.h"
-#include "Observable/Collections/ObservableCollection.h"
+#include <View/Components/Container/WindowContainer.h>
+#include <Observable/Collections/ObservableCollection.h>
+#include <iostream>
 
 using namespace Trema::View;
 using namespace Trema::Observable;
@@ -212,9 +214,10 @@ private:
     std::shared_ptr<ObservableCollection<std::vector<std::string>>> m_collection;
 };
 
-int main(int argc, char** argv)
+int Main(const std::vector<std::string>& args)
 {
     auto window = GLFWWindow::CreateGLFWWindow();
+    window->SetWindowIcon("./resources/icons/cpp_icon.png");
     window->StartActivityForResult(ActivityBuilder<LoginActivity>().CreateActivity(Intent{}, window));
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
     window->Run();

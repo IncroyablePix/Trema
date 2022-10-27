@@ -6,9 +6,6 @@
 
 #include <memory>
 #include "../Utils/FileSplits.h"
-#ifdef WIN32
-#include "Windows.h"
-#endif
 #include "Fonts/FontsRepository.h"
 #include "Vulkan/VulkanImage.h"
 #include "../ImGUI/Extensions/ImPlot/implot.h"
@@ -26,10 +23,6 @@ namespace Trema::View
             m_viewParser(std::move(viewParser)),
             m_stateManager(std::make_unique<ThreadSafeStateManager>())
     {
-#ifdef WIN32
-        SetConsoleOutputCP(65001); // UTF-8
-        ShowWindow(GetConsoleWindow(), SW_HIDE); // Hide Windows terminal
-#endif
     }
 
     void Window::SetDefaultFont(const std::string &name)
