@@ -133,7 +133,7 @@ namespace Trema::View
 
     void Activity::LoadView(const std::string& path)
     {
-        m_window->LoadView(path);
+        m_window->LoadView(path, m_window);
     }
 
     void Activity::ApplyStyle()

@@ -41,7 +41,7 @@ namespace Trema::View
 
     }
 
-    void ViewParser::ApplyStyles(Window* window, Activity* activity)
+    void ViewParser::ApplyStyles(std::shared_ptr<Window> window, Activity& activity)
     {
         auto vals = m_stylesParser->GetVariables();
         StyleApplier applier;
@@ -50,7 +50,7 @@ namespace Trema::View
         applier.ApplyStylesToWindow(vals, activity);
     }
 
-    void ViewParser::HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, Window* window, Activity* activity)
+    void ViewParser::HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<Window> window, Activity& activity)
     {
         auto name = attributes["name"];
 
@@ -111,8 +111,8 @@ namespace Trema::View
             if(attributes.find("titlebar") != attributes.end())
                 titleBar = StrToBool(attributes["titlebar"]);
 
-            activity->SetSize(width, height);
-            activity->ToggleFullscreen(fullscreen);
+            activity.SetSize(width, height);
+            activity.ToggleFullscreen(fullscreen);
             window->SetWidth(width);
             window->SetHeight(height);
             window->ToggleWindowOptions(fullscreen, titleBar);
@@ -133,7 +133,10 @@ namespace Trema::View
         return ss.str();
     }
 
-    std::shared_ptr<GuiElement> ViewParser::CreateFromName(std::shared_ptr<GuiElement> parent, const std::string &elementName, std::unordered_map<std::string, std::string>& attributes, Window* window, Activity* activity, std::string content)
+    std::shared_ptr<GuiElement> ViewParser::CreateFromName(std::shared_ptr<GuiElement> parent,
+                                                           const std::string &elementName, std::unordered_map<std::string,
+                                                           std::string>& attributes, std::shared_ptr<Window> window,
+                                                           Activity& activity, std::string content)
     {
         auto name = std::move(GetElementName(elementName, attributes, content));
         auto id = attributes.find("id") == attributes.end() ? "" : attributes["id"];
@@ -323,7 +326,7 @@ namespace Trema::View
         if(element)
         {
             if(!id.empty())
-                activity->AddElementId(id, element);
+                activity.AddElementId(id, element);
 
             return element;
         }
@@ -360,12 +363,12 @@ namespace Trema::View
         return str == "true";
     }
 
-    void ViewParser::TryAddLayout(const std::shared_ptr<GuiElement>& element, Activity* activity)
+    void ViewParser::TryAddLayout(const std::shared_ptr<GuiElement>& element, Activity& activity)
     {
         if(IsType<Layout>(element))
         {
             std::shared_ptr<Layout> newLayout = std::dynamic_pointer_cast<Layout>(element);
-            activity->SetLayout(newLayout);
+            activity.SetLayout(newLayout);
         }
         else
         {
@@ -390,7 +393,7 @@ namespace Trema::View
     void ViewParser::TryAddToLayout(const std::shared_ptr<GuiElement>& element,
                                     const std::shared_ptr<GuiElement> &container,
                                     std::unordered_map<std::string, std::string>& attributes,
-                                    Activity* activity)
+                                    Activity& activity)
     {
         if(dynamic_cast<Container*>(element.get()) == nullptr)
             throw ParsingException("Only Container can fit into layout");
@@ -402,7 +405,7 @@ namespace Trema::View
             if(IsType<TopMenu>(element))
             {
                 auto menu = std::dynamic_pointer_cast<TopMenu>(newContainer);
-                activity->SetTopMenu(menu);
+                activity.SetTopMenu(menu);
                 return;
             }
 
@@ -421,16 +424,29 @@ namespace Trema::View
         }
     }
 
-    void ViewParser::TryAddTopMenu(const std::shared_ptr<GuiElement> &element, Activity* activity)
+    void ViewParser::TryAddTopMenu(const std::shared_ptr<GuiElement> &element, Activity& activity)
     {
         if(IsType<TopMenu>(element))
         {
             std::shared_ptr<TopMenu> newMenu = std::dynamic_pointer_cast<TopMenu>(element);
-            activity->SetTopMenu(newMenu);
+            activity.SetTopMenu(newMenu);
         }
         else
         {
             throw ParsingException("Type mismatch to top menu item!");
+        }
+    }
+
+    void ViewParser::AddElementCreator(ActivityPart activityPart, std::string elementName,
+                                       ViewParser::ElementCreator creator)
+    {
+        if(activityPart == APP_HEAD)
+        {
+            m_headElementCreators[std::move(elementName)] = std::move(creator);
+        }
+        else if(activityPart == APP_BODY)
+        {
+            m_bodyElementCreators[std::move(elementName)] = std::move(creator);
         }
     }
 }

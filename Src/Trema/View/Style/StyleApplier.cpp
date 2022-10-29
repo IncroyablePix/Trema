@@ -12,7 +12,7 @@ namespace Trema::View
 {
 
     void StyleApplier::ApplyStylesToWindow(const std::unordered_map<std::string, std::shared_ptr<SymbolTable>> &vals,
-                                           Activity *activity)
+                                           Activity& activity)
     {
         for(const auto& [elementName, symbolTable] : vals)
         {
@@ -23,19 +23,16 @@ namespace Trema::View
             else if(elementName[0] == '#') // Id
             {
                 auto id = elementName.substr(1);
-                auto element = activity->GetElementById<GuiElement>(id);
+                auto element = activity.GetElementById<GuiElement>(id);
                 SetStyleForElement(element, symbolTable);
             }
         }
     }
 
-    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, Activity* activity)
+    void StyleApplier::SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, Activity& activity)
     {
-        if(!activity)
-            return;
-
-        SetStyle(activity->Style, symbolTable);
-        activity->ApplyStyle();
+        SetStyle(activity.Style, symbolTable);
+        activity.ApplyStyle();
     }
 
     void StyleApplier::SetStyleForElement(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable)

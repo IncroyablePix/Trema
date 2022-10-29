@@ -18,10 +18,10 @@ namespace Trema::View
     {
     public:
         void ApplyStylesToWindow(const std::unordered_map<std::string, std::shared_ptr<SymbolTable>> &vals,
-                                 Activity *activity);
+                                 Activity& activity);
 
     private:
-        void SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, Activity* activity);
+        void SetGlobalStyles(const std::shared_ptr<SymbolTable>& symbolTable, Activity& activity);
         void SetStyleForElement(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable);
         void SetStyle(ElementStyle &style, const std::shared_ptr<SymbolTable>& symbolTable);
         static char* CopyStr(const char* str);

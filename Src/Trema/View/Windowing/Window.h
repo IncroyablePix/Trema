@@ -55,7 +55,7 @@ namespace Trema::View
         void Close();
         bool IsOpened() const;
         void InitializeVulkan(std::shared_ptr<IWindowBackendStrategy> windowBackendStrategy);
-        void LoadView(const std::string &path);
+        void LoadView(const std::string &path, std::shared_ptr<Window> window);
         void StartActivityForResult(std::unique_ptr<Activity> activity);
         void QuitActivity(uint16_t requestCode, uint16_t resultCode, Intent intent);
 

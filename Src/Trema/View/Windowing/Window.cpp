@@ -63,11 +63,11 @@ namespace Trema::View
         BuildFontAtlas();
     }
 
-    void Window::LoadView(const std::string &path)
+    void Window::LoadView(const std::string &path, std::shared_ptr<Window> window)
     {
         if(!m_stateManager->Empty())
         {
-            m_viewParser->LoadView(path, this, m_stateManager->Top().get());
+            m_viewParser->LoadView(path, std::move(window), *m_stateManager->Top());
         }
     }
 

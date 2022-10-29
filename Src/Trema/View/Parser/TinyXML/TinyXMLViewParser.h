@@ -18,16 +18,16 @@ namespace Trema::View
         TinyXMLViewParser(const TinyXMLViewParser&) = delete;
         TinyXMLViewParser& operator=(const TinyXMLViewParser&) = delete;
         ~TinyXMLViewParser() override = default;
-        void LoadView(const std::string &path, Window* window, Activity* activity) override;
-        void SetupWindowFromString(const std::string &code, Window* window, Activity* activity) override;
+        void LoadView(const std::string &path, std::shared_ptr<Window> window, Activity& activity) override;
+        void SetupWindowFromString(const std::string &code, std::shared_ptr<Window> window, Activity& activity) override;
 
     private:
-        void ParseDocument(TiXmlDocument& document, Window* window, Activity* activity);
-        void ParseRoots(TiXmlElement* element, Window* window, Activity* activity);
-        void ParseBody(TiXmlElement* body, Window* window, Activity* activity);
-        void ParseHead(TiXmlElement* head, Window* window, Activity* activity);
-        void ParseElement(TiXmlElement* element, const std::shared_ptr<GuiElement>& container, Window* window, Activity* activity);
-        void ParseChildren(TiXmlElement *element, const std::shared_ptr<GuiElement>& container, Window* window, Activity* activity);
+        void ParseDocument(TiXmlDocument& document, std::shared_ptr<Window> window, Activity& activity);
+        void ParseRoots(TiXmlElement* element, std::shared_ptr<Window> window, Activity& activity);
+        void ParseBody(TiXmlElement* body, std::shared_ptr<Window> window, Activity& activity);
+        void ParseHead(TiXmlElement* head, std::shared_ptr<Window> window, Activity& activity);
+        void ParseElement(TiXmlElement* element, const std::shared_ptr<GuiElement>& container, std::shared_ptr<Window> window, Activity& activity);
+        void ParseChildren(TiXmlElement *element, const std::shared_ptr<GuiElement>& container, std::shared_ptr<Window> window, Activity& activity);
     };
 }
 
