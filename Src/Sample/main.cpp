@@ -217,7 +217,6 @@ private:
 int Main(const std::vector<std::string>& args)
 {
     auto window = GLFWWindow::CreateGLFWWindow();
-    window->SetWindowIcon("./resources/icons/cpp_icon.png");
     window->StartActivityForResult(ActivityBuilder<LoginActivity>().CreateActivity(Intent{}, window));
     window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
     window->Run();

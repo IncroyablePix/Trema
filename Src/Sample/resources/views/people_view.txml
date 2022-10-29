@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <App>
     <Head>
+        <Icon src="./resources/icons/cpp_icon.png" />
         <Font src="./resources/fonts/JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
         <Font src="./resources/fonts/Roboto-SemiMedium.ttf" size="16.0" name="Roboto" />
         <Style src="./resources/styles/styles.tss" />

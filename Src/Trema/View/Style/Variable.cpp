@@ -4,7 +4,7 @@
 
 #include <sstream>
 #include "Variable.h"
-#include "../Utils/StringExtensions.h"
+#include "../../Utils/StringConversion.h"
 #include <iomanip>
 #include <iostream>
 
@@ -47,7 +47,7 @@ namespace Trema::View
                 ss << (char*)(m_value.String);
                 break;
             case TYPE_NUM:
-                ss << *((int64_t*)(m_value.Integer)) << " - " << ToHex(*((int64_t*)(m_value.Integer)));
+                ss << *((int64_t*)(m_value.Integer)) << " - " << Utils::ToHex(*((int64_t*)(m_value.Integer)));
                 break;
             case TYPE_FLOAT:
                 ss << *((double*)(m_value.Float));

@@ -1,16 +1,20 @@
 //
-// Created by JajaFil on 3/4/2022.
+// Created by JajaFil on 10/29/2022.
 //
 
-#ifndef TREMA_STRINGEXTENSIONS_H
-#define TREMA_STRINGEXTENSIONS_H
+#ifndef TREMA_STRINGCONVERSION_H
+#define TREMA_STRINGCONVERSION_H
 
 #include <string>
 #include <sstream>
 #include <iomanip>
 
-namespace Trema::View
+namespace Trema::Utils
 {
+    int StrToInt(const std::string& str);
+    bool StrToBool(const std::string_view &str);
+    float StrToFloat(const std::string &str);
+
     bool IsFloat(const std::string &myString);
 
     template<typename T>
@@ -23,4 +27,6 @@ namespace Trema::View
         return stream.str();
     }
 }
-#endif //TREMA_STRINGEXTENSIONS_H
+
+
+#endif //TREMA_STRINGCONVERSION_H

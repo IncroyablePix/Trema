@@ -7,7 +7,6 @@
 #include <cmath>
 #include "Tokenizer.h"
 #include "../../Exceptions/ParsingException.h"
-#include "../../Utils/StringExtensions.h"
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))

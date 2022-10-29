@@ -13,15 +13,10 @@
 #include "../Components/Layout/Docking/DockSpace.h"
 #include "../Style/Parser/IStyleParser.h"
 #include "../Style/CompilationMistake.h"
+#include "../../../../build/windows/x64/release/include/Trema/StyleApplier.h"
 
 namespace Trema::View
 {
-    enum ActivityPart
-    {
-        APP_HEAD,
-        APP_BODY,
-    };
-
     class ViewParser
     {
     public:
@@ -31,13 +26,26 @@ namespace Trema::View
         virtual void SetupWindowFromString(const std::string &code, std::shared_ptr<Window> window, Activity& activity) = 0;
         inline const std::vector<CompilationMistake>& GetMistakes() const { return m_mistakes; };
 
-        using ElementCreator = typename std::function<std::shared_ptr<GuiElement>(std::shared_ptr<GuiElement>,
-                                                                                  const std::string &,
-                                                                                  std::unordered_map<std::string, std::string> &,
-                                                                                  std::shared_ptr<Window>, Activity &,
-                                                                                  std::string)>;
+        using BodyElementCreator = typename std::function<std::shared_ptr<GuiElement>(
+                std::shared_ptr<GuiElement> parent,
+                std::string name,
+                std::unordered_map<std::string, std::string> &attributes,
+                std::shared_ptr<Window> window,
+                Activity &activity,
+                std::vector<CompilationMistake>& mistakes,
+                std::string content)>;
 
-        void AddElementCreator(ActivityPart activityPart, std::string elementName, ElementCreator creator);
+        using HeadElementCreator = typename std::function<std::shared_ptr<GuiElement>(
+                std::string name,
+                std::unordered_map<std::string, std::string> &attributes,
+                std::shared_ptr<Window> window,
+                Activity &activity,
+                IStyleParser& styleApplier,
+                std::vector<CompilationMistake>& mistakes,
+                std::string content)>;
+
+        void AddHeadElementCreator(std::string elementName, HeadElementCreator creator);
+        void AddBodyElementCreator(std::string elementName, BodyElementCreator creator);
 
     protected:
         void HeadElementFromName(const std::string& elementName, const std::string& content, std::unordered_map<std::string, std::string>& attributes, std::shared_ptr<Window> window, Activity& activity);
@@ -57,13 +65,9 @@ namespace Trema::View
         std::unique_ptr<IStyleParser> m_stylesParser;
 
     private:
-        static int StrToInt(const std::string& str);
-        static bool StrToBool(const std::string_view &str);
-        static float StrToFloat(const std::string &str);
-        
         std::vector<CompilationMistake> m_mistakes;
-        std::unordered_map<std::string, ElementCreator> m_headElementCreators;
-        std::unordered_map<std::string, ElementCreator> m_bodyElementCreators;
+        std::unordered_map<std::string, HeadElementCreator> m_headElementCreators;
+        std::unordered_map<std::string, BodyElementCreator> m_bodyElementCreators;
 
         unsigned long m_nameCounter { 0 };
 

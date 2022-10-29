@@ -29,4 +29,4 @@ BEGIN
 
 END
 
-IDI_ICON ICON "./resources/icons/cpp_logo.ico"
+IDI_ICON ICON "../resources/icons/cpp_logo.ico"

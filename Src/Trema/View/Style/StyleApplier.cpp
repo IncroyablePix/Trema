@@ -5,7 +5,6 @@
 #include <iostream>
 #include <algorithm>
 #include "StyleApplier.h"
-#include "../Utils/StringExtensions.h"
 #include "../Activities/Activity.h"
 
 namespace Trema::View

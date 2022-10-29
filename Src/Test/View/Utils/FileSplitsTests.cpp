@@ -4,7 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include "../../../Trema/View/Style/CompilationMistake.h"
-#include "../../../Trema/View/Utils/FileSplits.h"
+#include "Utils/FileSplits.h"
 
 using namespace Trema::View;
 

@@ -24,6 +24,11 @@ Loads a stylesheet and applies it *after all elements have been loaded*.
 Sets the title of the window. The last Title element will be applied.
 - *content*: The title string
 
+#### Icon
+Sets the icon of the window. The last Icon element will be applied.
+- src: The source file for the icon
+- *content*: None
+
 #### WindowData
 Sets the window main options. **Some options might recreate a context and a window which is costly.**
 - fullscreen: Boolean value hinting the window to go fullscreen

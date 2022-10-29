@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <App>
     <Head>
+        <Icon src="./resources/icons/cpp_icon.png" />
         <Font src="./resources/fonts/JetBrainsMono-Regular.ttf" size="16.0" name="JetbrainsMono" />
         <Style src="./resources/styles/styles.tss" />
         <Title>Trema sample - Login</Title>

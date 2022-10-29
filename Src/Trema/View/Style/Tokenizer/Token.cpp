@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include "Token.h"
-#include "../../Utils/StringExtensions.h"
+#include "../../../Utils/StringConversion.h"
 
 namespace Trema::View
 {
@@ -24,7 +24,7 @@ namespace Trema::View
         switch(m_tokenType)
         {
             case T_LNUMBER:
-                ss << "NUMBER ('" << *m_value.Integer << " - " << ToHex(*m_value.Integer) << "'):";
+                ss << "NUMBER ('" << *m_value.Integer << " - " << Utils::ToHex(*m_value.Integer) << "'):";
                 break;
             case T_LFNUMBER:
                 ss << "FLOAT_NUMBER ('" << *m_value.Float << "'):";

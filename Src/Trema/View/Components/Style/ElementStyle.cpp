@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <regex>
 #include "ElementStyle.h"
-#include "../../Utils/StringExtensions.h"
+#include "../../../Utils/StringConversion.h"
 
 namespace Trema::View
 {
@@ -31,7 +31,7 @@ namespace Trema::View
 
     void ElementStyle::SetAlpha(const std::string &alpha)
     {
-        if(IsFloat(alpha))
+        if(Utils::IsFloat(alpha))
         {
             SetAlpha(std::stof(alpha));
         }

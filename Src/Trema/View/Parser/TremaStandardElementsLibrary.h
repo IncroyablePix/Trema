@@ -14,6 +14,10 @@ namespace Trema::View
     {
     public:
         void AddElements(ViewParser &viewParser) override;
+
+    private:
+        void AddBodyElements(ViewParser &viewParser);
+        void AddHeadElements(ViewParser &viewParser);
     };
 }
 
