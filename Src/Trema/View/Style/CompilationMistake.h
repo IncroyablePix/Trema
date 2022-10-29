@@ -22,7 +22,12 @@ namespace Trema::View
         // Parsing
         UndefinedSymbol = 2001,
         UnexpectedToken = 2002,
-        TypeMismatch = 2003
+        TypeMismatch = 2003,
+
+        // Elements
+        ElementNotFound = 3001,
+        MissingAttribute = 3002,
+        MisplacedElement = 3003,
     };
 
     struct CompilationMistake

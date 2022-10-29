@@ -43,21 +43,12 @@ namespace Trema::View
         if (m_headElementCreators.contains(elementNameUpper))
         {
             auto function = m_headElementCreators[elementNameUpper];
-            try
-            {
-                auto element = function(name, attributes, std::move(window), activity, *m_stylesParser, m_mistakes,
-                                        content);
-            }
-            catch (const std::exception& e)
-            {
-                std::stringstream ss;
-                ss << "Error while creating element [" << elementName << "]: " << e.what();
-                std::cout << ss.str().c_str() << std::endl;
-            }
+            auto element = function(name, attributes, std::move(window),
+                                    activity, *m_stylesParser, m_mistakes,content);
         }
         else
         {
-            // m_mistakes.emplace_back(CompilationMistake(CompilationMistake::MistakeType::UnknownElement, "Unknown element: " + elementName));
+            m_mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::ElementNotFound, .Extra = elementName });
         }
     }
 
@@ -100,9 +91,7 @@ namespace Trema::View
         }
         else
         {
-            std::stringstream ss;
-            ss << "Unknown element \"" << elementName << "\"";
-            throw ParsingException(ss.str().c_str());
+            m_mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::ElementNotFound, .Extra = elementName });
         }
     }
 

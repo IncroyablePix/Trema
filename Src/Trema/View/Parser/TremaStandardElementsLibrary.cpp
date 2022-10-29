@@ -395,7 +395,7 @@ namespace Trema::View
             }
             else
             {
-                throw ParsingException(R"(Missing "src" attribute from element "Font")");
+                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("FONT") });
             }
         });
 
@@ -413,6 +413,10 @@ namespace Trema::View
             {
                 src = attributes["src"];
                 window->SetWindowIcon(src);
+            }
+            else
+            {
+                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("FONT") });
             }
         });
 
