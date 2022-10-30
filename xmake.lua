@@ -1,4 +1,4 @@
-add_requires("catch2", "glfw", "tinyxml", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader")
+add_requires("catch2", "glfw", "tinyxml", "stb", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader")
 set_languages("c++20")
 set_policy("build.ccache", false)
 
@@ -6,7 +6,7 @@ add_rules("mode.debug", "mode.release")
 
 target("trema_lib", function()
     set_kind("static")
-    add_packages("glfw", "tinyxml", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
+    add_packages("glfw", "tinyxml", "stb", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
     add_headerfiles("Src/Trema/**.h", { prefixdir = "Trema" })
     add_files("Src/Trema/**.cpp")
     set_targetdir("./build/$(plat)/$(arch)/$(mode)/lib")
@@ -20,7 +20,7 @@ end)
 
 target("trema", function()
     set_kind("shared")
-    add_packages("glfw", "tinyxml", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
+    add_packages("glfw", "tinyxml", "stb", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
     add_headerfiles("Src/Trema/**.h", { prefixdir = "Trema" })
     add_files("Src/Trema/**.cpp")
 

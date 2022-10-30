@@ -9,7 +9,7 @@
 #include "../Fonts/FontsRepository.h"
 #include "../../Style/Parser/StackedStyleParser.h"
 #include "../../Parser/TinyXML/TinyXMLViewParser.h"
-#include "../../STB/stb_image.h"
+#include <stb_image.h>
 #include <filesystem>
 
 namespace Trema::View

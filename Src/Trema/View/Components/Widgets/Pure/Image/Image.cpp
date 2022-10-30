@@ -10,7 +10,7 @@
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../../../../STB/stb_image.h"
+#include <stb_image.h>
 #include "../../../../Windowing/Vulkan/Vulkan.h"
 
 namespace Trema::View

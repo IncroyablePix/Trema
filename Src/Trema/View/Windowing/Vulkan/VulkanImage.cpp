@@ -7,8 +7,7 @@
 #include <array>
 #include "VulkanImage.h"
 #include "VulkanRenderer.h"
-#include "../../ImGUI/imgui_impl_vulkan.h"
-#include "../../STB/stb_image.h"
+#include <stb_image.h>
 #include "Vulkan.h"
 
 namespace Trema::View

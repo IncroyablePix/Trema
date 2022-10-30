@@ -53,13 +53,12 @@ This will build the project to the ```./build``` directory and offer the followi
 build
 └── (platform)
      ├── (arch)
-     └── debug
          └── release
              ├── bin
-             │   └── trema.[dll|so]
+             │    └── trema.[dll|so]
              ├── include
              │    └── Trema
-             │        └── *.h
+             │        └── *.h
              ├── lib
              │   └── trema_lib.[lib|a]
              ├── include
