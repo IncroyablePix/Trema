@@ -43,8 +43,7 @@ namespace Trema::View
         if (m_headElementCreators.contains(elementNameUpper))
         {
             auto function = m_headElementCreators[elementNameUpper];
-            auto element = function(name, attributes, std::move(window),
-                                    activity, *m_stylesParser, m_mistakes,content);
+            function(name, attributes, std::move(window),activity, *m_stylesParser, m_mistakes,content);
         }
         else
         {
@@ -92,6 +91,7 @@ namespace Trema::View
         else
         {
             m_mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::ElementNotFound, .Extra = elementName });
+            return nullptr;
         }
     }
 

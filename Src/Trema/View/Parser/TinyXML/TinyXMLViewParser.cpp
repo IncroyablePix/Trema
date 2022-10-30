@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <utility>
-#include <sstream>
 #include "TinyXMLViewParser.h"
 #include "../../Exceptions/ParsingException.h"
 #include "../../Components/Widgets/Options/Radio.h"
@@ -109,16 +108,26 @@ namespace Trema::View
         newElement = CreateFromName(container, elementName, attributes, window, activity, elementContent ? elementContent : std::string(""));
 
         //---
+        if(!newElement)
+            return;
 
         ParseChildren(element, newElement, window, activity);
-        if(container == nullptr)
-            TryAddLayout(newElement, activity); // Try add as layout
-        else if(IsType<Layout>(container))
-            TryAddToLayout(newElement, container, attributes, activity); // Add container to layout
-        else if(IsType<TopMenu>(newElement))
-            TryAddTopMenu(newElement, activity);
-        else
-            TryAddAsChild(container, newElement, elementName); // Add to container
+
+        try
+        {
+            if (container == nullptr)
+                TryAddLayout(newElement, activity); // Try add as layout
+            else if (IsType<Layout>(container))
+                TryAddToLayout(newElement, container, attributes, activity); // Add container to layout
+            else if (IsType<TopMenu>(newElement))
+                TryAddTopMenu(newElement, activity);
+            else
+                TryAddAsChild(container, newElement, elementName); // Add to container
+        }
+        catch(const ParsingException &e)
+        {
+            m_mistakes.emplace_back(CompilationMistake { .Line = static_cast<unsigned int>(element->Row()), .Position = 0, .Code = ErrorCode::MisplacedElement, .Extra = e.what() });
+        }
     }
 
     void TinyXMLViewParser::ParseChildren(TiXmlElement *element, const std::shared_ptr<GuiElement> &container, std::shared_ptr<Window> window, Activity& activity)

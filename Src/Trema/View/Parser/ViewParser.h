@@ -13,7 +13,7 @@
 #include "../Components/Layout/Docking/DockSpace.h"
 #include "../Style/Parser/IStyleParser.h"
 #include "../Style/CompilationMistake.h"
-#include "../../../../build/windows/x64/release/include/Trema/StyleApplier.h"
+#include "../Style/StyleApplier.h"
 
 namespace Trema::View
 {
@@ -35,7 +35,7 @@ namespace Trema::View
                 std::vector<CompilationMistake>& mistakes,
                 std::string content)>;
 
-        using HeadElementCreator = typename std::function<std::shared_ptr<GuiElement>(
+        using HeadElementCreator = typename std::function<void(
                 std::string name,
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
@@ -59,13 +59,13 @@ namespace Trema::View
         template<class T>
         inline static bool IsType(const std::shared_ptr<GuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
 
+        std::vector<CompilationMistake> m_mistakes;
     protected:
         void ApplyStyles(std::shared_ptr<Window>, Activity& activity);
 
         std::unique_ptr<IStyleParser> m_stylesParser;
 
     private:
-        std::vector<CompilationMistake> m_mistakes;
         std::unordered_map<std::string, HeadElementCreator> m_headElementCreators;
         std::unordered_map<std::string, BodyElementCreator> m_bodyElementCreators;
 

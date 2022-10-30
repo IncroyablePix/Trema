@@ -379,7 +379,7 @@ namespace Trema::View
                 Activity &activity,
                 IStyleParser &styleApplier,
                 std::vector<CompilationMistake>& mistakes,
-                std::string content) -> std::shared_ptr<GuiElement>
+                std::string content)
         {
             std::string src;
             float size = 12.0f;
@@ -406,7 +406,7 @@ namespace Trema::View
                 Activity &activity,
                 IStyleParser &styleApplier,
                 std::vector<CompilationMistake>& mistakes,
-                std::string content) -> std::shared_ptr<GuiElement>
+                std::string content)
         {
             std::string src;
             if(attributes.contains("src"))
@@ -427,7 +427,7 @@ namespace Trema::View
                 Activity &activity,
                 IStyleParser &styleApplier,
                 std::vector<CompilationMistake>& mistakes,
-                const std::string& content) -> std::shared_ptr<GuiElement>
+                const std::string& content)
         {
             if(attributes.contains("src"))
             {
@@ -446,7 +446,7 @@ namespace Trema::View
                 Activity &activity,
                 IStyleParser &styleApplier,
                 std::vector<CompilationMistake>& mistakes,
-                std::string content) -> std::shared_ptr<GuiElement>
+                std::string content)
         {
             if(!content.empty())
             {
@@ -463,7 +463,7 @@ namespace Trema::View
                 Activity &activity,
                 IStyleParser &styleApplier,
                 std::vector<CompilationMistake>& mistakes,
-                std::string content) -> std::shared_ptr<GuiElement>
+                std::string content)
         {
             int width = 0, height = 0;
             bool fullscreen = false, titleBar = true;

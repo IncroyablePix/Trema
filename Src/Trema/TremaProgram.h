@@ -89,7 +89,6 @@ extern int Main(const std::vector<std::string>& args);
             LPSTR lpCmdLine, int nCmdShow                               \
         )                                                               \
     {                                                                   \
-        FreeConsole();                                                  \
         int argc;                                                       \
         LPSTR* argv = CommandLineToArgvA(GetCommandLine(), &argc);      \
         std::vector<std::string> args;                                  \
@@ -98,6 +97,7 @@ extern int Main(const std::vector<std::string>& args);
         return Main(args);                                              \
     }
 
+// FreeConsole();                                                  \
 #else
 
     #define TremaMain() int main(int argc, char* argv[])                \
