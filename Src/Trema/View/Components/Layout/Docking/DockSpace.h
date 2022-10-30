@@ -10,8 +10,8 @@
 #include <memory>
 #include <unordered_map>
 #include "../../GuiElement.h"
-#include "../../../ImGUI/imgui.h"
-#include "../../../ImGUI/imgui_internal.h"
+#include <imgui.h>
+#include <imgui_internal.h>
 #include "../Layout.h"
 #include "../../Container/Container.h"
 

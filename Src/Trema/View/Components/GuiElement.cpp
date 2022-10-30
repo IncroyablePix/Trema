@@ -3,7 +3,7 @@
 //
 
 #include "GuiElement.h"
-#include "../ImGUI/imgui.h"
+#include <imgui.h>
 #include "../Windowing/Fonts/FontsRepository.h"
 
 #include <utility>

@@ -29,10 +29,10 @@ Trema has its own styling language that goes by the name of TSS which has a CSS-
 
 # Installation/Build
 ## Dependencies
-Trema has several dependencies, some of which are embedded in the code and some are imported in the build system.
-- [TinyXML](https://www.grinninglizard.com/tinyxml/) (Embedded): Used for parsing XML files.
-- [Dear ImGui](https://github.com/ocornut/imgui) (Embedded): Used as backend between Trema and Vulkan for rendering GUI.
-- [STB](https://github.com/nothings/stb) (Embedded): Used for image loading.
+Trema has several dependencies that are imported through XMake.
+- [TinyXML](https://www.grinninglizard.com/tinyxml/) (Imported): Used for parsing XML files.
+- [Dear ImGui](https://github.com/ocornut/imgui) (Imported): Used as backend between Trema and Vulkan for rendering GUI.
+- [STB](https://github.com/nothings/stb) (Imported): Used for image loading.
 - [GLFW](https://www.glfw.org/) (Imported): Used for window management.
 - [Catch2](https://github.com/catchorg/Catch2) (Imported): Used for unit testing.
 - [Vulkan](https://www.khronos.org/vulkan/) (Imported): Used for rendering GUI.
@@ -72,6 +72,13 @@ build
 ```
 
 The projects builds itself as a shared library and a static library. The static library is used for the sample and the test projects.
+
+## CMake
+For some IDEs such as JetBrains CLion, you might want to generate a CMake project. You can do so by running the following command:
+
+```bash 
+xmake project -k cmake
+```
 
 ## Toolchains
 This project has been tested with the following toolchains :

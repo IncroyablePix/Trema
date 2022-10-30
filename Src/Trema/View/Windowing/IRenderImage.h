@@ -6,7 +6,7 @@
 #define TREMA_PROJECT_IRENDERIMAGE_H
 
 
-#include "../ImGUI/imgui.h"
+#include <imgui.h>
 
 namespace Trema::View
 {

@@ -3,7 +3,7 @@
 //
 
 #include "GLFWBackendStrategy.h"
-#include "../../ImGUI/imgui_impl_glfw.h"
+#include <imgui_impl_glfw.h>
 
 namespace Trema
 {

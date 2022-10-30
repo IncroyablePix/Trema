@@ -3,8 +3,7 @@
 //
 
 #include "WindowContainer.h"
-#include "../../ImGUI/imgui.h"
-
+#include <imgui.h>
 #include <utility>
 #include <iostream>
 

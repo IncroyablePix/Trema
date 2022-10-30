@@ -4,7 +4,7 @@
 
 #include <future>
 #include "Combo.h"
-#include "../../../ImGUI/imgui.h"
+#include <imgui.h>
 
 namespace Trema::View
 {

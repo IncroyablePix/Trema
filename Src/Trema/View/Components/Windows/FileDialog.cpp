@@ -4,7 +4,7 @@
 
 #include "FileDialog.h"
 #include "../../ImGUI/Extensions/FileDialog/ImGuiFileBrowser.h"
-#include "../../ImGUI/imgui.h"
+#include <imgui.h>
 #include <sstream>
 #include <utility>
 

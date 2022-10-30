@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include "TextInput.h"
-#include "../../../ImGUI/imgui.h"
+#include <imgui.h>
 
 namespace Trema::View
 {

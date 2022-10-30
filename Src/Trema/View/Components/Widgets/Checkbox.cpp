@@ -5,7 +5,7 @@
 #include <future>
 #include <iostream>
 #include "Checkbox.h"
-#include "../../ImGUI/imgui.h"
+#include <imgui.h>
 
 namespace Trema::View
 {

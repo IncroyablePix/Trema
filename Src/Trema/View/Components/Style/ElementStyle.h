@@ -6,7 +6,7 @@
 #define TREMA_ELEMENTSTYLE_H
 
 #include <string>
-#include "../../ImGUI/imgui.h"
+#include <imgui.h>
 #include "StyleColor.h"
 #include <functional>
 

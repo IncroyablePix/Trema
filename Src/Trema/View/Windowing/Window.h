@@ -9,7 +9,7 @@
 #include "../Components/Layout/Layout.h"
 #include "../Components/TopMenu/TopMenu.h"
 #include "../Components/IPopupComponent.h"
-#include "../ImGUI/imgui.h"
+#include <imgui.h>
 #include "Vulkan/IWindowBackendStrategy.h"
 #include "WindowInfo.h"
 #include "Vulkan/VulkanRenderer.h"

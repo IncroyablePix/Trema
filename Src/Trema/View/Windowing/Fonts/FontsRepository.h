@@ -6,7 +6,7 @@
 #define TREMA_PROJECT_FONTSREPOSITORY_H
 
 #include <string>
-#include "../../ImGUI/imgui.h"
+#include <imgui.h>
 #include <unordered_map>
 
 namespace Trema::View

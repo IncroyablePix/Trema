@@ -7,7 +7,7 @@
 
 #include <vulkan/vulkan.h>
 #include <memory>
-#include "../../ImGUI/imgui_impl_vulkan.h"
+#include <imgui_impl_vulkan.h>
 #include "IWindowBackendStrategy.h"
 #include "../../Components/Widgets/Pure/Image/ImageFormat.h"
 #include <functional>

@@ -5,7 +5,7 @@
 #ifndef TREMA_STYLECOLOR_H
 #define TREMA_STYLECOLOR_H
 
-#include "../../ImGUI/imgui.h"
+#include <imgui.h>
 
 namespace Trema::View
 {
