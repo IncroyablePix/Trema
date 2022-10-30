@@ -66,8 +66,9 @@ namespace Trema::View
     }
 
     std::shared_ptr<GuiElement> ViewParser::CreateFromName(std::shared_ptr<GuiElement> parent,
-                                                           const std::string &elementName, std::unordered_map<std::string,
-                                                           std::string>& attributes, std::shared_ptr<Window> window,
+                                                           const std::string &elementName,
+                                                           std::unordered_map<std::string, std::string>& attributes,
+                                                           std::shared_ptr<Window> window,
                                                            Activity& activity, std::string content)
     {
         auto name = std::move(GetElementName(elementName, attributes, content));
@@ -90,7 +91,6 @@ namespace Trema::View
         }
         else
         {
-            m_mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::ElementNotFound, .Extra = elementName });
             return nullptr;
         }
     }

@@ -96,6 +96,7 @@ namespace Trema::View
         bool m_opened;
         bool m_fullscreen { false };
         bool m_titleBar { false };
+        bool m_displayErrors { true };
         double m_deltaTime { 0.0 };
 
         std::unique_ptr<IStateManager> m_stateManager;

@@ -109,7 +109,11 @@ namespace Trema::View
 
         //---
         if(!newElement)
+        {
+            m_mistakes.emplace_back(
+                    CompilationMistake{ .Line = static_cast<unsigned int>(element->Row()), .Position = static_cast<unsigned int>(element->Column()), .Code = ErrorCode::ElementNotFound, .Extra = elementName });
             return;
+        }
 
         ParseChildren(element, newElement, window, activity);
 
@@ -126,7 +130,7 @@ namespace Trema::View
         }
         catch(const ParsingException &e)
         {
-            m_mistakes.emplace_back(CompilationMistake { .Line = static_cast<unsigned int>(element->Row()), .Position = 0, .Code = ErrorCode::MisplacedElement, .Extra = e.what() });
+            m_mistakes.emplace_back(CompilationMistake { .Line = static_cast<unsigned int>(element->Row()), .Position = static_cast<unsigned int>(element->Column()), .Code = ErrorCode::MisplacedElement, .Extra = e.what() });
         }
     }
 

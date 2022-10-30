@@ -55,14 +55,12 @@ namespace Trema::View
         static void TryAddAsChild(const std::shared_ptr<GuiElement>& container, const std::shared_ptr<GuiElement>& element, const std::string &elementName);
         void TryAddToLayout(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<GuiElement> &container,
                             std::unordered_map<std::string, std::string>& attributes, Activity& activity);
+        void ApplyStyles(std::shared_ptr<Window>, Activity& activity);
 
         template<class T>
         inline static bool IsType(const std::shared_ptr<GuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
 
         std::vector<CompilationMistake> m_mistakes;
-    protected:
-        void ApplyStyles(std::shared_ptr<Window>, Activity& activity);
-
         std::unique_ptr<IStyleParser> m_stylesParser;
 
     private:

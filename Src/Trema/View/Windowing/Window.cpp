@@ -5,6 +5,7 @@
 #include "Window.h"
 
 #include <memory>
+#include <iostream>
 #include "../../Utils/FileSplits.h"
 #include "Fonts/FontsRepository.h"
 #include "Vulkan/VulkanImage.h"
@@ -68,6 +69,16 @@ namespace Trema::View
         if(!m_stateManager->Empty())
         {
             m_viewParser->LoadView(path, std::move(window), *m_stateManager->Top());
+
+            if(m_displayErrors)
+            {
+                for(const auto& error : m_viewParser->GetMistakes())
+                {
+                    std::cerr << error << "\n";
+                }
+
+                std::cerr << std::flush;
+            }
         }
     }
 

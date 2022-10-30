@@ -5,8 +5,8 @@
 #ifndef TREMA_TINYXMLVIEWPARSER_H
 #define TREMA_TINYXMLVIEWPARSER_H
 
+#include <tinyxml.h>
 #include "../ViewParser.h"
-#include "tinyxml.h"
 #include "../../Style/Parser/IStyleParser.h"
 
 namespace Trema::View

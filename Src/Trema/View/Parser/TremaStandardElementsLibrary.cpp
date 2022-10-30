@@ -395,7 +395,7 @@ namespace Trema::View
             }
             else
             {
-                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("FONT") });
+                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("Font is missing \"src\"") });
             }
         });
 
@@ -416,7 +416,7 @@ namespace Trema::View
             }
             else
             {
-                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("FONT") });
+                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("Icon is missing \"src\"") });
             }
         });
 

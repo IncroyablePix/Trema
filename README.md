@@ -30,7 +30,7 @@ Trema has its own styling language that goes by the name of TSS which has a CSS-
 # Installation/Build
 ## Dependencies
 Trema has several dependencies, some of which are embedded in the code and some are imported in the build system.
-- [TinyXML 2](https://github.com/leethomason/tinyxml2) (Embedded): Used for parsing XML files.
+- [TinyXML](https://www.grinninglizard.com/tinyxml/) (Embedded): Used for parsing XML files.
 - [Dear ImGui](https://github.com/ocornut/imgui) (Embedded): Used as backend between Trema and Vulkan for rendering GUI.
 - [STB](https://github.com/nothings/stb) (Embedded): Used for image loading.
 - [GLFW](https://www.glfw.org/) (Imported): Used for window management.
