@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace Trema::View
+namespace Trema::Utils
 {
     struct FileSplit
     {

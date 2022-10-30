@@ -7,7 +7,6 @@
 
 #include <memory>
 #include "Intent.h"
-#include "NoActivityBuilderException.h"
 #include "ActivityAsBase.h"
 
 namespace Trema::View

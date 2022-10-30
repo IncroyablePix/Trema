@@ -1,0 +1,107 @@
+//
+// Created by JajaFil on 4/30/2022.
+//
+
+#include <catch2/catch_test_macros.hpp>
+#include <View/Activities/Activity.h>
+#include "View/Components/Widgets/Button.h"
+
+using namespace Trema::View;
+
+namespace Trema::Test::View
+{
+    class TestActivity : public Activity
+    {
+    public:
+        explicit TestActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) :
+            Activity(std::move(intent), std::move(window), requestCode)
+        {
+
+        }
+
+        std::string GetStringFromIntent(const std::string &name)
+        {
+            return GetStringExtra(name);
+        }
+    };
+
+    class MockElement : public Trema::View::GuiElement
+    {
+    public:
+        explicit MockElement(std::shared_ptr<GuiElement> parent, std::string name) :
+            Trema::View::GuiElement(std::move(parent), std::move(name))
+        {
+
+        }
+
+        void Show() override {}
+    };
+
+    TEST_CASE("Get by ID in activity")
+    {
+        // Given
+        std::string elementId = "myElement";
+        std::string elementName("My test element");
+        Intent intent;
+        TestActivity activity(intent, nullptr);
+        auto guiElement = std::make_shared<MockElement>(nullptr, elementName);
+        activity.AddElementId(elementId, guiElement);
+
+        // When
+        auto result = activity.GetElementById<MockElement>(elementId);
+
+        // Then
+        REQUIRE(result != nullptr);
+        REQUIRE(elementName == result->NameId());
+    }
+
+    TEST_CASE("Get by ID in activity with wrong type")
+    {
+        // Given
+        std::string elementId = "myElement";
+        std::string elementName("My test element");
+        Intent intent;
+        TestActivity activity(intent, nullptr);
+        auto guiElement = std::make_shared<MockElement>(nullptr, elementName);
+        activity.AddElementId(elementId, guiElement);
+
+        // When
+        auto result = activity.GetElementById<Button>(elementId);
+
+        // Then
+        REQUIRE(result == nullptr);
+    }
+
+    TEST_CASE("Get element with non-existant ID")
+    {
+        // Given
+        std::string elementId = "myElement";
+        std::string elementName("My test element");
+        Intent intent;
+        TestActivity activity(intent, nullptr);
+        auto guiElement = std::make_shared<MockElement>(nullptr, elementName);
+        activity.AddElementId(elementId, guiElement);
+
+        // When
+        auto result = activity.GetElementById<MockElement>("nonExistantId");
+
+        // Then
+        REQUIRE(result == nullptr);
+    }
+
+    TEST_CASE("Get value from intent")
+    {
+        // Given
+        std::string intentReferenceId = "myIntentValue";
+        std::string intentValue("Test intent value");
+        Intent intent;
+        intent.SetStringExtra(intentReferenceId, intentValue);
+        TestActivity activity(intent, nullptr);
+
+        // When
+        auto result = activity.GetStringFromIntent(intentReferenceId);
+
+        // Then
+        REQUIRE(result == intentValue);
+    }
+}

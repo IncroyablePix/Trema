@@ -8,6 +8,7 @@
 #include <string>
 #include <unordered_map>
 #include <functional>
+#include <any>
 
 namespace Trema::View
 {
@@ -77,6 +78,7 @@ namespace Trema::View
         std::unordered_map<std::string, bool> m_bools;
         std::unordered_map<std::string, char> m_chars;
         std::unordered_map<std::string, RawIntentValue> m_rawValues;
+        std::unordered_map<std::string, std::any> m_values;
     };
 }
 

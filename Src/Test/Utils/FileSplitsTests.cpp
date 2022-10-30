@@ -3,12 +3,11 @@
 //
 
 #include <catch2/catch_test_macros.hpp>
-#include "../../../Trema/View/Style/CompilationMistake.h"
-#include "Utils/FileSplits.h"
+#include <Utils/FileSplits.h>
 
-using namespace Trema::View;
+using namespace Trema::Utils;
 
-namespace Trema::Test::View
+namespace Trema::Test::Utils
 {
     TEST_CASE("Unix-like path extensionless file")
     {

@@ -22,7 +22,7 @@ namespace Trema::View
 
     bool FontsRepository::AddFont(std::string name, std::string path, float size, ImFontConfig* fontConfig)
     {
-        auto fontId = name.empty() ? FileSplit(path).FileWithoutExtension : std::move(name);
+        auto fontId = name.empty() ? Utils::FileSplit(path).FileWithoutExtension : std::move(name);
 
         if(!m_fonts.contains(fontId))
         {

@@ -34,6 +34,8 @@ namespace Trema::View
         inline std::shared_ptr<TopMenu> GetTopMenu() const { return m_menu; }
         void SetDefaultFont(const std::string &name);
         void Resume();
+        void ToggleFullscreen(bool fullscreen);
+        void SetSize(int width, int height);
 
         template<class T> std::shared_ptr<T> GetElementById(const std::string& id)
         {
@@ -130,10 +132,6 @@ namespace Trema::View
         bool m_fullscreen { false };
         int m_width;
         int m_height;
-
-    public:
-        void ToggleFullscreen(bool fullscreen);
-        void SetSize(int width, int height);
 
     private:
 

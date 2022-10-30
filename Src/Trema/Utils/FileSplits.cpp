@@ -6,7 +6,7 @@
 #include "FileSplits.h"
 
 
-namespace Trema::View
+namespace Trema::Utils
 {
     std::string GetFilePath(const std::string& path)
     {

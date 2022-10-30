@@ -24,12 +24,17 @@ namespace Trema::Observable
         }
 
         virtual ~ObservableCollection() = default;
-        virtual void Subscribe(std::string name, std::function<void(const ObservableCollection& collection)> callback)
+        virtual void Subscribe(std::string name, std::function<void(ObservableCollection& collection)> callback)
         {
             m_callbacks[std::move(name)] = std::move(callback);
         }
 
-        void Notify() const
+        virtual void Unsubscribe(const std::string &name)
+        {
+            m_callbacks.erase(name);
+        }
+
+        void Notify()
         {
             for(const auto& [name, function] : m_callbacks)
             {
@@ -45,13 +50,13 @@ namespace Trema::Observable
         inline const_iterator begin() const { return m_data.begin(); }
         inline iterator end() { return m_data.end(); }
         inline const_iterator end() const { return m_data.end(); }
-        inline ObservableContainer& GetContainer() { return (std::vector<std::basic_string<char>> &) m_data; }
+        inline ObservableContainer& GetContainer() { return m_data; }
 
     protected:
-        const ObservableContainer m_data;
+        ObservableContainer m_data;
 
     private:
-        std::unordered_map<std::string, std::function<void(const ObservableCollection& collection)>> m_callbacks;
+        std::unordered_map<std::string, std::function<void(ObservableCollection& collection)>> m_callbacks;
 
     };
 }
