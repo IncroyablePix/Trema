@@ -92,4 +92,56 @@ namespace Trema::Test::View
         // Then
         REQUIRE(resumed);
     }
+
+    TEST_CASE("Updates with good deltaTime")
+    {
+        // Given
+        auto givenDeltaTime = 1.0;
+        auto receivingDeltaTime = (double)NAN;
+        auto testActivity1 = std::make_unique<TestActivity>(Intent(), nullptr);
+        testActivity1->OnUpdateCallback = [&receivingDeltaTime](double deltaTime)
+        {
+            receivingDeltaTime = deltaTime;
+        };
+
+        ThreadSafeStateManager threadSafeStateManager;
+        threadSafeStateManager.PushPending(std::move(testActivity1));
+        threadSafeStateManager.UpdateState();
+
+        // When
+        threadSafeStateManager.UpdateCurrentActivity(givenDeltaTime);
+
+        // Then
+        REQUIRE(receivingDeltaTime == givenDeltaTime);
+    }
+
+    TEST_CASE("Clear state manager")
+    {
+        // Given
+        auto testActivity1 = std::make_unique<TestActivity>(Intent(), nullptr);
+        auto testActivity2 = std::make_unique<TestActivity>(Intent(), nullptr);
+        ThreadSafeStateManager threadSafeStateManager;
+        threadSafeStateManager.PushPending(std::move(testActivity1));
+        threadSafeStateManager.UpdateState();
+        threadSafeStateManager.PushPending(std::move(testActivity2));
+        threadSafeStateManager.UpdateState();
+
+        // When
+        threadSafeStateManager.Clear();
+
+        // Then
+        REQUIRE(threadSafeStateManager.Count() == 0);
+    }
+
+    TEST_CASE("Clear empty state manager")
+    {
+        // Given
+        ThreadSafeStateManager threadSafeStateManager;
+
+        // When
+        threadSafeStateManager.Clear();
+
+        // Then
+        REQUIRE(threadSafeStateManager.Count() == 0);
+    }
 }

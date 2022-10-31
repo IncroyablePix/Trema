@@ -34,7 +34,14 @@ namespace Trema::Test::View
                 OnResultCallback(requestCode, resultCode, std::move(intent));
         }
 
+        void OnActivityUpdate(double deltaTime) override
+        {
+            if(OnUpdateCallback)
+                OnUpdateCallback(deltaTime);
+        }
+
         std::function<void(uint16_t requestCode, uint16_t resultCode, Trema::View::Intent intent)> OnResultCallback;
+        std::function<void(double)> OnUpdateCallback;
     };
 }
 

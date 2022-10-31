@@ -31,7 +31,10 @@ namespace Trema::View
 
     void ThreadSafeStateManager::UpdateCurrentActivity(double deltaTime)
     {
-        Top()->OnActivityUpdate(deltaTime);
+        std::scoped_lock lock(m_mutex);
+
+        if (!m_activities.empty())
+            m_activities.top()->OnActivityUpdate(deltaTime);
     }
 
     void ThreadSafeStateManager::Push(std::unique_ptr<Activity> item)
@@ -99,10 +102,9 @@ namespace Trema::View
             toLeave->OnActivityEnd();
             if(!Empty())
             {
-                auto toResume = Pop();
+                auto const& toResume = m_activities.top();
                 toResume->OnActivityResult(m_toQuit->RequestCode, m_toQuit->ResultCode, std::move(m_toQuit->Intent));
                 toResume->Resume();
-                m_activities.push(std::move(toResume));
                 m_toQuit.reset();
             }
         }
