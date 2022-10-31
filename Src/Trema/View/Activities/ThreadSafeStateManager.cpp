@@ -4,12 +4,14 @@
 
 #include "ThreadSafeStateManager.h"
 #include "Activity.h"
+#include <variant>
+#include <iostream>
 
 namespace Trema::View
 {
     ThreadSafeStateManager::~ThreadSafeStateManager()
     {
-        Clear();
+        //Clear();
     }
 
     std::unique_ptr<Activity>& ThreadSafeStateManager::Top()
@@ -23,11 +25,6 @@ namespace Trema::View
         std::scoped_lock lock(m_mutex);
         auto t = std::move(m_activities.top());
         m_activities.pop();
-
-        if(!m_activities.empty())
-        {
-            m_activities.top()->Resume();
-        }
 
         return t;
     }
@@ -76,7 +73,8 @@ namespace Trema::View
     {
         while(!Empty())
         {
-            Pop();
+            QuitPending(0, 0, Intent());
+            UpdateState();
         }
     }
 
@@ -99,11 +97,12 @@ namespace Trema::View
         {
             auto toLeave = Pop();
             toLeave->OnActivityEnd();
-
             if(!Empty())
             {
-                const auto& toResume = Top();
+                auto toResume = Pop();
                 toResume->OnActivityResult(m_toQuit->RequestCode, m_toQuit->ResultCode, std::move(m_toQuit->Intent));
+                toResume->Resume();
+                m_activities.push(std::move(toResume));
                 m_toQuit.reset();
             }
         }

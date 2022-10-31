@@ -21,6 +21,8 @@ namespace Trema::Test::View
 
         }
 
+        ~TestActivity() override = default;
+
         std::string GetStringFromIntent(const std::string &name)
         {
             return GetStringExtra(name);

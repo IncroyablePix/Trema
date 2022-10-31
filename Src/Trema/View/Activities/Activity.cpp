@@ -3,7 +3,6 @@
 //
 
 #include "Activity.h"
-#include "../Windowing/Window.h"
 #include "../Windowing/Fonts/FontsRepository.h"
 
 namespace Trema::View
@@ -195,10 +194,13 @@ namespace Trema::View
 
     void Activity::Resume()
     {
-        m_window->ToggleFullscreen(m_fullscreen);
+        if(m_window)
+        {
+            m_window->ToggleFullscreen(m_fullscreen);
 
-        if(m_width > 0 && m_height > 0)
-            m_window->SetSize(m_width, m_height);
+            if (m_width > 0 && m_height > 0)
+                m_window->SetSize(m_width, m_height);
+        }
 
         OnActivityResume();
     }

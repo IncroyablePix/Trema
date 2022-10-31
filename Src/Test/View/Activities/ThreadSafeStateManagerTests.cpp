@@ -6,6 +6,7 @@
 #include <View/Activities/Activity.h>
 #include <View/Activities/ThreadSafeStateManager.h>
 #include "TestActivity.h"
+#include <iostream>
 
 using namespace Trema::View;
 
@@ -47,7 +48,24 @@ namespace Trema::Test::View
         REQUIRE(threadSafeStateManager.Count() == 1);
     }
 
-    /* TEST_CASE("Resume activity")
+    TEST_CASE("Two activities can be pushed within multiple updates")
+    {
+        // Given
+        auto testActivity1 = std::make_unique<TestActivity>(Intent(), nullptr);
+        auto testActivity2 = std::make_unique<TestActivity>(Intent(), nullptr);
+        ThreadSafeStateManager threadSafeStateManager;
+
+        // When
+        threadSafeStateManager.PushPending(std::move(testActivity1));
+        threadSafeStateManager.UpdateState();
+        threadSafeStateManager.PushPending(std::move(testActivity2));
+        threadSafeStateManager.UpdateState();
+
+        // Then
+        REQUIRE(threadSafeStateManager.Count() == 2);
+    }
+
+    TEST_CASE("Resume activity")
     {
         // Given
         bool resumed = false;
@@ -69,25 +87,9 @@ namespace Trema::Test::View
 
         // When
         threadSafeStateManager.QuitPending(0, 0, Intent());
+        threadSafeStateManager.UpdateState();
 
         // Then
         REQUIRE(resumed);
-    } */
-
-    TEST_CASE("Two activities can be pushed within multiple updates")
-    {
-        // Given
-        auto testActivity1 = std::make_unique<TestActivity>(Intent(), nullptr);
-        auto testActivity2 = std::make_unique<TestActivity>(Intent(), nullptr);
-        ThreadSafeStateManager threadSafeStateManager;
-
-        // When
-        threadSafeStateManager.PushPending(std::move(testActivity1));
-        threadSafeStateManager.UpdateState();
-        threadSafeStateManager.PushPending(std::move(testActivity2));
-        threadSafeStateManager.UpdateState();
-
-        // Then
-        REQUIRE(threadSafeStateManager.Count() == 2);
     }
 }
