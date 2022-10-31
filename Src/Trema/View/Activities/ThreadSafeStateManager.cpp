@@ -5,13 +5,12 @@
 #include "ThreadSafeStateManager.h"
 #include "Activity.h"
 #include <variant>
-#include <iostream>
 
 namespace Trema::View
 {
     ThreadSafeStateManager::~ThreadSafeStateManager()
     {
-        //Clear();
+        Clear();
     }
 
     std::unique_ptr<Activity>& ThreadSafeStateManager::Top()
