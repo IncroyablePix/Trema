@@ -5,26 +5,12 @@
 #include <catch2/catch_test_macros.hpp>
 #include <View/Activities/Activity.h>
 #include "View/Components/Widgets/Button.h"
+#include "TestActivity.h"
 
 using namespace Trema::View;
 
 namespace Trema::Test::View
 {
-    class TestActivity : public Activity
-    {
-    public:
-        explicit TestActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) :
-            Activity(std::move(intent), std::move(window), requestCode)
-        {
-
-        }
-
-        std::string GetStringFromIntent(const std::string &name)
-        {
-            return GetStringExtra(name);
-        }
-    };
-
     class MockElement : public Trema::View::GuiElement
     {
     public:

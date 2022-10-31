@@ -4,7 +4,7 @@ set_languages("c++20")
 set_policy("build.ccache", false)
 -- set_config("glfw_vulkan", true)
 
-add_rules("mode.debug", "mode.release")
+add_rules("mode.debug", "mode.release", "mode.coverage")
 
 target("trema_lib", function()
     set_kind("static")
