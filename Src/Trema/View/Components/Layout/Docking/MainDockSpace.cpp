@@ -7,7 +7,6 @@
 #include <utility>
 #include <imgui.h>
 #include <imgui_internal.h>
-#include "../../../ImGUI/Extensions/ImPlot/implot.h"
 
 namespace Trema::View
 {
@@ -45,7 +44,6 @@ namespace Trema::View
             }
         }
 
-        // ImPlot::ShowDemoWindow();
         End();
     }
 

@@ -70,6 +70,7 @@ namespace Trema::View
 
         static bool GetFromPercents(const std::string& value, float& floatValue);
         static bool GetFromWord(const std::string& value, float& floatValue);
+        static bool GetFromPx(const std::string &value, float &floatValue);
 
     public:
         void SetWindowPaddingX(float x);
@@ -139,8 +140,6 @@ namespace Trema::View
         inline StyleColor& PopupBackgroundColor() { return m_popupBackgroundColor; }
         inline StyleColor& SliderGrabColor() { return m_sliderGrabColor; }
         inline StyleColor& SliderGrabActiveColor() { return m_sliderGrabActiveColor; }
-
-        static bool GetFromPx(const std::string &value, float &floatValue) ;
     };
 }
 

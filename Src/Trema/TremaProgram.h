@@ -16,12 +16,11 @@ extern int Main(const std::vector<std::string>& args);
 
     LPSTR* CommandLineToArgvA(LPSTR lpCmdLine, INT *pNumArgs)
     {
-        int retval;
-        retval = MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, lpCmdLine, -1, NULL, 0);
+        int retval = MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, lpCmdLine, -1, NULL, 0);
         if (!SUCCEEDED(retval))
             return nullptr;
 
-        LPWSTR lpWideCharStr = (LPWSTR)malloc(retval * sizeof(WCHAR));
+        auto lpWideCharStr = (LPWSTR)malloc(retval * sizeof(WCHAR));
         if (!lpWideCharStr)
             return nullptr;
 
@@ -33,8 +32,7 @@ extern int Main(const std::vector<std::string>& args);
         }
 
         int numArgs;
-        LPWSTR* args;
-        args = CommandLineToArgvW(lpWideCharStr, &numArgs);
+        LPWSTR* args = CommandLineToArgvW(lpWideCharStr, &numArgs);
         free(lpWideCharStr);
         if (!args)
             return nullptr;
@@ -42,7 +40,7 @@ extern int Main(const std::vector<std::string>& args);
         int storage = numArgs * sizeof(LPSTR);
         for (int i = 0; i < numArgs; ++ i)
         {
-            BOOL lpUsedDefaultChar = FALSE;
+            auto lpUsedDefaultChar = FALSE;
             retval = WideCharToMultiByte(CP_ACP, 0, args[i], -1, nullptr, 0, nullptr, &lpUsedDefaultChar);
             if (!SUCCEEDED(retval))
             {
@@ -53,7 +51,7 @@ extern int Main(const std::vector<std::string>& args);
             storage += retval;
         }
 
-        LPSTR* result = (LPSTR*)LocalAlloc(LMEM_FIXED, storage);
+        auto* result = (LPSTR*)LocalAlloc(LMEM_FIXED, storage);
         if (!result)
         {
             LocalFree(args);

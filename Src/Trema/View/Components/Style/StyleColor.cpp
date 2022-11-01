@@ -15,7 +15,7 @@ namespace Trema::View
     StyleColor::StyleColor(ImVec4 color) :
             m_color(color)
     {
-
+        m_hasColor = true;
     }
     void StyleColor::SetColor(int color)
     {
@@ -24,12 +24,13 @@ namespace Trema::View
 
     void StyleColor::SetColor(unsigned int color)
     {
-        SetColor({
-                             (float) ((color >> 24) & 0xFF) / 255.0f,
-                             (float) ((color >> 16) & 0xFF) / 255.0f,
-                             (float) ((color >> 8) & 0xFF) / 255.0f,
-                             (float) (color & 0xFF) / 255.0f
-                     });
+        SetColor(
+        {
+            (float) ((color >> 24) & 0xFF) / 255.0f,
+            (float) ((color >> 16) & 0xFF) / 255.0f,
+            (float) ((color >> 8) & 0xFF) / 255.0f,
+            (float) (color & 0xFF) / 255.0f
+        });
     }
 
     void StyleColor::SetColor(const ImVec4 &color)

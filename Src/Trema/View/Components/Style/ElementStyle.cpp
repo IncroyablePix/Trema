@@ -293,4 +293,5 @@ namespace Trema::View
     {
         return m_verticalAlignment;
     }
+
 }

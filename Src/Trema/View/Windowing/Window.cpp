@@ -8,7 +8,6 @@
 #include <iostream>
 #include "Fonts/FontsRepository.h"
 #include "Vulkan/VulkanImage.h"
-#include "../ImGUI/Extensions/ImPlot/implot.h"
 #include "../Parser/ViewParser.h"
 #include "../Activities/ThreadSafeStateManager.h"
 
@@ -105,7 +104,7 @@ namespace Trema::View
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImPlot::CreateContext();
+        // ImPlot::CreateContext();
         auto& io = ImGui::GetIO(); (void) io;
         io.Fonts->AddFontDefault();
 
