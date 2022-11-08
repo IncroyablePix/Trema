@@ -45,14 +45,14 @@ xmake is a a cross-platform build utility that handles all dependencies for you.
 In order to build the project, you can run the following command in the project's directory:
 
 ```bash
-xmake -w
+xmake
 ```
 
 This will build the project to the ```./build``` directory and offer the following tree:
 ```
 build
 └── (platform)
-     ├── (arch)
+     └── (arch)
          └── release
              ├── bin
              │    └── trema.[dll|so]
@@ -78,6 +78,12 @@ For some IDEs such as JetBrains CLion, you might want to generate a CMake projec
 
 ```bash 
 xmake project -k cmake
+```
+
+If you want to be able to debug the project, make sure that you set the project to debug mode :
+
+```bash
+xmake f -m debug
 ```
 
 ## Toolchains

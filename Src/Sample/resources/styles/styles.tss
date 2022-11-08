@@ -20,7 +20,7 @@ pink: 0xFF8BC4FF;
 /* Applies globally to the whole window */
 # {
     header: false;
-    background-color: windowBg;
+    background-color: lightYellow;
     slidergrab-color: topColor;
     slidergrab-color-active: windowBg;
 
