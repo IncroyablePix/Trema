@@ -7,6 +7,7 @@
 
 
 #include <string>
+#include <deque>
 
 namespace Trema::View
 {

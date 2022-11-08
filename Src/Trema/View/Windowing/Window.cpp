@@ -70,12 +70,7 @@ namespace Trema::View
 
             if(m_displayErrors)
             {
-                for(const auto& error : m_viewParser->GetMistakes())
-                {
-                    std::cerr << error << "\n";
-                }
-
-                std::cerr << std::flush;
+                std::cerr << m_viewParser->GetMistakes() << std::flush;
             }
         }
     }

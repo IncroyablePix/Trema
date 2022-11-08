@@ -29,7 +29,7 @@ namespace Trema::Test::View
         std::string elementId = "myElement";
         std::string elementName("My test element");
         Intent intent;
-        TestActivity activity(intent, nullptr);
+        TestActivity activity(intent);
         auto guiElement = std::make_shared<MockElement>(nullptr, elementName);
         activity.AddElementId(elementId, guiElement);
 
@@ -47,7 +47,7 @@ namespace Trema::Test::View
         std::string elementId = "myElement";
         std::string elementName("My test element");
         Intent intent;
-        TestActivity activity(intent, nullptr);
+        TestActivity activity(intent);
         auto guiElement = std::make_shared<MockElement>(nullptr, elementName);
         activity.AddElementId(elementId, guiElement);
 
@@ -64,7 +64,7 @@ namespace Trema::Test::View
         std::string elementId = "myElement";
         std::string elementName("My test element");
         Intent intent;
-        TestActivity activity(intent, nullptr);
+        TestActivity activity(intent);
         auto guiElement = std::make_shared<MockElement>(nullptr, elementName);
         activity.AddElementId(elementId, guiElement);
 
@@ -82,7 +82,7 @@ namespace Trema::Test::View
         std::string intentValue("Test intent value");
         Intent intent;
         intent.SetStringExtra(intentReferenceId, intentValue);
-        TestActivity activity(intent, nullptr);
+        TestActivity activity(intent);
 
         // When
         auto result = activity.GetStringFromIntent(intentReferenceId);

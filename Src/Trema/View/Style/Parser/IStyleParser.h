@@ -19,8 +19,8 @@ namespace Trema::View
     {
     public:
         virtual ~IStyleParser() = default;
-        virtual void ParseFromFile(const std::string& path, std::vector<CompilationMistake>& mistakes) = 0;
-        virtual void ParseFromCode(const std::string& code, std::vector<CompilationMistake>& mistakes) = 0;
+        virtual void ParseFromFile(const std::string& path) = 0;
+        virtual void ParseFromCode(const std::string& code) = 0;
 
         inline void ClearVariables() { m_variables.clear(); }
         inline const std::unordered_map<std::string, std::shared_ptr<SymbolTable>>& GetVariables() { return m_variables; };

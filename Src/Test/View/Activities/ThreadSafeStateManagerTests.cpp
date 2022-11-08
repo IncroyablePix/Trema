@@ -16,8 +16,8 @@ namespace Trema::Test::View
     {
         // Given
         Intent intent;
-        auto testActivity1 = std::make_unique<TestActivity>(intent, nullptr);
-        auto testActivity2 = std::make_unique<TestActivity>(intent, nullptr);
+        auto testActivity1 = std::make_unique<TestActivity>(intent);
+        auto testActivity2 = std::make_unique<TestActivity>(intent);
         ThreadSafeStateManager threadSafeStateManager;
         threadSafeStateManager.PushPending(std::move(testActivity1));
         threadSafeStateManager.PushPending(std::move(testActivity2));
@@ -33,8 +33,8 @@ namespace Trema::Test::View
     {
         // Given
         Intent intent1, intent2;
-        auto testActivity1 = std::make_unique<TestActivity>(std::move(intent1), nullptr);
-        auto testActivity2 = std::make_unique<TestActivity>(std::move(intent2), nullptr);
+        auto testActivity1 = std::make_unique<TestActivity>(std::move(intent1));
+        auto testActivity2 = std::make_unique<TestActivity>(std::move(intent2));
         ThreadSafeStateManager threadSafeStateManager;
         threadSafeStateManager.PushPending(std::move(testActivity1));
         threadSafeStateManager.PushPending(std::move(testActivity2));
@@ -51,8 +51,8 @@ namespace Trema::Test::View
     TEST_CASE("Two activities can be pushed within multiple updates")
     {
         // Given
-        auto testActivity1 = std::make_unique<TestActivity>(Intent(), nullptr);
-        auto testActivity2 = std::make_unique<TestActivity>(Intent(), nullptr);
+        auto testActivity1 = std::make_unique<TestActivity>(Intent());
+        auto testActivity2 = std::make_unique<TestActivity>(Intent());
         ThreadSafeStateManager threadSafeStateManager;
 
         // When
@@ -70,14 +70,14 @@ namespace Trema::Test::View
         // Given
         bool resumed = false;
         Intent intent1;
-        auto testActivity1 = std::make_unique<TestActivity>(std::move(intent1), nullptr);
+        auto testActivity1 = std::make_unique<TestActivity>(std::move(intent1));
         testActivity1->OnResultCallback = [&resumed](uint16_t requestCode, uint16_t resultCode, Intent intent)
         {
             resumed = true;
         };
 
         Intent intent2;
-        auto testActivity2 = std::make_unique<TestActivity>(std::move(intent2), nullptr);
+        auto testActivity2 = std::make_unique<TestActivity>(std::move(intent2));
 
         ThreadSafeStateManager threadSafeStateManager;
         threadSafeStateManager.PushPending(std::move(testActivity1));
@@ -98,7 +98,7 @@ namespace Trema::Test::View
         // Given
         auto givenDeltaTime = 1.0;
         auto receivingDeltaTime = (double)NAN;
-        auto testActivity1 = std::make_unique<TestActivity>(Intent(), nullptr);
+        auto testActivity1 = std::make_unique<TestActivity>(Intent());
         testActivity1->OnUpdateCallback = [&receivingDeltaTime](double deltaTime)
         {
             receivingDeltaTime = deltaTime;
@@ -118,8 +118,8 @@ namespace Trema::Test::View
     TEST_CASE("Clear state manager")
     {
         // Given
-        auto testActivity1 = std::make_unique<TestActivity>(Intent(), nullptr);
-        auto testActivity2 = std::make_unique<TestActivity>(Intent(), nullptr);
+        auto testActivity1 = std::make_unique<TestActivity>(Intent());
+        auto testActivity2 = std::make_unique<TestActivity>(Intent());
         ThreadSafeStateManager threadSafeStateManager;
         threadSafeStateManager.PushPending(std::move(testActivity1));
         threadSafeStateManager.UpdateState();

@@ -7,6 +7,7 @@
 #include <cmath>
 #include "Tokenizer.h"
 #include "../../Exceptions/ParsingException.h"
+#include "../MistakesContainer.h"
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -180,7 +181,7 @@ namespace Trema::View
         return false;
     }
 
-    Tokenizer::Tokenizer(const std::string& code, std::vector<CompilationMistake> &mistakes) :
+    Tokenizer::Tokenizer(const std::string& code, MistakesContainer& mistakes) :
             m_lastType(T_LPAR),
             m_code(code.c_str()),
             m_cursor(0),
@@ -193,7 +194,7 @@ namespace Trema::View
         }
     }
 
-    std::unique_ptr<Token> Tokenizer::ParseToken(std::vector<CompilationMistake> &mistakes)
+    std::unique_ptr<Token> Tokenizer::ParseToken(MistakesContainer& mistakes)
     {
         unsigned int pos = m_cursor;
 
@@ -303,7 +304,7 @@ namespace Trema::View
 
                     if(m_code[l] == '\0' || m_code[l] == '\n')
                     {
-                        mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnfinishedString });
+                        mistakes << CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnfinishedString };
                         l --;
                         break;
                     }
@@ -433,7 +434,7 @@ namespace Trema::View
 
             else
             {
-                mistakes.emplace_back(CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnknownToken, .Extra = &""[c] });
+                mistakes << CompilationMistake { .Line = m_line, .Position = m_linePos, .Code = ErrorCode::UnknownToken, .Extra = &""[c] };
                 pos ++;
                 m_cursor++;
                 m_linePos ++;

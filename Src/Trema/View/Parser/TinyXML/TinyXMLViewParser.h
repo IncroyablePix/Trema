@@ -14,7 +14,7 @@ namespace Trema::View
     class TinyXMLViewParser : public ViewParser
     {
     public:
-        TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser);
+        TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser, MistakesContainer& mistakes);
         TinyXMLViewParser(const TinyXMLViewParser&) = delete;
         TinyXMLViewParser& operator=(const TinyXMLViewParser&) = delete;
         ~TinyXMLViewParser() override = default;

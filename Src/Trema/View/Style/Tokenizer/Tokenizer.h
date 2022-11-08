@@ -13,13 +13,14 @@
 #include "../CompilationMistake.h"
 #include "Token.h"
 #include "ITokenizer.h"
+#include "../MistakesContainer.h"
 
 namespace Trema::View
 {
     class Tokenizer : ITokenizer
     {
     public:
-        explicit Tokenizer(const std::string& code, std::vector<CompilationMistake> &mistakes);
+        explicit Tokenizer(const std::string& code, MistakesContainer& mistakes);
         Tokenizer(const Tokenizer&) = delete;
         Tokenizer& operator=(const Tokenizer&) = delete;
         ~Tokenizer() override = default;
@@ -36,7 +37,7 @@ namespace Trema::View
         unsigned int m_line { 1 };
         unsigned int m_linePos { 1 };
 
-        std::unique_ptr<Token> ParseToken(std::vector<CompilationMistake> &mistakes);
+        std::unique_ptr<Token> ParseToken(MistakesContainer& mistakes);
     };
 }
 

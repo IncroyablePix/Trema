@@ -17,8 +17,9 @@
 
 namespace Trema::View
 {
-    ViewParser::ViewParser(std::unique_ptr<IStyleParser> stylesParser) :
-        m_stylesParser(std::move(stylesParser))
+    ViewParser::ViewParser(std::unique_ptr<IStyleParser> stylesParser, MistakesContainer& mistakes) :
+        m_stylesParser(std::move(stylesParser)),
+        m_mistakes(mistakes)
     {
         TremaStandardElementsLibrary lib;
         lib.AddElements(*this);
@@ -43,11 +44,11 @@ namespace Trema::View
         if (m_headElementCreators.contains(elementNameUpper))
         {
             auto function = m_headElementCreators[elementNameUpper];
-            function(name, attributes, std::move(window),activity, *m_stylesParser, m_mistakes,content);
+            function(name, attributes, std::move(window),activity, *m_stylesParser, content);
         }
         else
         {
-            m_mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::ElementNotFound, .Extra = elementName });
+            m_mistakes << CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::ElementNotFound, .Extra = elementName };
         }
     }
 
@@ -82,7 +83,7 @@ namespace Trema::View
         if (m_bodyElementCreators.contains(elementNameUpper))
         {
             auto function = m_bodyElementCreators[elementNameUpper];
-            auto element = function(std::move(parent), name, attributes, std::move(window), activity, m_mistakes, content);
+            auto element = function(std::move(parent), name, attributes, std::move(window), activity, content);
 
             if(!id.empty())
                 activity.AddElementId(id, element);

@@ -16,7 +16,7 @@ namespace Trema::View
     class Activity
     {
     public:
-        Activity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1);
+        Activity(Intent intent, uint16_t requestCode = -1);
         virtual ~Activity() = default;
 
         // To be overriden
@@ -36,6 +36,7 @@ namespace Trema::View
         void Resume();
         void ToggleFullscreen(bool fullscreen);
         void SetSize(int width, int height);
+        void SetWindow(std::shared_ptr<Window> window);
 
         template<class T> std::shared_ptr<T> GetElementById(const std::string& id)
         {
@@ -53,14 +54,20 @@ namespace Trema::View
         template<class T> requires ActivityAsBase<T>
         void StartActivityForResult(ActivityBuilder<T> activityBuilder, uint16_t requestCode, Intent intent)
         {
-            auto activity = activityBuilder.CreateActivity(std::move(intent), m_window, requestCode);
+            auto activity = activityBuilder.CreateActivity(std::move(intent), requestCode);
+            if(m_window)
+                activity->SetWindow(m_window);
+
             m_window->StartActivityForResult(std::move(activity));
         }
 
         template<class T> requires ActivityAsBase<T>
         void StartActivityForResult(ActivityBuilder<T> activityBuilder, uint16_t requestCode)
         {
-            auto activity = activityBuilder.CreateActivity(Intent {}, m_window, requestCode);
+            auto activity = activityBuilder.CreateActivity(Intent {}, requestCode);
+            if(m_window)
+                activity->SetWindow(m_window);
+
             m_window->StartActivityForResult(std::move(activity));
         }
 

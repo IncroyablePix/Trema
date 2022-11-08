@@ -7,11 +7,13 @@
 #include "TinyXMLViewParser.h"
 #include "../../Exceptions/ParsingException.h"
 #include "../../Components/Widgets/Options/Radio.h"
+#include "../MissingAttributeException.h"
+#include "../../Style/MistakesContainer.h"
 
 namespace Trema::View
 {
-    TinyXMLViewParser::TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser) :
-            ViewParser(std::move(styleParser))
+    TinyXMLViewParser::TinyXMLViewParser(std::unique_ptr<IStyleParser> styleParser, MistakesContainer& mistakes) :
+            ViewParser(std::move(styleParser), mistakes)
     {
 
     }
@@ -110,8 +112,7 @@ namespace Trema::View
         //---
         if(!newElement)
         {
-            m_mistakes.emplace_back(
-                    CompilationMistake{ .Line = static_cast<unsigned int>(element->Row()), .Position = static_cast<unsigned int>(element->Column()), .Code = ErrorCode::ElementNotFound, .Extra = elementName });
+            m_mistakes << CompilationMistake { .Line = static_cast<unsigned int>(element->Row()), .Position = static_cast<unsigned int>(element->Column()), .Code = ErrorCode::ElementNotFound, .Extra = elementName };
             return;
         }
 
@@ -130,7 +131,11 @@ namespace Trema::View
         }
         catch(const ParsingException &e)
         {
-            m_mistakes.emplace_back(CompilationMistake { .Line = static_cast<unsigned int>(element->Row()), .Position = static_cast<unsigned int>(element->Column()), .Code = ErrorCode::MisplacedElement, .Extra = e.what() });
+            m_mistakes << CompilationMistake { .Line = static_cast<unsigned int>(element->Row()), .Position = static_cast<unsigned int>(element->Column()), .Code = ErrorCode::MisplacedElement, .Extra = e.what() };
+        }
+        catch(const MissingAttributeException &e)
+        {
+            m_mistakes << CompilationMistake { .Line = static_cast<unsigned int>(element->Row()), .Position = static_cast<unsigned int>(element->Column()), .Code = ErrorCode::MissingAttribute, .Extra = e.what() };
         }
     }
 

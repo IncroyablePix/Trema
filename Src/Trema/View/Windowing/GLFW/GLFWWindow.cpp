@@ -14,8 +14,8 @@
 
 namespace Trema::View
 {
-    GLFWWindow::GLFWWindow(const WindowInfo &info) :
-        Window(info, std::move(std::make_unique<TinyXMLViewParser>(std::move(std::make_unique<StackedStyleParser>())))),
+    GLFWWindow::GLFWWindow(const WindowInfo &info, std::unique_ptr<ViewParser> viewParser) :
+        Window(info, std::move(viewParser)),
         m_window(nullptr)
     {
         CreateGlfwWindow();
@@ -56,11 +56,6 @@ namespace Trema::View
     void GLFWWindow::SetTitle(const std::string &title)
     {
         glfwSetWindowTitle(m_window, title.c_str());
-    }
-
-    std::shared_ptr<GLFWWindow> GLFWWindow::CreateGLFWWindow(const WindowInfo &info)
-    {
-        return std::make_shared<GLFWWindow>(info);
     }
 
     void GLFWWindow::InitializeGlfw()

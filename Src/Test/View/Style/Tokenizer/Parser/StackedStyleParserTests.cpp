@@ -15,11 +15,11 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "three: 2 + 1;";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
 
         // When
-        StackedStyleParser parser;
-        parser.ParseFromCode(code, mistakes);
+        StackedStyleParser parser(mistakes);
+        parser.ParseFromCode(code);
 
         // Then
         auto variables = parser.GetVariables();
@@ -31,11 +31,11 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "five: 2 + 1 * 3;";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
 
         // When
-        StackedStyleParser parser;
-        parser.ParseFromCode(code, mistakes);
+        StackedStyleParser parser(mistakes);
+        parser.ParseFromCode(code);
 
         // Then
         auto variables = parser.GetVariables();
@@ -47,11 +47,11 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "five: 3 * 1 + 2;";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
 
         // When
-        StackedStyleParser parser;
-        parser.ParseFromCode(code, mistakes);
+        StackedStyleParser parser(mistakes);
+        parser.ParseFromCode(code);
 
         // Then
         auto variables = parser.GetVariables();
@@ -63,11 +63,11 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "two: 2; five: 3 + two;";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
 
         // When
-        StackedStyleParser parser;
-        parser.ParseFromCode(code, mistakes);
+        StackedStyleParser parser(mistakes);
+        parser.ParseFromCode(code);
 
         // Then
         auto variables = parser.GetVariables();
@@ -82,11 +82,11 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "two: 2; #scope { five: 3 + two; }";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
 
         // When
-        StackedStyleParser parser;
-        parser.ParseFromCode(code, mistakes);
+        StackedStyleParser parser(mistakes);
+        parser.ParseFromCode(code);
 
         // Then
         auto variables = parser.GetVariables();

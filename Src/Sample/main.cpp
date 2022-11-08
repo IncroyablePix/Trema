@@ -20,6 +20,7 @@
 #include <View/Components/Container/WindowContainer.h>
 #include <Observable/Collections/ObservableCollection.h>
 #include <iostream>
+#include <View/Windowing/WindowBuilder.h>
 
 using namespace Trema::View;
 using namespace Trema::Observable;
@@ -27,7 +28,7 @@ using namespace Trema::Observable;
 class PeopleActivity : public Activity
 {
 public:
-    PeopleActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) : Activity(std::move(intent), std::move(window), requestCode)
+    PeopleActivity(Intent intent, uint16_t requestCode = -1) : Activity(std::move(intent), requestCode)
     {
 
     }
@@ -169,8 +170,8 @@ private:
 class LoginActivity : public Activity
 {
 public:
-    LoginActivity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode = -1) :
-        Activity(std::move(intent), std::move(window), requestCode)
+    LoginActivity(Intent intent, uint16_t requestCode = -1) :
+        Activity(std::move(intent), requestCode)
     {
 
     }
@@ -216,10 +217,12 @@ private:
 
 int Main(const std::vector<std::string>& args)
 {
-    auto window = GLFWWindow::CreateGLFWWindow();
-    window->StartActivityForResult(ActivityBuilder<LoginActivity>().CreateActivity(Intent{}, window));
-    window->AddPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export..."));
-    window->Run();
+    WindowBuilder<GLFWWindow>().
+            WithActivity(ActivityBuilder<LoginActivity>().CreateActivity(Intent())).
+            WithPopupComponent<FileDialog>(FileDialog::CreateFileDialog("Export...")).
+            WithErrorsOutput(true).
+            Build()->
+            Run();
 
     return EXIT_SUCCESS;
 }

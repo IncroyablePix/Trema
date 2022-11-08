@@ -14,7 +14,7 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "#element { prop: variable; }";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         int count = 0;
 
         // When
@@ -33,7 +33,7 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "#element { prop: variable; }";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::unique_ptr<Token> token;
 
         // When
@@ -51,7 +51,7 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = R"("Hello, I'm testing out my code")";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::unique_ptr<Token> token;
 
         // When
@@ -67,7 +67,7 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "false";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::unique_ptr<Token> token;
 
         // When
@@ -83,7 +83,7 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "1.5";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::unique_ptr<Token> token;
 
         // When
@@ -99,7 +99,7 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = "34";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::unique_ptr<Token> token;
 
         // When
@@ -115,14 +115,14 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = R"("Hello, I'm testing out my code\n)";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::unique_ptr<Token> token;
 
         // When
         Tokenizer t(code, mistakes);
 
         // Then
-        REQUIRE(mistakes.size() == 1);
+        REQUIRE(mistakes.Size() == 1);
         REQUIRE(mistakes[0].Code == UnfinishedString);
     }
 
@@ -130,14 +130,14 @@ namespace Trema::Test::View
     {
         // Given
         std::string code = R"(#test { property: /* This is a comment */ "value"; /* This is also a comment */ })";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::unique_ptr<Token> token;
 
         // When
         Tokenizer t(code, mistakes);
 
         // Then
-        REQUIRE(mistakes.empty());
+        REQUIRE(mistakes.Empty());
         REQUIRE(t.Size() == 11);
     }
 
@@ -145,7 +145,7 @@ namespace Trema::Test::View
     {
         // Given
         std::string comment = "Testing out my stuff";
-        std::vector<CompilationMistake> mistakes;
+        MistakesContainer mistakes;
         std::stringstream ss;
         ss << "/*" << comment << "*/";
         std::unique_ptr<Token> token;

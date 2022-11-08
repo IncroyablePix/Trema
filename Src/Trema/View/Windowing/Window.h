@@ -60,7 +60,7 @@ namespace Trema::View
         void QuitActivity(uint16_t requestCode, uint16_t resultCode, Intent intent);
 
         inline bool IsFullscreen() const { return m_fullscreen; }
-
+        inline void ToggleErrorsOutput(bool toggle) { m_displayErrors = toggle; }
         inline bool IsTitleBarEnabled() const { return m_titleBar; }
 
         template<class T> void AddPopupComponent(std::shared_ptr<T> component)
@@ -91,7 +91,7 @@ namespace Trema::View
         int m_height;
 
         ImFont* m_standardFont;
-        std::string m_standardFontName { "" };
+        std::string m_standardFontName;
         std::shared_ptr<VulkanRenderer> m_renderer;
         bool m_opened;
         bool m_fullscreen { false };
@@ -100,6 +100,7 @@ namespace Trema::View
         double m_deltaTime { 0.0 };
 
         std::unique_ptr<IStateManager> m_stateManager;
+        std::vector<CompilationMistake> m_mistakes;
 
         std::unordered_map<std::string, std::shared_ptr<IPopupComponent>> m_popupComponents;
         std::unordered_map<std::string, std::shared_ptr<IRenderImage>> m_renderImages;

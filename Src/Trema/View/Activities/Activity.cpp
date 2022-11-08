@@ -7,9 +7,8 @@
 
 namespace Trema::View
 {
-    Activity::Activity(Intent intent, std::shared_ptr<Window> window, uint16_t requestCode) :
+    Activity::Activity(Intent intent, uint16_t requestCode) :
         m_intent(std::move(intent)),
-        m_window(std::move(window)),
         m_requestCode(requestCode)
     {
 
@@ -203,6 +202,11 @@ namespace Trema::View
         }
 
         OnActivityResume();
+    }
+
+    void Activity::SetWindow(std::shared_ptr<Window> window)
+    {
+        m_window = std::move(window);
     }
 
 }

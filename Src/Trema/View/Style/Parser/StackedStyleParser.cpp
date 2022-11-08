@@ -11,14 +11,15 @@
 
 namespace Trema::View
 {
-    StackedStyleParser::StackedStyleParser()
+    StackedStyleParser::StackedStyleParser(MistakesContainer& mistakes) :
+        m_mistakes(mistakes)
     {
 
     }
 
-    void StackedStyleParser::ParseFromCode(const std::string &code, std::vector<CompilationMistake>& mistakes)
+    void StackedStyleParser::ParseFromCode(const std::string &code)
     {
-        Tokenizer tokenizer(code, mistakes);
+        Tokenizer tokenizer(code, m_mistakes);
 
         if(tokenizer.Empty())
             return;
@@ -45,7 +46,7 @@ namespace Trema::View
                     tokens.push(std::move(currentToken));
                     break;
                 case T_OPERATOR:
-                    ProcessOperators(operators, currentToken, tokens, mistakes);
+                    ProcessOperators(operators, currentToken, tokens);
                     break;
                 case T_LCURLY:
                     currentSt = std::make_shared<SymbolTable>();
@@ -53,20 +54,19 @@ namespace Trema::View
                     tokens.push(std::move(currentToken));
                     break;
                 case T_RCURLY:
-                    AssignProps(tokens, currentSt, mistakes);
+                    AssignProps(tokens, currentSt);
                     break;
 
                 case T_ENDINS:
-                    if(!AssignVar(tokens, operators, currentSt, mistakes))
+                    if(!AssignVar(tokens, operators, currentSt))
                     {
-                        mistakes.emplace_back(
-                                CompilationMistake
+                        m_mistakes << CompilationMistake
                                 {
                                     .Line = currentToken->GetLine(),
                                     .Position = currentToken->GetPosition(),
                                     .Code = ErrorCode::UnexpectedToken,
                                     .Extra = ";"
-                                });
+                                };
                     }
                     break;
 
@@ -83,7 +83,7 @@ namespace Trema::View
         SaveTopSymbolTable("#");
     }
 
-    void StackedStyleParser::ParseFromFile(const std::string &path, std::vector<CompilationMistake>& mistakes)
+    void StackedStyleParser::ParseFromFile(const std::string &path)
     {
         std::fstream file;
         file.open(path, std::ios::in);
@@ -104,10 +104,10 @@ namespace Trema::View
 
         file.close();
 
-        ParseFromCode(code.str(), mistakes);
+        ParseFromCode(code.str());
     }
 
-    void StackedStyleParser::SetFromSymbolTables(const std::shared_ptr<SymbolTable>& symbolTable, const char *propName, const char *varName, std::vector<CompilationMistake>& mistakes)
+    void StackedStyleParser::SetFromSymbolTables(const std::shared_ptr<SymbolTable>& symbolTable, const char *propName, const char *varName)
     {
         for(const auto& st : m_symbolTables)
         {
@@ -135,10 +135,10 @@ namespace Trema::View
         if(propName != nullptr)
             delete[] propName;
 
-        mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::UndefinedSymbol, .Extra = std::string(varName) });
+        m_mistakes << CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::UndefinedSymbol, .Extra = std::string(varName) };
     }
 
-    std::any StackedStyleParser::GetNextTokenValue(std::stack<std::unique_ptr<Token>>& tokens, std::vector<CompilationMistake> &mistakes) const
+    std::any StackedStyleParser::GetNextTokenValue(std::stack<std::unique_ptr<Token>>& tokens) const
     {
         auto token = std::move(tokens.top());
         tokens.pop();
@@ -160,7 +160,7 @@ namespace Trema::View
                     }
                     else
                     {
-                        mistakes.emplace_back(CompilationMistake { .Line = token->GetLine(), .Position = token->GetPosition(), .Code = ErrorCode::TypeMismatch, .Extra = std::string(token->GetValue().String) });
+                        m_mistakes << CompilationMistake { .Line = token->GetLine(), .Position = token->GetPosition(), .Code = ErrorCode::TypeMismatch, .Extra = std::string(token->GetValue().String) };
                         return {};
                     }
                 }
@@ -177,7 +177,7 @@ namespace Trema::View
         else
         {
             // TODO: process error
-            mistakes.emplace_back(CompilationMistake { .Line = token->GetLine(), .Position = token->GetPosition(), .Code = ErrorCode::UnexpectedToken, .Extra = token->GetIdentity() });
+            m_mistakes << CompilationMistake { .Line = token->GetLine(), .Position = token->GetPosition(), .Code = ErrorCode::UnexpectedToken, .Extra = token->GetIdentity() };
         }
 
         return {};
@@ -185,8 +185,7 @@ namespace Trema::View
 
     bool StackedStyleParser::ProcessOperators(std::stack<std::unique_ptr<Token>> &operators,
                                               std::unique_ptr<Token> &currentOperator,
-                                              std::stack<std::unique_ptr<Token>> &tokens,
-                                              std::vector<CompilationMistake> &mistakes)
+                                              std::stack<std::unique_ptr<Token>> &tokens)
     {
         while(!operators.empty())
         {
@@ -198,8 +197,8 @@ namespace Trema::View
             {
                 operators.pop();
 
-                const auto value1 = GetNextTokenValue(tokens, mistakes);
-                const auto value2 = GetNextTokenValue(tokens, mistakes);
+                const auto value1 = GetNextTokenValue(tokens);
+                const auto value2 = GetNextTokenValue(tokens);
 
                 const auto result = op2.Operation(value2, value1);
 
@@ -230,8 +229,7 @@ namespace Trema::View
 
     bool StackedStyleParser::AssignVar(std::stack<std::unique_ptr<Token>>& tokens,
                                        std::stack<std::unique_ptr<Token>>& operators,
-                                       const std::shared_ptr<SymbolTable>& currentSt,
-                                       std::vector<CompilationMistake>& mistakes)
+                                       const std::shared_ptr<SymbolTable>& currentSt)
     {
         // Shunting Yard
         while(!operators.empty())
@@ -239,8 +237,8 @@ namespace Trema::View
             const auto operatorToken = std::move(operators.top());
             operators.pop();
 
-            const auto value1 = GetNextTokenValue(tokens, mistakes);
-            const auto value2 = GetNextTokenValue(tokens, mistakes);
+            const auto value1 = GetNextTokenValue(tokens);
+            const auto value2 = GetNextTokenValue(tokens);
 
             const auto& op2 = m_operationsTable.GetOperator(operatorToken->GetValue().String);
             const auto result = op2.Operation(value2, value1);
@@ -295,7 +293,7 @@ namespace Trema::View
             else if (val->GetTokenType() == T_LSTRING)
                 currentSt->SetVariable<char>(propName->GetValue().String, val->GetValue().Clone<char*>());
             else if(val->GetTokenType() == T_IDENTIFIER)
-                SetFromSymbolTables(currentSt, CopyStr(propName->GetValue().String), val->GetValue().String, mistakes);
+                SetFromSymbolTables(currentSt, CopyStr(propName->GetValue().String), val->GetValue().String);
 
             return true;
         }
@@ -306,8 +304,7 @@ namespace Trema::View
     }
 
     void StackedStyleParser::AssignProps(std::stack<std::unique_ptr<Token>> &tokens,
-                                         std::shared_ptr<SymbolTable> &currentSt,
-                                         std::vector<CompilationMistake>& mistakes)
+                                         std::shared_ptr<SymbolTable> &currentSt)
     {
         if(tokens.size() < 2)
             throw ParsingException(R"(Unexpected symbol "}")");

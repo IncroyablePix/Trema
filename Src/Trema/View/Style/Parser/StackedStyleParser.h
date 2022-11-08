@@ -17,25 +17,26 @@ namespace Trema::View
     class StackedStyleParser : public IStyleParser
     {
     public:
-        StackedStyleParser();
+        StackedStyleParser(MistakesContainer& mistakes);
         StackedStyleParser(const StackedStyleParser&) = delete;
         StackedStyleParser& operator=(const StackedStyleParser&) = delete;
         ~StackedStyleParser() override = default;
-        void ParseFromCode(const std::string &code, std::vector<CompilationMistake>& mistakes) override;
-        void ParseFromFile(const std::string &path, std::vector<CompilationMistake>& mistakes) override;
+        void ParseFromCode(const std::string &code) override;
+        void ParseFromFile(const std::string &path) override;
 
     private:
         unsigned int m_pos;
         OperationsTable m_operationsTable;
+        MistakesContainer& m_mistakes;
 
-        void SetFromSymbolTables(const std::shared_ptr<SymbolTable>& st, const char *propName, const char* varName, std::vector<CompilationMistake>& mistakes);
-        bool ProcessOperators(std::stack<std::unique_ptr<Token>>& operators, std::unique_ptr<Token>& currentOperator, std::stack<std::unique_ptr<Token>>& tokens, std::vector<CompilationMistake>& mistakes);
-        bool AssignVar(std::stack<std::unique_ptr<Token>>& tokens, std::stack<std::unique_ptr<Token>>& operators, const std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes);
-        void AssignProps(std::stack<std::unique_ptr<Token>>& tokens, std::shared_ptr<SymbolTable>& currentSt, std::vector<CompilationMistake>& mistakes);
+        void SetFromSymbolTables(const std::shared_ptr<SymbolTable>& st, const char *propName, const char* varName);
+        bool ProcessOperators(std::stack<std::unique_ptr<Token>>& operators, std::unique_ptr<Token>& currentOperator, std::stack<std::unique_ptr<Token>>& tokens);
+        bool AssignVar(std::stack<std::unique_ptr<Token>>& tokens, std::stack<std::unique_ptr<Token>>& operators, const std::shared_ptr<SymbolTable>& currentSt);
+        void AssignProps(std::stack<std::unique_ptr<Token>>& tokens, std::shared_ptr<SymbolTable>& currentSt);
         void SaveTopSymbolTable(std::string name);
         static char* CopyStr(const char* str);
 
-        std::any GetNextTokenValue(std::stack<std::unique_ptr<Token>> &tokens, std::vector<CompilationMistake> &mistakes) const;
+        std::any GetNextTokenValue(std::stack<std::unique_ptr<Token>> &tokens) const;
     };
 }
 

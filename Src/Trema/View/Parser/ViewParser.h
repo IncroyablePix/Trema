@@ -14,17 +14,18 @@
 #include "../Style/Parser/IStyleParser.h"
 #include "../Style/CompilationMistake.h"
 #include "../Style/StyleApplier.h"
+#include "../Style/MistakesContainer.h"
 
 namespace Trema::View
 {
     class ViewParser
     {
     public:
-        explicit ViewParser(std::unique_ptr<IStyleParser> stylesParser);
+        explicit ViewParser(std::unique_ptr<IStyleParser> stylesParser, MistakesContainer& mistakes);
         virtual ~ViewParser() = default;
         virtual void LoadView(const std::string &path, std::shared_ptr<Window> window, Activity& activity) = 0;
         virtual void SetupWindowFromString(const std::string &code, std::shared_ptr<Window> window, Activity& activity) = 0;
-        inline const std::vector<CompilationMistake>& GetMistakes() const { return m_mistakes; };
+        inline const MistakesContainer& GetMistakes() const { return m_mistakes; };
 
         using BodyElementCreator = typename std::function<std::shared_ptr<GuiElement>(
                 std::shared_ptr<GuiElement> parent,
@@ -32,7 +33,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content)>;
 
         using HeadElementCreator = typename std::function<void(
@@ -41,7 +41,6 @@ namespace Trema::View
                 std::shared_ptr<Window> window,
                 Activity &activity,
                 IStyleParser& styleApplier,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content)>;
 
         void AddHeadElementCreator(std::string elementName, HeadElementCreator creator);
@@ -60,7 +59,7 @@ namespace Trema::View
         template<class T>
         inline static bool IsType(const std::shared_ptr<GuiElement> &element) { return dynamic_cast<T*>(element.get()) != nullptr; }
 
-        std::vector<CompilationMistake> m_mistakes;
+        MistakesContainer& m_mistakes;
         std::unique_ptr<IStyleParser> m_stylesParser;
 
     private:

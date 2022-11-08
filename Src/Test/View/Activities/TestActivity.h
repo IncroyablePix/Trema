@@ -14,9 +14,8 @@ namespace Trema::Test::View
     class TestActivity : public Trema::View::Activity
     {
     public:
-        explicit TestActivity(Trema::View::Intent intent, std::shared_ptr<Trema::View::Window> window,
-                              uint16_t requestCode = -1) :
-                Activity(std::move(intent), std::move(window), requestCode)
+        explicit TestActivity(Trema::View::Intent intent, uint16_t requestCode = -1) :
+                Activity(std::move(intent), requestCode)
         {
 
         }

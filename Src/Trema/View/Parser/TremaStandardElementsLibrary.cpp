@@ -25,6 +25,7 @@
 #include "../Components/Widgets/ColorPicker.h"
 #include "../Components/Widgets/Pure/Image/Image.h"
 #include "../Exceptions/ParsingException.h"
+#include "MissingAttributeException.h"
 
 namespace Trema::View
 {
@@ -42,7 +43,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             auto dockspaceId = 1;
@@ -63,7 +63,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return StackSpace::CreateStackSpace(std::move(name));
@@ -75,7 +74,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return WindowContainer::CreateWindowContainer(std::move(parent), std::move(name));
@@ -87,7 +85,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             const char separator = '\n';
@@ -117,7 +114,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return Combo::CreateCombo(std::move(parent), std::move(name));
@@ -129,7 +125,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return Button::CreateButton(std::move(parent), std::move(name));
@@ -141,7 +136,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             auto wrapped = !(attributes.contains("wrapped")) || (attributes["wrapped"] != "false");
@@ -154,7 +148,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return Checkbox::CreateCheckbox(std::move(parent), std::move(name));
@@ -166,7 +159,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             const char separator = ';';
@@ -191,7 +183,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             auto password = attributes.contains("type") && attributes["type"] == "password";
@@ -207,7 +198,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return TextArea::CreateTextArea(std::move(parent), std::move(name));
@@ -219,7 +209,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return SelectorOption::CreateSelectorOption(std::move(parent), std::move(name));
@@ -231,7 +220,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return TableRow::CreateTableRow(std::move(parent), std::move(name));
@@ -243,7 +231,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return TopMenu::CreateTopMenu(std::move(name));
@@ -255,7 +242,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return SubMenu::CreateSubMenu(std::move(parent), std::move(name));
@@ -267,7 +253,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             std::string shortcut;
@@ -284,7 +269,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             return Separator::CreateSeparator(std::move(parent), std::move(name));
@@ -296,7 +280,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             auto element = SliderFloat::CreateSliderFloat(std::move(parent), std::move(name));
@@ -316,7 +299,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             auto element = SliderInt::CreateSliderInt(std::move(parent), std::move(name));
@@ -336,7 +318,6 @@ namespace Trema::View
                 std::unordered_map<std::string, std::string> &attributes,
                 std::shared_ptr<Window> window,
                 Activity &activity,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             auto element = ColorPicker::CreateColorPicker(std::move(parent), std::move(name));
@@ -356,7 +337,6 @@ namespace Trema::View
              std::unordered_map<std::string, std::string> &attributes,
              std::shared_ptr<Window> window,
              Activity &activity,
-             std::vector<CompilationMistake>& mistakes,
              std::string content) -> std::shared_ptr<GuiElement>
         {
             std::string src;
@@ -378,7 +358,6 @@ namespace Trema::View
                 std::shared_ptr<Window> window,
                 Activity &activity,
                 IStyleParser &styleApplier,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content)
         {
             std::string src;
@@ -395,7 +374,7 @@ namespace Trema::View
             }
             else
             {
-                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("Font is missing \"src\"") });
+                throw MissingAttributeException("Font is missing \"src\"");
             }
         });
 
@@ -405,7 +384,6 @@ namespace Trema::View
                 std::shared_ptr<Window> window,
                 Activity &activity,
                 IStyleParser &styleApplier,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content)
         {
             std::string src;
@@ -416,7 +394,7 @@ namespace Trema::View
             }
             else
             {
-                mistakes.emplace_back(CompilationMistake { .Line = 1, .Position = 0, .Code = ErrorCode::MissingAttribute, .Extra = std::string("Icon is missing \"src\"") });
+                throw MissingAttributeException("Icon is missing \"src\"");
             }
         });
 
@@ -426,16 +404,15 @@ namespace Trema::View
                 std::shared_ptr<Window> window,
                 Activity &activity,
                 IStyleParser &styleApplier,
-                std::vector<CompilationMistake>& mistakes,
                 const std::string& content)
         {
             if(attributes.contains("src"))
             {
-                styleApplier.ParseFromFile(attributes["src"], mistakes);
+                styleApplier.ParseFromFile(attributes["src"]);
             }
             else if(!content.empty())
             {
-                styleApplier.ParseFromCode(content, mistakes);
+                styleApplier.ParseFromCode(content);
             }
         });
 
@@ -445,7 +422,6 @@ namespace Trema::View
                 std::shared_ptr<Window> window,
                 Activity &activity,
                 IStyleParser &styleApplier,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content)
         {
             if(!content.empty())
@@ -462,7 +438,6 @@ namespace Trema::View
                 std::shared_ptr<Window> window,
                 Activity &activity,
                 IStyleParser &styleApplier,
-                std::vector<CompilationMistake>& mistakes,
                 std::string content)
         {
             int width = 0, height = 0;
