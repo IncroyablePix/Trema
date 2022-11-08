@@ -139,7 +139,8 @@ namespace Trema::View
                 std::string content) -> std::shared_ptr<GuiElement>
         {
             auto wrapped = !(attributes.contains("wrapped")) || (attributes["wrapped"] != "false");
-            return Text::CreateText(std::move(parent), std::move(name), wrapped);
+            auto text = Text::CreateText(std::move(parent), std::move(name), wrapped);
+            return std::move(text);
         });
 
         viewParser.AddBodyElementCreator("CHECKBOX", [](

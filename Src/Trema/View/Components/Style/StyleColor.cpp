@@ -17,6 +17,7 @@ namespace Trema::View
     {
         m_hasColor = true;
     }
+
     void StyleColor::SetColor(int color)
     {
         SetColor(*((unsigned int*) &color));

@@ -36,7 +36,7 @@ namespace Trema::View
 
     void StyleApplier::SetStyleForElement(const std::shared_ptr<GuiElement>& element, const std::shared_ptr<SymbolTable>& symbolTable)
     {
-        if(!element) // TODO: Throw exception ?
+        if(!element) // Throw exception ?
             return;
 
         SetStyle(element->Style, symbolTable);

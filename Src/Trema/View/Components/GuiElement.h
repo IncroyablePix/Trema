@@ -36,6 +36,8 @@ namespace Trema::View
         inline float GetDockSize() const { return m_dockSize; }
 
         void ShowContextMenu();
+        virtual void AlignX();
+        virtual void AlignY();
 
         ElementStyle Style;
 
@@ -49,10 +51,7 @@ namespace Trema::View
         inline bool IsTextHidden() const { return m_name.length() > 2 && m_name[0] == '#' && m_name[1] == '#'; }
         ImVec2 GetSize() const;
 
-    public:
-        virtual void AlignX();
     protected:
-        virtual void AlignY();
 
         bool m_isWindow { false };
         std::shared_ptr<GuiElement> m_parent;
