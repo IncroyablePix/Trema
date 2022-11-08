@@ -1,3 +1,4 @@
+set_runtimes(is_mode("debug") and "MDd" or "MD")
 add_requires("catch2", "glfw", "tinyxml", "stb", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader")
 add_requires("imgui v1.88-docking", {configs = {glfw_vulkan = true}})
 set_languages("c++20")

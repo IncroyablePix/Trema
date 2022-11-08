@@ -20,7 +20,7 @@ namespace Trema::View
         WindowBuilder() :
             m_mistakes(),
             m_window(std::make_shared<W>(
-                    WindowInfo(),
+                    WindowInfo{ .Width = 800, .Height = 600 },
                     std::make_unique<TinyXMLViewParser>(std::make_unique<StackedStyleParser>(m_mistakes), m_mistakes))
                     )
         {
@@ -72,17 +72,18 @@ namespace Trema::View
 
         WindowBuilder& WithActivity(std::unique_ptr<Activity> activity)
         {
+            activity->SetWindow(m_window);
             m_window->StartActivityForResult(std::move(activity));
             return *this;
         }
 
-        std::shared_ptr<W> Build()
+        std::shared_ptr<Window> Build()
         {
             return m_window;
         }
 
     private:
-        std::shared_ptr<W> m_window;
+        std::shared_ptr<Window> m_window;
         MistakesContainer m_mistakes;
     };
 }

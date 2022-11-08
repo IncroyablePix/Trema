@@ -19,7 +19,6 @@
 #include <View/Activities/Activity.h>
 #include <View/Components/Container/WindowContainer.h>
 #include <Observable/Collections/ObservableCollection.h>
-#include <iostream>
 #include <View/Windowing/WindowBuilder.h>
 
 using namespace Trema::View;
