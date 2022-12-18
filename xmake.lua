@@ -7,8 +7,8 @@ set_policy("build.ccache", false)
 
 add_rules("mode.debug", "mode.release", "mode.coverage")
 
-target("trema_lib", function()
-    set_kind("static")
+target("trema", function()
+    set_kind("$(kind)")
     add_packages("glfw", "tinyxml", "stb", "imgui", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
     add_headerfiles("Src/Trema/**.h", { prefixdir = "Trema" })
     add_files("Src/Trema/**.cpp")
@@ -19,21 +19,18 @@ target("trema_lib", function()
         os.cp("Src/Trema/**", path.join(target:targetdir(), "../include/Trema"))
         os.rm(path.join(target:targetdir(), "../include/Trema/**.cpp"))
     end)
-end)
 
-target("trema", function()
-    set_kind("shared")
-    add_packages("glfw", "tinyxml", "stb", "imgui", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
-    add_headerfiles("Src/Trema/**.h", { prefixdir = "Trema" })
-    add_files("Src/Trema/**.cpp")
-
-    set_targetdir("./build/$(plat)/$(arch)/$(mode)/bin")
+    on_load(function (target)
+        if target:kind() == "static" then
+            target:add("defines", "TREMA_STATIC", { public = true })
+        end
+    end)
 end)
 
 target("trema_sample", function()
     set_kind("binary")
     set_optimize("fastest")
-    add_deps("trema_lib")
+    add_deps("trema")
     add_includedirs("Src/Trema")
     add_files("Src/Sample/**.cpp")
 
@@ -56,7 +53,7 @@ end)
 
 target("trema_test", function()
     set_kind("binary")
-    add_deps("trema_lib")
+    add_deps("trema")
     add_packages("catch2")
     add_includedirs("Src/Trema")
     add_files("Src/Test/**.cpp")
