@@ -8,7 +8,7 @@ set_policy("build.ccache", false)
 add_rules("mode.debug", "mode.release", "mode.coverage")
 
 target("trema", function()
-    set_kind("$(kind)")
+    set_kind("static")
     add_packages("glfw", "tinyxml", "stb", "imgui", "vulkan-headers", "vulkan-validationlayers", "vulkan-loader", { public = true })
     add_headerfiles("Src/(Trema/**.h)", { prefixdir = "Trema" })
     add_files("Src/Trema/**.cpp")
