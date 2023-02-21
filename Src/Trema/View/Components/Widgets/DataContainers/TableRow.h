@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 6/13/2022.
-//
-
 #ifndef TREMA_PROJECT_TABLEROW_H
 #define TREMA_PROJECT_TABLEROW_H
 

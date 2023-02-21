@@ -1,6 +1,3 @@
-//
-// Created by JajaFil on 5/5/2022.
-//
 #include "Vulkan.h"
 
 namespace Trema::View

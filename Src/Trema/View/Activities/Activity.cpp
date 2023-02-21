@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/21/2022.
-//
-
 #include "Activity.h"
 #include "../Windowing/Fonts/FontsRepository.h"
 

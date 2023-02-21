@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/13/2022.
-//
-
 #include "WindowContainer.h"
 #include <imgui.h>
 #include <utility>

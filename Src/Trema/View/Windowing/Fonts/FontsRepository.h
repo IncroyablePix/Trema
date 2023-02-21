@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/9/2022.
-//
-
 #ifndef TREMA_PROJECT_FONTSREPOSITORY_H
 #define TREMA_PROJECT_FONTSREPOSITORY_H
 

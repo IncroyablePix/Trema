@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/21/2022.
-//
-
 #ifndef TREMA_PROJECT_ACTIVITY_H
 #define TREMA_PROJECT_ACTIVITY_H
 

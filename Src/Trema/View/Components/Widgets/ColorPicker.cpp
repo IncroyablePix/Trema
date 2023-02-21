@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/22/2022.
-//
-
 #include "ColorPicker.h"
 
 #include <utility>

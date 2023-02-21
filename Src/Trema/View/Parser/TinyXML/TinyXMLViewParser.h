@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/18/2022.
-//
-
 #ifndef TREMA_TINYXMLVIEWPARSER_H
 #define TREMA_TINYXMLVIEWPARSER_H
 

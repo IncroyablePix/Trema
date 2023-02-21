@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/16/2022.
-//
-
 #ifndef TREMA_TEXTINPUT_H
 #define TREMA_TEXTINPUT_H
 

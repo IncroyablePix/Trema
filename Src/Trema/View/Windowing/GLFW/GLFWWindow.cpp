@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/1/2022.
-//
-
 #include <sstream>
 #include "GLFWWindow.h"
 #include "GLFWBackendStrategy.h"

@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/3/2022.
-//
-
 #ifndef TREMA_STYLEAPPLIER_H
 #define TREMA_STYLEAPPLIER_H
 

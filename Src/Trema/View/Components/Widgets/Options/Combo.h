@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/14/2022.
-//
-
 #ifndef TREMA_COMBO_H
 #define TREMA_COMBO_H
 

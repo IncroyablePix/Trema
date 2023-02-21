@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/19/2022.
-//
-
 #ifndef TREMA_PARSINGEXCEPTION_H
 #define TREMA_PARSINGEXCEPTION_H
 

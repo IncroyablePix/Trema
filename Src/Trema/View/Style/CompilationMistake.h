@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/5/2022.
-//
-
 #ifndef TREMA_COMPILATIONMISTAKE_H
 #define TREMA_COMPILATIONMISTAKE_H
 

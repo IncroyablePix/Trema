@@ -1,6 +1,3 @@
-//
-// Created by JajaFil on 2/12/2022.
-//
 // Shamelessly sucked out of Dear ImGUI examples ; abstracted by myself
 //
 

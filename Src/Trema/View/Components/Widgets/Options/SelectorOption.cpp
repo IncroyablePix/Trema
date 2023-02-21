@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/27/2022.
-//
-
 #include "SelectorOption.h"
 #include "../DisplayException.h"
 

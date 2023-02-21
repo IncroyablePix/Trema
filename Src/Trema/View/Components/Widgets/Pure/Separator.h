@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/28/2022.
-//
-
 #ifndef TREMA_SEPARATOR_H
 #define TREMA_SEPARATOR_H
 

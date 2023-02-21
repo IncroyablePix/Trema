@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/3/2022.
-//
-
 #include <iostream>
 #include <algorithm>
 #include "StyleApplier.h"

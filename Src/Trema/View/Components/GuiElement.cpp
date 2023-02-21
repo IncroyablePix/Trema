@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/16/2022.
-//
-
 #include "GuiElement.h"
 #include <imgui.h>
 #include "../Windowing/Fonts/FontsRepository.h"

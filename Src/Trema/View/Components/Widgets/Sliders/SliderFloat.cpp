@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/4/2022.
-//
-
 #include <future>
 #include "SliderFloat.h"
 

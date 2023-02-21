@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 10/29/2022.
-//
-
 #ifndef TREMA_IELEMENTSLIBRARY_H
 #define TREMA_IELEMENTSLIBRARY_H
 

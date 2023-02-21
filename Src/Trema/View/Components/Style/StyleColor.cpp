@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/17/2022.
-//
-
 #include "StyleColor.h"
 
 namespace Trema::View

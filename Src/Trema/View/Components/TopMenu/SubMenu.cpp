@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/28/2022.
-//
-
 #include "SubMenu.h"
 #include "MenuOption.h"
 #include "../Widgets/FamilyException.h"

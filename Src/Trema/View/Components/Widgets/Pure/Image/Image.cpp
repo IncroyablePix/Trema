@@ -1,6 +1,3 @@
-//
-// Created by JajaFil on 5/4/2022.
-//
 // Inspired by Walnut project: https://github.com/TheCherno/Walnut
 //
 

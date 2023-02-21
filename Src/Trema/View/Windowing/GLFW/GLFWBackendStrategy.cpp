@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/1/2022.
-//
-
 #include "GLFWBackendStrategy.h"
 #include <imgui_impl_glfw.h>
 

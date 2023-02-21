@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 7/22/2022.
-//
-
 #include "ContextMenu.h"
 
 namespace Trema::View

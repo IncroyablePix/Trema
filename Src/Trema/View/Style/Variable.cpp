@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/2/2022.
-//
-
 #include <sstream>
 #include "Variable.h"
 #include "../../Utils/StringConversion.h"

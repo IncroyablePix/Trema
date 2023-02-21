@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/18/2022.
-//
-
 #include <iterator>
 #include <utility>
 #include <vector>

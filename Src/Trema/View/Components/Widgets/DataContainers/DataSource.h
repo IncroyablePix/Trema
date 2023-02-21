@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/30/2022.
-//
-
 #ifndef TREMA_PROJECT_DATASOURCE_H
 #define TREMA_PROJECT_DATASOURCE_H
 

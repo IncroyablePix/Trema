@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 27/04/22.
-//
-
 #include <future>
 #include "SliderInt.h"
 

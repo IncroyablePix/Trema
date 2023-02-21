@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/11/2022.
-//
-
 #ifndef TREMA_PROJECT_VULKANIMAGE_H
 #define TREMA_PROJECT_VULKANIMAGE_H
 

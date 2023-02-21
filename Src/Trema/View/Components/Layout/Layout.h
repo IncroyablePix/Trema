@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/13/2022.
-//
-
 #ifndef TREMA_ILAYOUT_H
 #define TREMA_ILAYOUT_H
 

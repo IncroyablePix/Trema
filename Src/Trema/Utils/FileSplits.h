@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/4/2022.
-//
-
 #ifndef TREMA_FILESPLITS_H
 #define TREMA_FILESPLITS_H
 

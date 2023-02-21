@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/18/2022.
-//
-
 #include "FileNotFoundException.h"
 
 namespace Trema::View

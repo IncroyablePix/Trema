@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/4/2022.
-//
-
 #include <algorithm>
 #include "FileSplits.h"
 

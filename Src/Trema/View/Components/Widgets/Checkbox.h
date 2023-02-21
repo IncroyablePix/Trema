@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/15/2022.
-//
-
 #ifndef TREMA_CHECKBOX_H
 #define TREMA_CHECKBOX_H
 

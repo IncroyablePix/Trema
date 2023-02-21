@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/9/2022.
-//
-
 #include "../../../../../Trema/View/Style/Tokenizer/Tokenizer.h"
 #include "../../../../../Trema/View/Style/Parser/StackedStyleParser.h"
 #include <catch2/catch_test_macros.hpp>

@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 10/30/2022.
-//
-
 #include <catch2/catch_test_macros.hpp>
 #include <Observable/Collections/ObservableCollection.h>
 

@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/9/2022.
-//
-
 #include "FontsRepository.h"
 #include "../../../Utils/FileSplits.h"
 

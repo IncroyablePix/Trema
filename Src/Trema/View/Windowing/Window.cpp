@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/12/2022.
-//
-
 #include "Window.h"
 
 #include <memory>

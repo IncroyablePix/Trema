@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/18/2022.
-//
-
 #ifndef TREMA_FILENOTFOUNDEXCEPTION_H
 #define TREMA_FILENOTFOUNDEXCEPTION_H
 

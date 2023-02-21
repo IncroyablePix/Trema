@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/18/2022.
-//
-
 #ifndef TREMA_IVIEWPARSER_H
 #define TREMA_IVIEWPARSER_H
 

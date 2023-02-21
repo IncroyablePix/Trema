@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/14/2022.
-//
-
 #ifndef TREMA_RADIO_H
 #define TREMA_RADIO_H
 

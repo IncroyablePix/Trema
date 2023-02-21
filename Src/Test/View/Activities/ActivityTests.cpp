@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/30/2022.
-//
-
 #include <catch2/catch_test_macros.hpp>
 #include <View/Activities/Activity.h>
 #include "View/Components/Widgets/Button.h"

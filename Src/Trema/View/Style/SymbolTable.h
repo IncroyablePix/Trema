@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/19/2022.
-//
-
 #ifndef TREMA_SYMBOLTABLE_H
 #define TREMA_SYMBOLTABLE_H
 

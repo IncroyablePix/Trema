@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/29/2022.
-//
-
 #ifndef TREMA_LAYOUTEXCEPTION_H
 #define TREMA_LAYOUTEXCEPTION_H
 

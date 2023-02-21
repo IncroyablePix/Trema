@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/5/2022.
-//
-
 #include "CompilationMistake.h"
 #include <iostream>
 

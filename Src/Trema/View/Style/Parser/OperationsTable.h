@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 8/31/2022.
-//
-
 #ifndef TREMA_PROJECT_OPERATIONSTABLE_H
 #define TREMA_PROJECT_OPERATIONSTABLE_H
 

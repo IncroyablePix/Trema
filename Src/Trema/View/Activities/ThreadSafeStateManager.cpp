@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/22/2022.
-//
-
 #include "ThreadSafeStateManager.h"
 #include "Activity.h"
 #include <variant>

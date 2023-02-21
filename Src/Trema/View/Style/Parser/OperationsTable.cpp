@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 8/31/2022.
-//
-
 #include "OperationsTable.h"
 
 namespace Trema::View

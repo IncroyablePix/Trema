@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/2/2022.
-//
-
 #ifndef TREMA_IPOPUPCOMPONENT_H
 #define TREMA_IPOPUPCOMPONENT_H
 

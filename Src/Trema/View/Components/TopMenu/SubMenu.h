@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/28/2022.
-//
-
 #ifndef TREMA_SUBMENU_H
 #define TREMA_SUBMENU_H
 

@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/27/2022.
-//
-
 #ifndef TREMA_SELECTOROPTION_H
 #define TREMA_SELECTOROPTION_H
 

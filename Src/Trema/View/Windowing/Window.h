@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/12/2022.
-//
-
 #ifndef TREMA_IWINDOW_H
 #define TREMA_IWINDOW_H
 

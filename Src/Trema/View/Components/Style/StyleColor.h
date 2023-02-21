@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/17/2022.
-//
-
 #ifndef TREMA_STYLECOLOR_H
 #define TREMA_STYLECOLOR_H
 

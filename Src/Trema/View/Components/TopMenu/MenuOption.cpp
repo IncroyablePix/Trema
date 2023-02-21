@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/28/2022.
-//
-
 #include "MenuOption.h"
 
 #include <utility>

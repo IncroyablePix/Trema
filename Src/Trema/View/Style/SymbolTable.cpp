@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/19/2022.
-//
-
 #include <algorithm>
 #include "SymbolTable.h"
 

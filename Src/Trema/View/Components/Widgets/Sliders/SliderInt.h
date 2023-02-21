@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 27/04/22.
-//
-
 #ifndef TREMA_PROJECT_SLIDERINT_H
 #define TREMA_PROJECT_SLIDERINT_H
 

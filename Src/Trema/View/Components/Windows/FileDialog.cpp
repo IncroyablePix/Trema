@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/2/2022.
-//
-
 #include "FileDialog.h"
 #include "../../ImGUI/Extensions/FileDialog/ImGuiFileBrowser.h"
 #include <imgui.h>

@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/15/2022.
-//
-
 #include "Text.h"
 #include <imgui.h>
 

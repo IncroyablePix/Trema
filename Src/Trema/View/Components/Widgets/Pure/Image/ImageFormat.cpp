@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 5/11/2022.
-//
-
 #include "ImageFormat.h"
 
 namespace Trema::View

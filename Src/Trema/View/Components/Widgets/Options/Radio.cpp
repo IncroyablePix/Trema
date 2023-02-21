@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 2/14/2022.
-//
-
 #include "Radio.h"
 #include <imgui.h>
 #include <utility>

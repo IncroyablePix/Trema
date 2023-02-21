@@ -1,6 +1,3 @@
-//
-// Created by JajaFil on 5/11/2022.
-//
 // Shamelessly stolen and customized from Walnut (https://github.com/TheCherno/Walnut/)
 //
 

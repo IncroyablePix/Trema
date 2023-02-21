@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 6/13/2022.
-//
-
 #include "TableRow.h"
 
 namespace Trema::View

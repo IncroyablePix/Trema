@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/16/2022.
-//
-
 #ifndef TREMA_TOKENIZER_H
 #define TREMA_TOKENIZER_H
 

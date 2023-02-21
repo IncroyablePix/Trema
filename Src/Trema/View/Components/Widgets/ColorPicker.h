@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/22/2022.
-//
-
 #ifndef TREMA_SAMPLE_COLORPICKER_H
 #define TREMA_SAMPLE_COLORPICKER_H
 

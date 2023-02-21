@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/9/2022.
-//
-
 #define CATCH_CONFIG_RUNNER
 #include <catch2/catch_all.hpp>
 

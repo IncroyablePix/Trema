@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 10/29/2022.
-//
-
 #ifndef TREMA_STRINGCONVERSION_H
 #define TREMA_STRINGCONVERSION_H
 

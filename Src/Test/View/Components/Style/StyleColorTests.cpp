@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 11/1/2022.
-//
-
 #include <catch2/catch_test_macros.hpp>
 #include <View/Components/Style/StyleColor.h>
 

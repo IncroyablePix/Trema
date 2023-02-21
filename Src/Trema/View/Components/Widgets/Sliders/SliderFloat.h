@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/4/2022.
-//
-
 #ifndef TREMA_SLIDERFLOAT_H
 #define TREMA_SLIDERFLOAT_H
 

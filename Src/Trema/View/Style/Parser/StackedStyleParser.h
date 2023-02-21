@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/7/2022.
-//
-
 #ifndef TREMA_STACKEDSTYLEPARSER_H
 #define TREMA_STACKEDSTYLEPARSER_H
 

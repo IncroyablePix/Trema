@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 6/12/2022.
-//
-
 #ifndef TREMA_PROJECT_WINDOWASBASE_H
 #define TREMA_PROJECT_WINDOWASBASE_H
 

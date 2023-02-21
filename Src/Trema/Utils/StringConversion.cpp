@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 10/29/2022.
-//
-
 #include "StringConversion.h"
 
 namespace Trema::Utils

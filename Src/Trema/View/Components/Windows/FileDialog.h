@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/2/2022.
-//
-
 #ifndef TREMA_FILEDIALOG_H
 #define TREMA_FILEDIALOG_H
 

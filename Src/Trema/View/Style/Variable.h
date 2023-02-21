@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 4/2/2022.
-//
-
 #ifndef TREMA_VARIABLE_H
 #define TREMA_VARIABLE_H
 

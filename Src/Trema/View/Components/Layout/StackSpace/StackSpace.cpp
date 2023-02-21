@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/29/2022.
-//
-
 #include "StackSpace.h"
 
 #include <utility>

@@ -1,7 +1,3 @@
-//
-// Created by JajaFil on 3/6/2022.
-//
-
 #include <algorithm>
 #include <regex>
 #include "ElementStyle.h"
